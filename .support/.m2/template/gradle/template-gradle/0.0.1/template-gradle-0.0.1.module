@@ -1,0 +1,108 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "template.gradle",
+    "module": "template-gradle",
+    "version": "0.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.11.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "template-gradle-0.0.1.jar",
+          "url": "template-gradle-0.0.1.jar",
+          "size": 73467,
+          "sha512": "38cf815b905ac9aef558cbac9d7cf1bf7c68babf23d5253c842bf055a3a170f166b03de3f2663ccf52e54ff7ed1620632fd92e6a9a90e5a5dfdea69927b2dc2f",
+          "sha256": "9d465467ff7a5a9178584908700cb21a3885b496ea5ff1e25d3907bb150d047c",
+          "sha1": "e6c00d28fdeca94f9a665d242c9f5a1e7b05858c",
+          "md5": "8b7b7ab3007537fe59f1f5e45c5d398d"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.android.tools.build",
+          "module": "gradle",
+          "version": {
+            "requires": "8.7.2"
+          }
+        },
+        {
+          "group": "com.eygraber",
+          "module": "ejson-gradle",
+          "version": {
+            "requires": "1.0.9"
+          }
+        },
+        {
+          "group": "com.google.gms",
+          "module": "google-services",
+          "version": {
+            "requires": "4.4.2"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-gradle-plugin",
+          "version": {
+            "requires": "2.0.21"
+          }
+        },
+        {
+          "group": "com.google.devtools.ksp",
+          "module": "com.google.devtools.ksp.gradle.plugin",
+          "version": {
+            "requires": "2.0.21-1.0.28"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-serialization-json",
+          "version": {
+            "requires": "1.7.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "template-gradle-0.0.1.jar",
+          "url": "template-gradle-0.0.1.jar",
+          "size": 73467,
+          "sha512": "38cf815b905ac9aef558cbac9d7cf1bf7c68babf23d5253c842bf055a3a170f166b03de3f2663ccf52e54ff7ed1620632fd92e6a9a90e5a5dfdea69927b2dc2f",
+          "sha256": "9d465467ff7a5a9178584908700cb21a3885b496ea5ff1e25d3907bb150d047c",
+          "sha1": "e6c00d28fdeca94f9a665d242c9f5a1e7b05858c",
+          "md5": "8b7b7ab3007537fe59f1f5e45c5d398d"
+        }
+      ]
+    }
+  ]
+}

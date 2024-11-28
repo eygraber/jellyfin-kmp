@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="primary">@color/darkPrimary</color>
+  <color name="onPrimary">@color/darkOnPrimary</color>
+  <color name="primaryContainer">@color/darkPrimaryContainer</color>
+  <color name="onPrimaryContainer">@color/darkOnPrimaryContainer</color>
+  <color name="secondary">@color/darkSecondary</color>
+  <color name="onSecondary">@color/darkOnSecondary</color>
+  <color name="secondaryContainer">@color/darkSecondaryContainer</color>
+  <color name="onSecondaryContainer">@color/darkOnSecondaryContainer</color>
+  <color name="tertiary">@color/darkTertiary</color>
+  <color name="onTertiary">@color/darkOnTertiary</color>
+  <color name="tertiaryContainer">@color/darkTertiaryContainer</color>
+  <color name="onTertiaryContainer">@color/darkOnTertiaryContainer</color>
+  <color name="error">@color/darkError</color>
+  <color name="onError">@color/darkOnError</color>
+  <color name="errorContainer">@color/darkErrorContainer</color>
+  <color name="onErrorContainer">@color/darkOnErrorContainer</color>
+  <color name="background">@color/darkBackground</color>
+  <color name="onBackground">@color/darkOnBackground</color>
+  <color name="surface">@color/darkSurface</color>
+  <color name="surfaceVariant">@color/darkSurfaceVariant</color>
+  <color name="surfaceContainerLowest">@color/darkSurfaceContainerLowest</color>
+  <color name="surfaceContainerLow">@color/darkSurfaceContainerLow</color>
+  <color name="surfaceContainer">@color/darkSurfaceContainer</color>
+  <color name="surfaceContainerHigh">@color/darkSurfaceContainerHigh</color>
+  <color name="surfaceContainerHighest">@color/darkSurfaceContainerHighest</color>
+  <color name="surfaceBright">@color/darkSurfaceContainerHighest</color>
+  <color name="surfaceDim">@color/darkSurfaceContainerLowest</color>
+  <color name="onSurface">@color/darkOnSurface</color>
+  <color name="onSurfaceVariant">@color/darkOnSurfaceVariant</color>
+  <color name="inverseSurface">@color/darkInverseSurface</color>
+  <color name="inverseOnSurface">@color/darkInverseOnSurface</color>
+  <color name="inversePrimary">@color/darkInversePrimary</color>
+</resources>

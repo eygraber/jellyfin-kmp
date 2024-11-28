@@ -1,0 +1,42 @@
+name: Submit Dependency Snapshot
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: submit-dependency-snapshot
+  cancel-in-progress: true
+
+jobs:
+  submit-snapshots:
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version-file: .java-version
+
+      - name: Retrieve dependency graph artifact and submit
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+          dependency-graph: generate-and-submit
+          dependency-graph-continue-on-failure: false
+
+      - name: Run dependencies
+        run: ./gradlew :app:dependencies
+
+env:
+  DEPENDENCY_GRAPH_EXCLUDE_CONFIGURATIONS: '.*[Tt]est(Compile|Runtime)Classpath'
+  DEPENDENCY_GRAPH_INCLUDE_CONFIGURATIONS: devReleaseRuntimeClasspath
+  EJSON_DEV_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_DEV_BUILD_PRIVATE_KEY }}
+  EJSON_PROD_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_PROD_BUILD_PRIVATE_KEY }}
+  ORG_GRADLE_PROJECT_org.gradle.vfs.watch: false

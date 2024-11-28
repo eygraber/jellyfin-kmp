@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CURRENT_RELEASE_TAG=$(git tag -l | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+-[0-9]+$' | sort -Vr | head -n 1)
+
+COMMITS=$(git log $CURRENT_RELEASE_TAG..HEAD --oneline)
+
+if [ -z "$COMMITS" ]; then
+   echo "No new commits since the last tag ($CURRENT_RELEASE_TAG)."
+   if [ "$CI" = "true" ]; then
+     echo "should_continue=false" >> $GITHUB_OUTPUT
+   fi
+ else
+   echo "New commits found since the last tag ($CURRENT_RELEASE_TAG)."
+   if [ "$CI" = "true" ]; then
+     echo "should_continue=true" >> $GITHUB_OUTPUT
+   fi
+fi

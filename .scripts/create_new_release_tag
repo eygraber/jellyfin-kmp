@@ -1,0 +1,24 @@
+#!/bin/bash
+
+CURRENT_RELEASE_TAG=$(git tag -l | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+-[0-9]+$' | sort -Vr | head -n 1)
+CURRENT_VERSION_NAME=$(grep -Po 'versionName = "\K[0-9]+\.[0-9]+\.[0-9]+' app/build.gradle.kts)
+CURRENT_VERSION_CODE=$(echo $CURRENT_RELEASE_TAG | cut -d '-' -f2)
+
+NEXT_VERSION_CODE=$((CURRENT_VERSION_CODE + 1))
+
+NEW_RELEASE_TAG="v$CURRENT_VERSION_NAME-$NEXT_VERSION_CODE"
+
+echo "Current release tag is $CURRENT_RELEASE_TAG"
+echo "Current versionName is $CURRENT_VERSION_NAME"
+echo "Current versionCode is $CURRENT_VERSION_CODE"
+echo "New release tag is $NEW_RELEASE_TAG"
+
+if [ "$CI" = "true" ]; then
+  git tag "$NEW_RELEASE_TAG"
+
+  NEW_RELEASE_TAG_REF=$(git rev-parse "$NEW_RELEASE_TAG")
+
+  echo "CURRENT_RELEASE_TAG=$CURRENT_RELEASE_TAG" >> $GITHUB_ENV
+  echo "NEW_RELEASE_TAG=$NEW_RELEASE_TAG" >> $GITHUB_ENV
+  echo "NEW_RELEASE_TAG_REF=$NEW_RELEASE_TAG_REF" >> $GITHUB_ENV
+fi

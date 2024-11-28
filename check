@@ -1,0 +1,18 @@
+#!/bin/bash
+
+full=false
+args=""
+for arg in "$@"; do
+  if [ "$arg" == "--full" ]; then
+    full=true
+  else
+    args="$args $arg"
+  fi
+done
+
+if [ "$full" = true ]; then
+  ./format && ./detekt buildHealth :app:lintDevRelease :app:licenseeAndroidDevRelease\
+   testDevDebugUnitTest verifyPaparazziDevDebug ${args:+$args}
+else
+  ./format && ./detekt buildHealth :app:lintDevRelease ${args:+$args}
+fi

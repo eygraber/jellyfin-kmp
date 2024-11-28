@@ -1,0 +1,95 @@
+name: template-lint-pr
+
+on:
+  pull_request
+
+concurrency:
+  group: template-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: read
+  contents: read
+
+jobs:
+  ktlint_template-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            template-lint:
+              - '.support/template-lint/**'
+
+      - name: Run ktlint
+        if: steps.changes.outputs.template-lint == 'true'
+        run: ./format --no-format --check-support
+
+  detekt_template-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            template-lint:
+              - '.support/template-lint/**'
+
+      - name: Run detekt
+        if: steps.changes.outputs.template-lint == 'true'
+        run: ./gradlew -p .support/template-lint :checks:detektMain
+
+  test_template-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            template-lint:
+              - '.support/template-lint/**'
+
+      - name: Run template-lint tests
+        run: ./gradlew -p .support/template-lint :checks:test
+
+  check_template-lint_binary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            template-lint:
+              - '.support/template-lint/**'
+
+      - name: Ensure template-lint binary is regenerated
+        if: steps.changes.outputs.template-lint == 'true'
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+          if ! git diff --name-only HEAD^ HEAD | grep -q ".support/.m2/template/lint/library/maven-metadata.xml"; then
+            echo 'Run .scripts/publish_included_builds to regenerate the template-lint binary'
+            exit 1
+          fi
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -XX:MaxMetaspaceSize=1024m"

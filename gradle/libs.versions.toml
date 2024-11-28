@@ -1,0 +1,234 @@
+[versions]
+androidCacheFix = "3.0.1"
+
+# If the AGP version is X.Y.Z, then the Lint library version is X+23.Y.Z.
+android-lint = "31.7.2"
+
+android-plugin = "8.7.2"
+
+android-sdk-compile = "35"
+android-sdk-target = "35"
+android-sdk-min = "26"
+
+androidx-activity = "1.9.3"
+androidx-core = "1.15.0"
+androidx-lifecycle = "2.8.7"
+androidx-navigation = "2.8.0-alpha10"
+
+atomicfu = "0.26.0"
+
+compose-bom = "2024.11.00"
+composeJetbrains = "1.8.0-dev1905"
+
+conventions = "0.0.81"
+
+detekt = "1.23.7"
+detektCompose = "0.4.19"
+detektEygraber = "1.0.11"
+
+ejson = "1.0.9"
+
+googleServices = "4.4.2"
+
+jvmTarget = "17"
+
+khronicle = "0.5.0"
+
+kotest = "5.9.1"
+
+kotlin = "2.1.0"
+kotlinInject = "0.7.2"
+kotlinInjectAnvil = "0.1.1"
+
+kotlinx-coroutines = "1.9.0"
+kotlinx-serialization = "1.7.3"
+
+ksp = "2.1.0-1.0.29"
+
+ktlint = "1.4.1"
+
+paparazzi = "1.3.5"
+
+square-sqldelight = "2.0.2"
+
+vice = "0.9.5"
+virtue = "0.0.1-SNAPSHOT"
+uiToolingPreviewAndroid = "1.7.3"
+
+[plugins]
+androidApp = { id = "com.android.application" }
+androidCacheFix = { id = "org.gradle.android.cache-fix" }
+androidLint = { id = "com.android.lint" }
+atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
+completeKotlin = { id = "com.louiscad.complete-kotlin", version = "1.1.0" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+conventionsAndroidLibrary = { id = "com.eygraber.conventions-android-library" }
+conventionsBase = { id = "com.eygraber.conventions", version.ref = "conventions" }
+conventionsCompose = { id = "com.eygraber.conventions-compose" }
+conventionsComposeMultiplatform = { id = "com.eygraber.conventions-compose-jetbrains" }
+conventionsDetekt = { id = "com.eygraber.conventions-detekt" }
+conventionsKotlin = { id = "com.eygraber.conventions-kotlin-library" }
+conventionsKotlinMultiplatform = { id = "com.eygraber.conventions-kotlin-multiplatform" }
+conventionsProjectCommon = { id = "com.eygraber.conventions-project-common" }
+dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
+dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "2.5.0" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.0.0" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
+googleServices = { id = "com.google.gms.google-services" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
+ksp = { id = "com.google.devtools.ksp" }
+licensee = { id = "app.cash.licensee", version = "1.12.0" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
+playStoreApi = { id = "com.github.triplet.play", version = "3.12.1" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "square-sqldelight" }
+templateGradle = { id = "template-gradle", version = "0.0.1" }
+
+[libraries]
+android-desugar = "com.android.tools:desugar_jdk_libs:2.1.3"
+android-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "android-lint" }
+android-lint-test = { module = "com.android.tools.lint:lint-tests", version.ref = "android-lint" }
+
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
+androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-annotation = "androidx.annotation:annotation:1.9.1"
+androidx-annotationExperimental = "androidx.annotation:annotation-experimental:1.4.1"
+androidx-appCompat = "androidx.appcompat:appcompat:1.7.0"
+androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
+androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+
+androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+
+androidx-navigation-common = { module = "org.jetbrains.androidx.navigation:navigation-common", version.ref = "androidx-navigation" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+androidx-navigation-runtime = { module = "org.jetbrains.androidx.navigation:navigation-runtime", version.ref = "androidx-navigation" }
+
+androidx-splash = "androidx.core:core-splashscreen:1.2.0-alpha02"
+
+androidx-startup = "androidx.startup:startup-runtime:1.2.0"
+
+buildscript-android = { module = "com.android.tools.build:gradle", version.ref = "android-plugin" }
+buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:android-cache-fix-gradle-plugin", version = "3.0.1" }
+buildscript-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+buildscript-compose-jetbrains = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeJetbrains" }
+buildscript-conventions = { module = "com.eygraber:gradle-conventions", version.ref = "conventions" }
+buildscript-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+buildscript-ejson = { module = "com.eygraber:ejson-gradle", version.ref = "ejson" }
+buildscript-googleServices = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+buildscript-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+buildscript-kotlinxSerialization = { module = "org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin", version.ref = "kotlin" }
+buildscript-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
+compose-bom = { module = "androidx.compose:compose-bom-alpha", version.ref = "compose-bom" }
+compose-animation = { module = "androidx.compose.animation:animation" }
+compose-animation-core = { module = "androidx.compose.animation:animation-core" }
+compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.6.0"
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-foundationLayout = { module = "androidx.compose.foundation:foundation-layout" }
+compose-materialIcons = { module = "androidx.compose.material:material-icons-core" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material3Navigation = "com.eygraber:compose-material3-navigation:0.0.3"
+compose-runtime = { module = "androidx.compose.runtime:runtime" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-geometry = { module = "androidx.compose.ui:ui-geometry" }
+compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+compose-ui-text = { module = "androidx.compose.ui:ui-text" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-unit = { module = "androidx.compose.ui:ui-unit" }
+composeMaterialIconsCore = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.1" }
+
+detektCompose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
+detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", version.ref = "detektEygraber" }
+detektEygraber-style = { module = "com.eygraber.detekt.rules:style", version.ref = "detektEygraber" }
+
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = "com.google.firebase:firebase-bom:33.6.0"
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-installations = { module = "com.google.firebase:firebase-installations" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+khronicle = { module = "com.juul.khronicle:khronicle-core", version.ref = "khronicle" }
+
+kotlinInject-anvilCompiler = { module = "software.amazon.lastmile.kotlin.inject.anvil:compiler", version.ref = "kotlinInjectAnvil" }
+kotlinInject-anvilRuntime = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime", version.ref = "kotlinInjectAnvil" }
+kotlinInject-anvilRuntimeOptional = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional", version.ref = "kotlinInjectAnvil" }
+kotlinInject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlinInject" }
+kotlinInject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime-kmp", version.ref = "kotlinInject" }
+
+# not actually used; just here so renovate picks it up
+ktlint = { module = "com.pinterest.ktlint:ktlint-bom", version.ref = "ktlint" }
+
+libphonenumber = "io.github.luca992.libphonenumber-kotlin:libphonenumber:0.1.1"
+
+square-molecule = "app.cash.molecule:molecule-runtime:2.0.0"
+square-seismic = "com.squareup:seismic:1.0.3"
+square-sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "square-sqldelight" }
+square-sqldelight-dialect = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "square-sqldelight" }
+square-sqldelight-flow = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "square-sqldelight" }
+
+templateLint = "template.lint:library:0.0.1"
+
+test-androidx-junit = "androidx.test.ext:junit:1.2.1"
+test-compose-ui = { module = "androidx.compose.ui:ui-test" }
+test-compose-uiJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+test-compose-uiManifest = { module = "androidx.compose.ui:ui-test-manifest" }
+test-junit = "junit:junit:4.13.2"
+test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared", version.ref = "kotest" }
+test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+test-paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
+test-parameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.18"
+test-robolectric = "org.robolectric:robolectric:4.14.1"
+test-square-turbine = "app.cash.turbine:turbine:1.2.0"
+
+vice-core = { module = "com.eygraber:vice-core", version.ref = "vice" }
+vice-nav = { module = "com.eygraber:vice-nav", version.ref = "vice" }
+vice-nav-material3 = { module = "com.eygraber:vice-nav-material3", version.ref = "vice" }
+vice-sources = { module = "com.eygraber:vice-sources", version.ref = "vice" }
+
+virtue-android = { module = "com.eygraber:virtue-android", version.ref = "virtue" }
+virtue-app = { module = "com.eygraber:virtue-app", version.ref = "virtue" }
+virtue-appCompat = { module = "com.eygraber:virtue-app-compat", version.ref = "virtue" }
+virtue-diScopes = { module = "com.eygraber:virtue-di-scopes", version.ref = "virtue" }
+virtue-init = { module = "com.eygraber:virtue-init", version.ref = "virtue" }
+virtue-session = { module = "com.eygraber:virtue-session", version.ref = "virtue" }
+
+[bundles]
+androidx-appCompat = ["androidx-activity", "androidx-activityCompose", "androidx-appCompat"]
+
+androidx-core = ["androidx-core", "androidx-coreKtx"]
+
+test-composeUi = [
+    "test-compose-ui",
+    "test-compose-uiJunit4",
+]
+
+test-molecule = [
+    "square-molecule",
+    "test-kotlinx-coroutines",
+    "test-square-turbine"
+]
+
+test-paparazzi = [
+    "test-junit",
+    "test-paparazzi",
+    "test-parameterInjector"
+]
+
+test-robolectricCompose = [
+    "test-robolectric",
+    "test-androidx-junit"
+]

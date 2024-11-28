@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <application
+    android:theme="@style/Theme.TemplateSplash"
+    android:allowBackup="true"
+    android:dataExtractionRules="@xml/backup_rules_v_twelve"
+    android:enableOnBackInvokedCallback="true"
+    android:fullBackupContent="@xml/backup_rules_v_eleven"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:name="template.app.TemplateApplication"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    tools:targetApi="33">
+    <activity
+      android:theme="@style/Theme.TemplateSplash"
+      android:name="template.app.TemplateActivity"
+      android:configChanges="colorMode|density|fontScale|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+      android:exported="true"
+      android:launchMode="singleInstance"
+      android:windowSoftInputMode="adjustResize">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <provider
+      android:name="androidx.startup.InitializationProvider"
+      android:authorities="${applicationId}.androidx-startup"
+      android:exported="false"
+      tools:node="merge">
+      <meta-data
+        android:name="template.app.init.TemplateAndroidXInitializer"
+        android:value="androidx.startup" />
+    </provider>
+  </application>
+
+</manifest>

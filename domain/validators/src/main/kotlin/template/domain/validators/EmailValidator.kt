@@ -1,0 +1,31 @@
+package template.domain.validators
+
+import androidx.compose.runtime.Immutable
+import me.tatarka.inject.annotations.Inject
+
+@Inject
+class EmailValidator {
+  @Immutable
+  enum class Result {
+    Valid,
+    Invalid,
+    Required,
+  }
+
+  fun validate(email: CharSequence) =
+    when {
+      email.isBlank() -> Result.Required
+      !email.matches(ValidEmailRegex) -> Result.Invalid
+      else -> Result.Valid
+    }
+
+  companion object {
+    /*
+    Copied from android.util.Patterns.EMAIL_ADDRESS
+    but we can't use it without using Robolectric for tests
+     */
+    private val ValidEmailRegex = Regex(
+      """[a-zA-Z0-9+._%\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+""",
+    )
+  }
+}
