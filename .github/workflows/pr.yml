@@ -1,0 +1,125 @@
+name: PR
+
+on:
+  pull_request
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  danger:
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Danger
+        uses: danger/kotlin@1.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  assemble:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Run assemble task
+        run: ./gradlew assembleDevDebug
+
+  dependency_analysis:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Run dependency analysis check
+        env:
+          GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx4g -XX:ReservedCodeCacheSize=240m -XX:+UseCompressedOops -XX:+UseParallelGC -XX:MetaspaceSize=1g -Dfile.encoding=UTF-8"
+        run: ./gradlew buildHealth
+
+  detekt:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Run detekt
+        run: ./detekt
+
+  ktlint:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run ktlint
+        run: ./format --no-format
+
+  lint:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Run Android lint
+        run: ./gradlew :apps:android:lintDevRelease
+
+  license_check:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Run licensee
+        run: ./gradlew :apps:shared:licensee
+
+  unit_and_screenshot_tests:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Compare files that match .gitattributes filter to those actually tracked by git-lfs
+        run: diff <(git ls-files ':(attr:filter=lfs)' | sort) <(git lfs ls-files -n | sort) >/dev/null
+
+      - name: Run unit and paparazzi screenshot tests
+        run: ./gradlew testDevDebugUnitTest verifyPaparazziDevDebug :konsist:test
+
+env:
+  EJSON_DEV_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_DEV_BUILD_PRIVATE_KEY }}
+  EJSON_PROD_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_PROD_BUILD_PRIVATE_KEY }}
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx12g -XX:ReservedCodeCacheSize=240m -XX:+UseCompressedOops -XX:+UseParallelGC -XX:MetaspaceSize=1g -Dfile.encoding=UTF-8"

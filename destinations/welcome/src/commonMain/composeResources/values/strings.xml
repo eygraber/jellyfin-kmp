@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="onboarding_splash_body">Use this app to get started with your own app!</string>
+  <string name="onboarding_splash_login">Login</string>
+  <string name="onboarding_splash_privacy_tos">By continuing you accept our Privacy Policy and\nTerms of Use.</string>
+  <string name="onboarding_splash_sign_up">Sign Up</string>
+  <string name="onboarding_splash_title">Welcome to the Template app</string>
+</resources>

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+additional_gradle_tasks=""
+
+args=""
+for arg in "$@"; do
+  if [ "$arg" == "--full" ]; then
+    additional_gradle_tasks="$additional_gradle_tasks :apps:shared:licensee"
+    additional_gradle_tasks="$additional_gradle_tasks testDevDebugUnitTest"
+    additional_gradle_tasks="$additional_gradle_tasks verifyPaparazziDevDebug"
+    additional_gradle_tasks="$additional_gradle_tasks :konsist:test"
+  else
+    args="$args $arg"
+  fi
+done
+
+./format && ./detekt :apps:android:lintDevRelease $additional_gradle_tasks ${args:+$args}

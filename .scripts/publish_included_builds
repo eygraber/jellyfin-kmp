@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+./gradlew -p .support/template-gradle publishAllPublicationsToProjectLocalRepository
+./gradlew -p .support/template-lint publishAllPublicationsToProjectLocalRepository
+
+find .support/.m2 -type f \( -name "*.md5" -o -name "*.sha1" -o -name "*.sha256" -o -name "*.sha512" \) -exec rm -f {} \;

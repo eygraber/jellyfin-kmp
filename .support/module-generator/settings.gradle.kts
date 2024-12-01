@@ -1,0 +1,70 @@
+import com.eygraber.conventions.Env
+import com.eygraber.conventions.repositories.addCommonRepositories
+import org.gradle.api.initialization.resolve.RepositoriesMode.FAIL_ON_PROJECT_REPOS
+
+pluginManagement {
+  repositories {
+    google {
+      content {
+        includeGroupByRegex("com\\.google.*")
+        includeGroupByRegex("com\\.android.*")
+        includeGroupByRegex("androidx.*")
+      }
+    }
+
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots") {
+      mavenContent {
+        snapshotsOnly()
+      }
+    }
+
+    maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots") {
+      mavenContent {
+        snapshotsOnly()
+      }
+    }
+
+    mavenCentral()
+
+    gradlePluginPortal()
+  }
+}
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+@Suppress("UnstableApiUsage")
+dependencyResolutionManagement {
+  repositoriesMode = FAIL_ON_PROJECT_REPOS
+
+  versionCatalogs {
+    create("libs") {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+
+  repositories {
+    addCommonRepositories(
+      includeMavenCentral = true,
+      includeMavenCentralSnapshots = true,
+      includeGoogle = true,
+    )
+  }
+}
+
+plugins {
+  id("com.gradle.develocity") version "3.18.2"
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+  id("com.eygraber.conventions.settings") version "0.0.79"
+}
+
+rootProject.name = "module-generator"
+
+develocity {
+  buildScan {
+    termsOfUseUrl = "https://gradle.com/terms-of-service"
+    publishing.onlyIf { Env.isCI }
+    if(Env.isCI) {
+      termsOfUseAgree = "yes"
+    }
+  }
+}

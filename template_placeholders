@@ -1,0 +1,235 @@
+#!/usr/bin/env bash
+
+function usage {
+  echo "Usage: $0 --project-name <ProjectName> --project-package <project.package.name>"
+  exit 1
+}
+
+alias_gnu_sed() {
+  if sed --version 2>/dev/null | grep -q 'GNU sed'; then
+    echo "GNU sed detected. Aliasing gsed to sed for this script."
+    gsed() {
+      command sed "$@"
+    }
+  else
+    echo "GNU sed is not detected. Check if gsed is installed."
+    if command -v gsed >/dev/null 2>&1; then
+      echo "gsed is available."
+    else
+      echo "Neither GNU sed nor gsed is available."
+      exit 1
+    fi
+  fi
+}
+
+alias_gnu_sed
+
+PROJECT_NAME=""
+PROJECT_PACKAGE=""
+
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --project-name)
+      PROJECT_NAME="$2"
+      shift 2
+      ;;
+    --project-package)
+      PROJECT_PACKAGE="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown parameter passed: $1"
+      usage
+      ;;
+  esac
+done
+
+if [[ ! "$PROJECT_NAME" =~ ^[A-Z][A-Za-z0-9]*$ ]]; then
+  echo "Error: --project-name must be in PascalCase, alphanumeric, and start with a letter."
+  exit 1
+fi
+
+# Validate project package (valid Java package format)
+if [[ ! "$PROJECT_PACKAGE" =~ ^[a-z]+(\.[a-z][a-z0-9]*)*$ ]]; then
+  echo "Error: --project-package must be a valid Java package name (e.g., com.example.project)."
+  exit 1
+fi
+
+if ! command -v ejson &> /dev/null; then
+  echo "The 'ejson' command is not available. Please install it by following the steps at https://github.com/Shopify/ejson"
+  exit 1
+fi
+
+if [[ ! -d /opt/ejson/keys ]]; then
+  echo "The directory '/opt/ejson/keys' does not exist. Please create it with the following command:"
+  echo "sudo mkdir -p /opt/ejson/keys"
+  exit 1
+fi
+
+# Set an initial tag for the version code generation if needed
+if ! git tag -l | grep -qE "^v[0-9]*\.[0-9]*\.[0-9]*-[0-9]*$"; then
+  git tag v0.0.0-1
+fi
+
+PROJECT_NAME_PASCAL="$PROJECT_NAME"
+PROJECT_NAME_CAMEL="$(echo "$PROJECT_NAME" | sed -E 's/^([A-Z])/\L\1/')"
+PROJECT_NAME_KEBAB="$(echo "$PROJECT_NAME" | sed -E 's/([a-z0-9])([A-Z])/\1-\L\2/g' | tr '[:upper:]' '[:lower:]')"
+PROJECT_NAME_UNDERSCORE="$(echo "$PROJECT_NAME" | sed -E 's/([a-z])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]')"
+PROJECT_NAME_DOT="$(echo "$PROJECT_NAME" | sed -E 's/([a-z0-9])([A-Z])/\1.\L\2/g' | tr '[:upper:]' '[:lower:]')"
+PROJECT_PACKAGE_PATH="$(echo "$PROJECT_PACKAGE" | tr '.' '/')"
+CURRENT_DIRECTORY=$(basename "$PWD")
+
+echo "Project Name (PascalCase): $PROJECT_NAME_PASCAL"
+echo "Project Name (camelCase): $PROJECT_NAME_CAMEL"
+echo "Project Name (kebab-case): $PROJECT_NAME_KEBAB"
+echo "Project Name (underscore-case): $PROJECT_NAME_UNDERSCORE"
+echo "Project Name (dot.case): $PROJECT_NAME_DOT"
+echo "Project Package: $PROJECT_PACKAGE"
+echo "Project Package Path: $PROJECT_PACKAGE_PATH"
+echo "Current Directory: $CURRENT_DIRECTORY"
+
+gsed -i "s/applicationId = \"template\.app\"/applicationId = \"$PROJECT_PACKAGE.$PROJECT_NAME_UNDERSCORE\"/g" apps/android/build.gradle.kts
+
+rm apps/android/template.keystore
+rm apps/android/template-internal.keystore
+
+keytool -genkey -v -keystore apps/android/${PROJECT_NAME_KEBAB}.keystore -alias ${PROJECT_NAME_KEBAB}-prod -keyalg RSA -keysize 4096 -validity 10000
+
+INTERNAL_KEYSTORE_PASSWORD=$(head -c 32 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 32)
+keytool -genkey -v -keystore apps/android/${PROJECT_NAME_KEBAB}-internal.keystore -alias ${PROJECT_NAME_KEBAB}-internal -keyalg RSA -keysize 4096 -validity 10000 -storepass $INTERNAL_KEYSTORE_PASSWORD
+
+EJSON_OUTPUT=$(ejson keygen)
+INTERNAL_EJSON_PUBLIC_KEY=$(echo "$EJSON_OUTPUT" | awk '/Public Key:/ {getline; print}')
+INTERNAL_EJSON_PRIVATE_KEY=$(echo "$EJSON_OUTPUT" | awk '/Private Key:/ {getline; print}')
+
+EJSON_OUTPUT=$(ejson keygen)
+PROD_EJSON_PUBLIC_KEY=$(echo "$EJSON_OUTPUT" | awk '/Public Key:/ {getline; print}')
+PROD_EJSON_PRIVATE_KEY=$(echo "$EJSON_OUTPUT" | awk '/Private Key:/ {getline; print}')
+
+echo $INTERNAL_EJSON_PRIVATE_KEY | sudo tee /opt/ejson/keys/$INTERNAL_EJSON_PUBLIC_KEY > /dev/null
+echo $PROD_EJSON_PRIVATE_KEY | sudo tee /opt/ejson/keys/$PROD_EJSON_PUBLIC_KEY > /dev/null
+
+cat <<EOF > apps/android/secrets.ejson
+{
+  "_public_key": "$INTERNAL_EJSON_PUBLIC_KEY",
+  "internal_keystore_password": "$INTERNAL_KEYSTORE_PASSWORD"
+}
+EOF
+
+cat <<EOF > apps/android/src/dev/secrets.ejson
+{
+  "_public_key": "$INTERNAL_EJSON_PUBLIC_KEY",
+  "google_services": ""
+}
+EOF
+
+cat <<EOF > apps/android/src/prod/secrets.ejson
+{
+  "_public_key": "$PROD_EJSON_PUBLIC_KEY",
+  "google_services": ""
+}
+EOF
+
+cat <<EOF > .gitattributes
+**/snapshots/**/*.png filter=lfs diff=lfs merge=lfs -text
+**/snapshots/**/*.gif filter=lfs diff=lfs merge=lfs -text
+EOF
+
+ejson encrypt apps/android/secrets.ejson
+ejson encrypt apps/android/src/dev/secrets.ejson
+ejson encrypt apps/android/src/prod/secrets.ejson
+
+gsed -i "s/rootProject\.name = \"cmp-app-template\"/rootProject.name = \"$CURRENT_DIRECTORY\"/g" settings.gradle.kts
+
+gsed -i "s/template.app.init.TemplateAndroidXInitializer/$PROJECT_PACKAGE.app.init.${PROJECT_NAME_PASCAL}AndroidXInitializer/g" apps/android/src/main/AndroidManifest.xml
+
+gsed -i "s/Template/$PROJECT_NAME_PASCAL/g" apps/ios/build.gradle.kts
+
+gsed -i "s/template-wasm/$PROJECT_NAME_KEBAB-wasm/g" apps/web/webpack.config.d/boilerplate.js
+gsed -i "s/template-wasm/$PROJECT_NAME_KEBAB-wasm/g" apps/web/build.gradle.kts
+gsed -i "s/template-wasm/$PROJECT_NAME_KEBAB-wasm/g" apps/web/src/wasmJsMain/resources/index.html
+gsed -i "s/Template/$PROJECT_NAME_PASCAL-wasm/g" apps/web/src/wasmJsMain/resources/index.html
+gsed -i "s/template-wasm/$PROJECT_NAME_KEBAB-wasm/g" apps/web/src/wasmJsMain/resources/load.mjs
+
+gsed -i "s/is not supported in Template/is not supported in $PROJECT_NAME_PASCAL/g" .support/template-lint/checks/src/main/kotlin/template/lint/ForbiddenMaterialIconsDetector.kt
+gsed -i "s/Use TemplateIcons/Use ${PROJECT_NAME_PASCAL}Icons/g" .support/template-lint/checks/src/main/kotlin/template/lint/ForbiddenMaterialIconsDetector.kt
+gsed -i "s/TemplateLintIssueRegistry/${PROJECT_NAME_PASCAL}LintIssueRegistry/g" .support/template-lint/checks/src/main/kotlin/template/lint/TemplateLintIssueRegistry.kt
+gsed -i "s/vendorName = \"Template\"/vendorName = \"$PROJECT_NAME_PASCAL\"/g" .support/template-lint/checks/src/main/kotlin/template/lint/TemplateLintIssueRegistry.kt
+gsed -i "s/template\.lint\.TemplateLintIssueRegistry/$PROJECT_PACKAGE.lint.${PROJECT_NAME_PASCAL}LintIssueRegistry/g" .support/template-lint/checks/src/main/resources/META-INF/services/com.android.tools.lint.client.api.IssueRegistry
+mv .support/template-lint/checks/src/main/kotlin/template/lint/TemplateLintIssueRegistry.kt .support/template-lint/checks/src/main/kotlin/template/lint/${PROJECT_NAME_PASCAL}LintIssueRegistry.kt
+
+# Find and rename all 'src/*/kotlin/template' directories at any depth
+find . -type d -path "*/src/*/kotlin/template" | while read -r template_dir; do
+  new_dir="${template_dir%/template}/$PROJECT_PACKAGE_PATH"
+    mkdir -p "$(dirname "$new_dir")" # Ensure parent directories exist
+    mv "$template_dir" "$new_dir"
+    echo "Renamed $template_dir to $new_dir"
+done
+
+find . -type f -name "Template*" -exec bash -c 'mv "$0" "${0%/*}/'"$PROJECT_NAME_PASCAL"'${0##*/Template}"' {} \;
+
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s/package template\./package $PROJECT_PACKAGE./g" {} \; -exec echo "Modified package statement: {}" \;
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s/import template\./import $PROJECT_PACKAGE./g" {} \; -exec echo "Modified import statements: {}" \;
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s/namespace = \"template\./namespace = \"$PROJECT_PACKAGE./g" {} \; -exec echo "Modified namespace statements: {}" \;
+find . -type f -name "*.kts" -exec gsed -i "s/libs\.plugins\.templateGradle/libs.plugins.${PROJECT_NAME_CAMEL}Gradle/g" {} +
+find . -type f -name "*.kts" -exec gsed -i "s/\"template-gradle\"/\"$PROJECT_NAME_KEBAB-gradle\"/g" {} +
+
+gsed -i "s/templateLint =/${PROJECT_NAME_CAMEL}Lint =/g" gradle/libs.versions.toml
+gsed -i "s/templateGradle =/${PROJECT_NAME_CAMEL}Gradle =/g" gradle/libs.versions.toml
+gsed -i "s/template-gradle/${PROJECT_NAME_KEBAB}-gradle/g" gradle/libs.versions.toml
+
+mv .support/template-gradle/src/main/kotlin/template-gradle.gradle.kts .support/template-gradle/src/main/kotlin/$PROJECT_NAME_KEBAB-gradle.gradle.kts
+rm -rf .support/$PROJECT_NAME_KEBAB-gradle
+mv .support/template-gradle .support/$PROJECT_NAME_KEBAB-gradle
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s/template\.gradle/$PROJECT_PACKAGE.gradle/g" {} +
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s/templateGradleLibs/${PROJECT_NAME_CAMEL}GradleLibs/g" {} +
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s#template/#$PROJECT_PACKAGE_PATH/#g" {} +
+
+gsed -i "s/rootProject\.name = \"template-lint\"/rootProject.name = \"$PROJECT_NAME_KEBAB-lint\"/g" .support/template-lint/settings.gradle.kts
+find . -type f \( -name "*.kt" -o -name "*.kts" -o -name "*.toml" \) -exec gsed -i "s/template\.lint/$PROJECT_PACKAGE.lint/g" {} +
+find . -type f -name "*.kts" -exec gsed -i "s/libs\.templateLint/libs.${PROJECT_NAME_CAMEL}Lint/g" {} +
+rm -rf .support/$PROJECT_NAME_KEBAB-lint
+mv .support/template-lint .support/$PROJECT_NAME_KEBAB-lint
+
+gsed -i "s/template-/${PROJECT_NAME_KEBAB}-/g" .github/workflows/template-gradle-pr.yml
+gsed -i "s#template/#${PROJECT_PACKAGE_PATH}/#g" .github/workflows/template-gradle-pr.yml
+gsed -i "s/template-/${PROJECT_NAME_KEBAB}-/g" .github/workflows/template-lint-pr.yml
+gsed -i "s#template/#${PROJECT_PACKAGE_PATH}/#g" .github/workflows/template-lint-pr.yml
+
+mv .github/workflows/template-gradle-pr.yml .github/workflows/$PROJECT_NAME_KEBAB-gradle-pr.yml
+mv .github/workflows/template-lint-pr.yml .github/workflows/$PROJECT_NAME_KEBAB-lint-pr.yml
+
+find . -type f -name "*.kt" -exec gsed -i "s/createTemplate/create$PROJECT_NAME_PASCAL/g" {} +
+
+find . -type f -name "*.md" -exec gsed -i "s/Template/$PROJECT_NAME_PASCAL/g" {} +
+find . -type f -name "*.kt" -exec gsed -i "s/PreviewTemplateScreen/Preview${PROJECT_NAME_PASCAL}Screen/g" {} +
+find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec gsed -i "s/\(^\|[^a-zA-Z]\)Template/\1$PROJECT_NAME_PASCAL/g" {} +
+find . -type f \( -name "*.kt" -o -name "*.kts" -o -name "*.md" \) -exec gsed -i "s/template\./$PROJECT_PACKAGE./g" {} +
+find . -type f \( -name "*.kt" -o -name "*.kts" -o -name "*.md" \) -exec gsed -i "s/template-/$PROJECT_NAME_KEBAB-/g" {} +
+find . -type f \( -name "*.kt" -o -name "*.kts" -o -name "*.md" \) -exec gsed -i "s/template/$PROJECT_NAME_CAMEL/g" {} +
+
+gsed -i "s/template\.app\.TemplateApplication/$PROJECT_PACKAGE.app.${PROJECT_NAME_PASCAL}Application/g" apps/android/src/main/AndroidManifest.xml
+gsed -i "s/template\.app\.TemplateActivity/$PROJECT_PACKAGE.app.${PROJECT_NAME_PASCAL}Activity/g" apps/android/src/main/AndroidManifest.xml
+
+find . -type f -name "*.xml" -exec gsed -i "s/Theme\.TemplateSplash/Theme.${PROJECT_NAME_PASCAL}Splash/g" {} +
+find . -type f -name "*.xml" -exec gsed -i "s/Theme\.Template/Theme.$PROJECT_NAME_PASCAL/g" {} +
+
+gsed -i "s/Template/$PROJECT_NAME_PASCAL/g" apps/android/src/main/res/values/strings.xml
+gsed -i "s/Welcome to the Template app/Welcome to the $PROJECT_NAME_PASCAL app/g" destinations/welcome/src/commonMain/composeResources/values/strings.xml
+
+rm -rf .support/.m2/template
+rm -rf .support/.m2/template-gradle
+rm -rf kotlin-js-store
+
+gsed -i "s/template-/${PROJECT_NAME_KEBAB}-/g" .scripts/publish_included_builds
+.scripts/publish_included_builds
+
+./gradlew cleanPaparazziDevDebug
+./gradlew recordPaparazziDevDebug
+
+./format
+./format --check-support
+
+echo "Your ejson public keys:"
+echo "  Internal: $INTERNAL_EJSON_PUBLIC_KEY"
+echo "  Prod: $PROD_EJSON_PUBLIC_KEY"

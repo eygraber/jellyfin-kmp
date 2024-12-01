@@ -1,0 +1,104 @@
+name: Build and deploy a nightly build to Firebase App Distribution
+run-name: Build and Deploy Nightly
+
+on:
+  schedule:
+    # 3:00 AM EST (converted from UTC), Monday-Friday
+    - cron:  '0 7 * * 1-5'
+  workflow_dispatch:
+
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  check-changes:
+    if: false
+    runs-on: ubuntu-latest
+
+    outputs:
+      should_continue: ${{ steps.check-changes.outputs.should_continue }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        run: git fetch --tags origin
+
+      - name: Check if there are new commits since the last release tag
+        id: check-changes
+        run: .scripts/check_for_commits_since_last_release
+
+  deploy:
+    needs: check-changes
+    if: needs.check-changes.outputs.should_continue == 'true'
+
+    permissions:
+      contents: write
+      issues: read
+      pull-requests: read
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        run: git fetch --tags origin
+
+      - name: Setup Firebase App Distribution Dev Secret
+        run: mkdir tmp && echo "$FIREBASE_APP_DISTRIBUTION_DEV_KEY" > tmp/firebase_app_distribution_dev_cred
+
+      - name: Setup for building
+        uses: ./.github/actions/build-setup
+
+      - name: Create the new release tag
+        run: .scripts/create_new_release_tag
+
+      - name: Build the dev release APK and prod release AAB
+        run: ./gradlew :app:assembleDevRelease :app:bundleProdRelease
+
+      - name: Deploy the DevRelease APK to Firebase App Distribution
+        run: ./gradlew :app:appDistributionUploadDevRelease
+
+      - name: Deploy the ProdRelease AAB to the Play Store
+        if: false # disabled until the listing is ready
+        run: ./gradlew :app:publishProdReleaseBundle
+
+      - name: Build changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          configuration: "changelog_config.json"
+          toTag: ${{ env.NEW_RELEASE_TAG_REF }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          body: ${{ steps.build_changelog.outputs.changelog }}
+          name: Release ${{ env.NEW_RELEASE_TAG }}
+          tag: ${{ env.NEW_RELEASE_TAG }}
+          artifacts: "app/build/outputs/apk/dev/release/app-dev-release.apk"
+
+      - name: Upload mapping files to release
+        run: |
+          cp "app/build/outputs/mapping/devRelease/mapping.txt" "tmp/mapping-dev-release-${{ env.NEW_RELEASE_TAG }}.txt"
+          cp "app/build/outputs/mapping/prodRelease/mapping.txt" "tmp/mapping-prod-release-${{ env.NEW_RELEASE_TAG }}.txt"
+          gh release upload ${{ env.NEW_RELEASE_TAG }} "tmp/mapping-dev-release-${{ env.NEW_RELEASE_TAG }}.txt"
+          gh release upload ${{ env.NEW_RELEASE_TAG }} "tmp/mapping-prod-release-${{ env.NEW_RELEASE_TAG }}.txt"
+
+env:
+  EJSON_DEV_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_DEV_BUILD_PRIVATE_KEY }}
+  EJSON_PROD_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_PROD_BUILD_PRIVATE_KEY }}
+  FIREBASE_APP_DISTRIBUTION_DEV_KEY: ${{ secrets.FIREBASE_APP_DISTRIBUTION_DEV_KEY }}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PROD_KEY_PASSWORD: ${{ secrets.PROD_KEY_PASSWORD }}
+  PROD_KEYSTORE_PASSWORD: ${{ secrets.PROD_KEYSTORE_PASSWORD }}
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx16g -XX:ReservedCodeCacheSize=240m -XX:+UseCompressedOops -XX:+UseParallelGC -XX:MetaspaceSize=1g -Dfile.encoding=UTF-8"
