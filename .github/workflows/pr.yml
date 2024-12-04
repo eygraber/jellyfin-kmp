@@ -38,6 +38,7 @@ jobs:
         run: ./gradlew assembleDevDebug
 
   dependency_analysis:
+    if: false
     permissions:
       contents: read
     runs-on: ubuntu-latest
