@@ -191,7 +191,7 @@ test-compose-uiManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 test-junit = "junit:junit:4.13.2"
 test-junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
-test-konsist = "com.lemonappdev:konsist:0.17.1"
+test-konsist = "com.lemonappdev:konsist:0.17.2"
 test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared", version.ref = "kotest" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
