@@ -40,3 +40,12 @@ kotlin {
     }
   }
 }
+
+// needed until https://github.com/google/ksp/issues/2243 is resolved
+tasks.all {
+  if(name.startsWith("kspKotlinIos")) {
+    afterEvaluate {
+      setOnlyIf { true }
+    }
+  }
+}

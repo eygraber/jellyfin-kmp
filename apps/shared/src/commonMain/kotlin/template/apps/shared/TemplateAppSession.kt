@@ -32,6 +32,7 @@ fun TemplateAppSession(
   )
 }
 
+@Suppress("ModifierNotUsedAtRoot")
 @Composable
 private fun Content(
   isDarkMode: Boolean,
