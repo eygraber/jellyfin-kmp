@@ -25,13 +25,14 @@ It `@Provides` the route used to navigate to it, as well as a `Navigator` class 
 
 [AndroidX Navigation Compose] is used together with `vice-nav` to provide navigation between `ViceDestinations`.
 
-The `nav` module contains the top level `NavGraphBuilder` which it provides to the `NavHost` in the `app` module.
+The `nav` module contains the top level `TemplateNav` composable,
+which contains a `NavHost` that acts as the root of the app's navigation graph.
 
 It will add `ViceDestinations` to the nav graph by creating an instance of the destination's component, which
 exposes a `ViceDestination` instance.
 
 The `NavController` is not exposed outside of `nav`. Instead, `ViceDestination` receives "navigation events"
-in the form of lambdas. This allows all navigation to happen centrally in the `NavGraphBuilder`, and doesn't leak
+in the form of lambdas. This allows all navigation to happen centrally in `TemplateNav`, and doesn't leak
 navigation library implementation details into the destinations. See [Encapsulate your navigation code].
 
 [1]: https://developer.android.com/topic/architecture/ui-layer

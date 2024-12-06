@@ -59,7 +59,7 @@ showing which versions of AGP work with specific versions of Android Studio.
 
 ## eJSON
 
-[eJSON] is being used to manage repo secrets so that they can't get accidentally leaked.
+[eJSON] is being used to manage repo secrets so that they don't get accidentally leaked.
 
 You can get the dev keypair from Eli. Make sure that it is stored in /opt/ejson/keys
 (or a specific location using the EJSON_KEYDIR environment variable). Prod can't be built locally,

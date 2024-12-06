@@ -3,8 +3,9 @@
 There are several tools and checks run on every PR to ensure
 a high standard of code quality in the project.
 
-The `check` script that will run all of the checks that are run for a PR
+The `check` script will run all of the checks that are run for a PR
 (arguments passed to `./check` will get forwarded to its invocation of `detekt`).
+Passing `--lite` will run a subset of those checks.
 
 ## Android Lint
 
@@ -56,6 +57,11 @@ IDE formatting rules are checked into git at `.idea/codeStyles`.
 This allows the IDE formatting tool to be used in a way that is _mostly_ compatible with `ktlint`
 (there are rare cases where they disagree with each other; in those cases `ktlint` wins).
 
+## Consistency
+
+[Konsist] is used to keep patterns in the project consistent.
+
 [Dependency Analysis Plugin]: https://github.com/autonomousapps/dependency-analysis-gradle-plugin
 [Detekt]: https://detekt.dev/
 [ktlint]: https://github.com/pinterest/ktlint
+[Konsist]: https://github.com/LemonAppDev/konsist
