@@ -140,6 +140,7 @@ ejson encrypt apps/android/src/dev/secrets.ejson
 ejson encrypt apps/android/src/prod/secrets.ejson
 
 $SED -i "s/rootProject\.name = \"cmp-app-template\"/rootProject.name = \"$CURRENT_DIRECTORY\"/g" settings.gradle.kts
+$SED -i "s/template\.keystore/$PROJECT_NAME_KEBAB.keystore/g" apps/android/build.gradle.kts
 
 $SED -i "s/template.app.init.TemplateAndroidXInitializer/$PROJECT_PACKAGE.app.init.${PROJECT_NAME_PASCAL}AndroidXInitializer/g" apps/android/src/main/AndroidManifest.xml
 
