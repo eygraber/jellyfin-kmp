@@ -143,7 +143,7 @@ compose-ui-text = { module = "androidx.compose.ui:ui-text" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-unit = { module = "androidx.compose.ui:ui-unit" }
-composeMaterialIconsCore = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.1" }
+composeMaterialIconsCore = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.3" }
 
 detektCompose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
 detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", version.ref = "detektEygraber" }
