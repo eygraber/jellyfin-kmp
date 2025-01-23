@@ -33,6 +33,7 @@ kotlin {
 
   sourceSets {
     androidUnitTest.dependencies {
+      implementation(projects.testUtils)
       implementation(libs.bundles.test.paparazzi)
     }
 

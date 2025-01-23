@@ -10,6 +10,8 @@ android {
   namespace = "template.test.utils"
 
   dependencies {
+    api(libs.test.paparazzi)
+
     debugImplementation(libs.test.compose.uiManifest)
   }
 }
