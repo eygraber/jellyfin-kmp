@@ -124,6 +124,14 @@ dependencyAnalysis {
         severity("ignore")
       }
 
+      onDuplicateClassWarnings {
+        // https://github.com/cashapp/paparazzi/issues/1719
+        exclude(
+          "org/jetbrains/annotations/NotNull",
+          "org/jetbrains/annotations/Nullable",
+        )
+      }
+
       onAny {
         severity("fail")
 
