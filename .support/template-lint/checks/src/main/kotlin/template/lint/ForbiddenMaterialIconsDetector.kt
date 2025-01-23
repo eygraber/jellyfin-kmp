@@ -19,8 +19,13 @@ import org.jetbrains.uast.UVariable
 import org.jetbrains.uast.kotlin.parentAs
 
 class ForbiddenMaterialIconsDetector : Detector(), SourceCodeScanner {
+  private val errorMessage =
+    "Usage of Icons from material-icons-core is not supported in Template. Use TemplateIcons instead."
+
   override fun createUastHandler(context: JavaContext) =
     object : UElementHandler() {
+      private val variableCache = HashSet<PsiElement?>()
+
       override fun visitSimpleNameReferenceExpression(node: USimpleNameReferenceExpression) {
         val resolvedNode by lazy {
           node.resolve() as? PsiClass
@@ -37,18 +42,26 @@ class ForbiddenMaterialIconsDetector : Detector(), SourceCodeScanner {
 
         val referenced = resolvedNode
         if(nodeExpressionType != null && referenced != null) {
-          visitReference(context, node, referenced, nodeExpressionType.name)
+          visitReference(
+            context = context,
+            reference = node,
+            referenced = referenced,
+            typeName = nodeExpressionType.name,
+          )
         }
       }
-
-      private val variableCache = HashSet<PsiElement?>()
 
       override fun visitVariable(node: UVariable) {
         if(!variableCache.add(node.sourcePsi)) return
 
         (node.type as? PsiClassType)?.let { type ->
           context.evaluator.getTypeClass(type)?.let { referenced ->
-            visitReference(context, node, referenced, type.name)
+            visitReference(
+              context = context,
+              reference = node,
+              referenced = referenced,
+              typeName = type.name,
+            )
           }
         }
       }
@@ -87,9 +100,6 @@ class ForbiddenMaterialIconsDetector : Detector(), SourceCodeScanner {
       }
     }
   }
-
-  private val errorMessage =
-    "Usage of Icons from material-icons-core is not supported in Template. Use TemplateIcons instead."
 
   companion object {
     @JvmField

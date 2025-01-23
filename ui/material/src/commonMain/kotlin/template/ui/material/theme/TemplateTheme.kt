@@ -1,5 +1,3 @@
-@file:Suppress("StringLiteralDuplication")
-
 package template.ui.material.theme
 
 import androidx.compose.desktop.ui.tooling.preview.Preview

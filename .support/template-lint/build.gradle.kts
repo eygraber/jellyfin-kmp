@@ -47,7 +47,7 @@ gradleConventionsDefaults {
     allWarningsAsErrors = true
 
     findToolchainIfNeeded(
-      javaVersionDir = "../../",
+      javaVersionDir = "../../.github/",
     )?.let { toolchainVersion ->
       this.jdkToolchainVersion = toolchainVersion
       this.jvmDistribution = JvmVendorSpec.AZUL

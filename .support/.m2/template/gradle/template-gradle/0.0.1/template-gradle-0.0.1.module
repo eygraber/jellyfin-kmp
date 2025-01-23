@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.11.1"
+      "version": "8.12"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76367,
-          "sha512": "d6f72d656b67be1f7f8927d5a23421fd24357d445fa51cf7f63eb500fffdec9bce0dd5037a1ea5d059e11bbf51aedcd9c98867cf24e6e56618102a78e4f372d6",
-          "sha256": "895854525e39659a4e21d54bce36ef592f12d4e4b265f7bbad619f7abbb15eb1",
-          "sha1": "be7abcf1c728b4bb1dda1cb9687a78cfba937852",
-          "md5": "cb8ae82b31889644cb84c2b82b0e3a6b"
+          "size": 76280,
+          "sha512": "6e6198aae24e0d54969ba26c6091ddfa36580716dcfe0ced9d65db9d395a45a0d5d7a296ac41f050f1a6f75023387d5cdd2b5fa8427bb6e96a4c161618ac1447",
+          "sha256": "0c09f35c798c78c8c3860b9cc837d5edf447b299b0679fd1e1ec481bc4d6ac35",
+          "sha1": "5b82badc5a01ca7114bd1bef579e21a90cf80348",
+          "md5": "a49dc38f67db1f6a8ddb5d6c67e84976"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "8.7.3"
+            "requires": "8.8.0"
           }
         },
         {
@@ -88,7 +88,7 @@
           "group": "org.jetbrains.kotlinx",
           "module": "kotlinx-serialization-json",
           "version": {
-            "requires": "1.7.3"
+            "requires": "1.8.0"
           }
         }
       ],
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76367,
-          "sha512": "d6f72d656b67be1f7f8927d5a23421fd24357d445fa51cf7f63eb500fffdec9bce0dd5037a1ea5d059e11bbf51aedcd9c98867cf24e6e56618102a78e4f372d6",
-          "sha256": "895854525e39659a4e21d54bce36ef592f12d4e4b265f7bbad619f7abbb15eb1",
-          "sha1": "be7abcf1c728b4bb1dda1cb9687a78cfba937852",
-          "md5": "cb8ae82b31889644cb84c2b82b0e3a6b"
+          "size": 76280,
+          "sha512": "6e6198aae24e0d54969ba26c6091ddfa36580716dcfe0ced9d65db9d395a45a0d5d7a296ac41f050f1a6f75023387d5cdd2b5fa8427bb6e96a4c161618ac1447",
+          "sha256": "0c09f35c798c78c8c3860b9cc837d5edf447b299b0679fd1e1ec481bc4d6ac35",
+          "sha1": "5b82badc5a01ca7114bd1bef579e21a90cf80348",
+          "md5": "a49dc38f67db1f6a8ddb5d6c67e84976"
         }
       ]
     }

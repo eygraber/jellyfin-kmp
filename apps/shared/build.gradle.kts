@@ -54,8 +54,9 @@ kotlin {
 licensee {
   allow("Apache-2.0")
   allow("MIT")
+
+  // de.drick.compose:edge-to-edge-preview
   allow("Unlicense")
-  allowUrl("https://opensource.org/license/mit")
 
   allowDependency(libs.templateLint)
 }

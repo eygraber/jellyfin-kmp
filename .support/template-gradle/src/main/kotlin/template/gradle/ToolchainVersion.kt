@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 fun Project.findToolchainIfNeeded(
-  javaVersionDir: String = "./",
+  javaVersionDir: String = ".github/",
 ): JavaLanguageVersion? {
   val expectedJavaVersion = file("$javaVersionDir.java-version").readText().trim()
   val isToolchainNeeded = JavaVersion.current() < JavaVersion.toVersion(expectedJavaVersion.toInt())

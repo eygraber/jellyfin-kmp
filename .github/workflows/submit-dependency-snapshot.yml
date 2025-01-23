@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version-file: .java-version
+          java-version-file: .github/.java-version
 
       - name: Retrieve dependency graph artifact and submit
         uses: gradle/actions/setup-gradle@v4

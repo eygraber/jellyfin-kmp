@@ -21,6 +21,8 @@ jobs:
 
       - name: Danger
         uses: danger/kotlin@1.3.2
+        with:
+          dangerfile: .github/Dangerfile.df.kts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -48,7 +48,7 @@ gradleConventions {
   kotlin {
     jvmTargetVersion = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     allWarningsAsErrors = true
-    jdkToolchainVersion = JavaLanguageVersion.of(file("../../.java-version").readText().trim())
+    jdkToolchainVersion = JavaLanguageVersion.of(file("../../.github/.java-version").readText().trim())
     jvmDistribution = JvmVendorSpec.AZUL
   }
 }

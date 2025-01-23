@@ -13,10 +13,10 @@ The project aims to use the latest version of the JDK that is supported by the A
 and Gradle. This will usually be the latest stable version of the JDK, but there could be a delay between when it is
 available and when the tools support it.
 
-The version used for building the app is defined in the `.java-version` file. The Azul / zulu distribution is preferred.
+The version used for building the app is defined in the `.github/.java-version` file. The Azul / zulu distribution is preferred.
 If your local JDK is a lower version than that or uses a different distribution, Gradle will download and use a JDK
 that matches the requirements. Gradle itself will be run using your local JDK, so it is always better to make sure that
-you have a local version >= to the one defined in `.java-version`.
+you have a local version >= to the one defined in `.github/.java-version`.
 
 [Homebrew] is a good option for managing JDK versions on macos.
 [SDKMan] is a good option for Linux.

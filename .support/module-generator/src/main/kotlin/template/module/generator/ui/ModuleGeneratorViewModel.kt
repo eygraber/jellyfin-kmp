@@ -54,6 +54,9 @@ internal class ModuleGeneratorViewModel {
   var packageName by mutableStateOf(PackageNamePrefix)
   var packageNameError by mutableStateOf<String?>(null)
 
+  var isProgressShowing by mutableStateOf(false)
+  var progressText by mutableStateOf("")
+
   val isGenerationEnabled by derivedStateOf {
     moduleName.isNotEmpty() && moduleNameError == null &&
       packageName.isNotEmpty() && packageNameError == null &&
@@ -175,9 +178,6 @@ internal class ModuleGeneratorViewModel {
       }
     }
   }
-
-  var isProgressShowing by mutableStateOf(false)
-  var progressText by mutableStateOf("")
 
   fun generate() {
     isProgressShowing = true

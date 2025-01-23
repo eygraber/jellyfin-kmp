@@ -1,7 +1,4 @@
-[versions]
-androidCacheFix = "3.0.1"
-
-# If the AGP version is X.Y.Z, then the Lint library version is X+23.Y.Z.
+[versions]# If the AGP version is X.Y.Z, then the Lint library version is X+23.Y.Z.
 android-lint = "31.8.0"
 
 android-plugin = "8.8.0"
@@ -64,6 +61,7 @@ androidLint = { id = "com.android.lint" }
 atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
 completeKotlin = { id = "com.louiscad.complete-kotlin", version = "1.1.0" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeJetbrains" }
 conventionsAndroidLibrary = { id = "com.eygraber.conventions-android-library" }
 conventionsBase = { id = "com.eygraber.conventions", version.ref = "conventions" }
 conventionsCompose = { id = "com.eygraber.conventions-compose" }

@@ -13,7 +13,7 @@ plugins {
 group = "template.gradle"
 version = "0.0.1"
 
-val expectedJavaVersion = file("../../.java-version").readText().trim()
+val expectedJavaVersion = file("../../.github/.java-version").readText().trim()
 val toolchainVersion: JavaLanguageVersion? = when {
   JavaVersion.current() < JavaVersion.toVersion(expectedJavaVersion.toInt()) ->
     JavaLanguageVersion.of(expectedJavaVersion)
