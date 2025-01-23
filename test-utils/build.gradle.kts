@@ -1,5 +1,8 @@
+import org.jetbrains.compose.compose
+
 plugins {
   alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
@@ -10,6 +13,10 @@ android {
   namespace = "template.test.utils"
 
   dependencies {
+    implementation(compose.components.resources)
+    implementation(compose.runtime)
+    implementation(compose.uiTooling)
+
     api(libs.test.paparazzi)
 
     debugImplementation(libs.test.compose.uiManifest)

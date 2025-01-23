@@ -6,6 +6,7 @@ import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import template.test.utils.PaparazziComposeResourcesEffect
 import template.test.utils.PaparazziDeviceConfig
 import template.ui.material.theme.TemplateEdgeToEdgePreviewTheme
 
@@ -22,6 +23,8 @@ class WelcomeScreenshotTest(
   @Test
   fun screenshot() {
     paparazzi.snapshot {
+      PaparazziComposeResourcesEffect()
+
       TemplateEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
         WelcomeView(
           state = WelcomeViewState,

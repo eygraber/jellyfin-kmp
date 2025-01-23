@@ -437,6 +437,7 @@ internal fun createDestinationModule(
         |import org.junit.Rule
         |import org.junit.Test
         |import org.junit.runner.RunWith
+        |import template.test.utils.PaparazziComposeResourcesEffect
         |import template.test.utils.PaparazziDeviceConfig
         |import template.ui.material.theme.TemplateEdgeToEdgePreviewTheme
         |
@@ -453,6 +454,8 @@ internal fun createDestinationModule(
         |  @Test
         |  fun screenshot() {
         |    paparazzi.snapshot {
+        |      PaparazziComposeResourcesEffect()
+        |
         |      TemplateEdgeToEdgePreviewTheme(isDarkMode = config.isDarkMode) {
         |        $viewName(
         |          state = $viewStateName,
