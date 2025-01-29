@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76280,
-          "sha512": "6e6198aae24e0d54969ba26c6091ddfa36580716dcfe0ced9d65db9d395a45a0d5d7a296ac41f050f1a6f75023387d5cdd2b5fa8427bb6e96a4c161618ac1447",
-          "sha256": "0c09f35c798c78c8c3860b9cc837d5edf447b299b0679fd1e1ec481bc4d6ac35",
-          "sha1": "5b82badc5a01ca7114bd1bef579e21a90cf80348",
-          "md5": "a49dc38f67db1f6a8ddb5d6c67e84976"
+          "size": 76297,
+          "sha512": "5c00dc97cd393ba4a819f0811f5c4cb79ea330efebf3bc2fd892e824cbb5ba2ea2f9a10141b350b66437d37f258e9c049a8ca4f0d5f8417cd686d035da449e5c",
+          "sha256": "be942733ca9951f09d3e59ea177a7bd51c12a4b99b591a7fdc4af1fa6d65ebb6",
+          "sha1": "4c427d07e311ccd5b1940c13ba9aba74f73af9ff",
+          "md5": "e0348347b8ec30639e9440de4cb34e96"
         }
       ]
     },
@@ -81,7 +81,7 @@
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.1.0-1.0.29"
+            "requires": "2.1.10-1.0.29"
           }
         },
         {
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76280,
-          "sha512": "6e6198aae24e0d54969ba26c6091ddfa36580716dcfe0ced9d65db9d395a45a0d5d7a296ac41f050f1a6f75023387d5cdd2b5fa8427bb6e96a4c161618ac1447",
-          "sha256": "0c09f35c798c78c8c3860b9cc837d5edf447b299b0679fd1e1ec481bc4d6ac35",
-          "sha1": "5b82badc5a01ca7114bd1bef579e21a90cf80348",
-          "md5": "a49dc38f67db1f6a8ddb5d6c67e84976"
+          "size": 76297,
+          "sha512": "5c00dc97cd393ba4a819f0811f5c4cb79ea330efebf3bc2fd892e824cbb5ba2ea2f9a10141b350b66437d37f258e9c049a8ca4f0d5f8417cd686d035da449e5c",
+          "sha256": "be942733ca9951f09d3e59ea177a7bd51c12a4b99b591a7fdc4af1fa6d65ebb6",
+          "sha1": "4c427d07e311ccd5b1940c13ba9aba74f73af9ff",
+          "md5": "e0348347b8ec30639e9440de4cb34e96"
         }
       ]
     }
