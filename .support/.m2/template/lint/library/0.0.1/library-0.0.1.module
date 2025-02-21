@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.12"
+      "version": "8.12.1"
     }
   },
   "variants": [
@@ -27,7 +27,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib",
           "version": {
-            "requires": "2.1.0"
+            "requires": "2.1.10"
           }
         }
       ],
@@ -35,11 +35,11 @@
         {
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
-          "size": 8114,
-          "sha512": "3bba66dca1910e259b0c5e1f96964bf4eb1e16e2cde5e8f88a6aba3c81c65f313639b6b3793a8629029896d8ca1df905975dc1619428c908ad8230857ea03955",
-          "sha256": "5fca06f60898d51938deb7f82a071ea2339b0d3d675e0c048313b4e357966275",
-          "sha1": "6b8190710cb6fbe8aec0b3a07fc79091b79a1a8d",
-          "md5": "f7d2264d2f53cbd8af5c2bef793206f4"
+          "size": 8134,
+          "sha512": "dbd65cc03a7c0812a8a146224313607109ed2ec9489326edab571392fb1e8705a2a52944aed4ef650e978b491c3c1c8fa226edcb4b79b0bd0aea43d9c734f7af",
+          "sha256": "0e64916e3a6f66e3674b7d7fe3c8e732affdaf654aa5436626742102ff0fa4fa",
+          "sha1": "4019e8ae27b8203fc952c965b33c241cd98ace37",
+          "md5": "dd230f7191e0ae749baa8aba1d7b3521"
         }
       ]
     },
@@ -56,7 +56,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib",
           "version": {
-            "requires": "2.1.0"
+            "requires": "2.1.10"
           }
         }
       ],
@@ -64,11 +64,11 @@
         {
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
-          "size": 8114,
-          "sha512": "3bba66dca1910e259b0c5e1f96964bf4eb1e16e2cde5e8f88a6aba3c81c65f313639b6b3793a8629029896d8ca1df905975dc1619428c908ad8230857ea03955",
-          "sha256": "5fca06f60898d51938deb7f82a071ea2339b0d3d675e0c048313b4e357966275",
-          "sha1": "6b8190710cb6fbe8aec0b3a07fc79091b79a1a8d",
-          "md5": "f7d2264d2f53cbd8af5c2bef793206f4"
+          "size": 8134,
+          "sha512": "dbd65cc03a7c0812a8a146224313607109ed2ec9489326edab571392fb1e8705a2a52944aed4ef650e978b491c3c1c8fa226edcb4b79b0bd0aea43d9c734f7af",
+          "sha256": "0e64916e3a6f66e3674b7d7fe3c8e732affdaf654aa5436626742102ff0fa4fa",
+          "sha1": "4019e8ae27b8203fc952c965b33c241cd98ace37",
+          "md5": "dd230f7191e0ae749baa8aba1d7b3521"
         }
       ]
     }
