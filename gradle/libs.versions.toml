@@ -89,7 +89,7 @@ templateGradle = { id = "template-gradle", version = "0.0.1" }
 testBurst = { id = "app.cash.burst", version = "2.4.0" }
 
 [libraries]
-android-desugar = "com.android.tools:desugar_jdk_libs:2.1.4"
+android-desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 android-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "android-lint" }
 android-lint-test = { module = "com.android.tools.lint:lint-tests", version.ref = "android-lint" }
 
