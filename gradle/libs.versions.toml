@@ -27,7 +27,7 @@ ejson = "1.0.9"
 
 googleServices = "4.4.2"
 
-junit5 = "5.11.4"
+junit5 = "5.12.1"
 
 jvmTarget = "17"
 
@@ -187,8 +187,11 @@ test-compose-ui = { module = "androidx.compose.ui:ui-test" }
 test-compose-uiJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 test-compose-uiManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 test-junit = "junit:junit:4.13.2"
-test-junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
-test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
+test-junit5-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+test-junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
+test-junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+test-junit5-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params" }
 test-konsist = "com.lemonappdev:konsist:0.17.3"
 test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared", version.ref = "kotest" }

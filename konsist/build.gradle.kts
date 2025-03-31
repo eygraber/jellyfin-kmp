@@ -9,8 +9,10 @@ dependencies {
   testImplementation(libs.kotlinInject.anvilRuntimeOptional)
   testImplementation(libs.kotlinInject.runtime)
 
-  testImplementation(libs.test.junit5.engine)
-  testImplementation(libs.test.junit5.params)
+  testImplementation(libs.test.junit5.api)
+  testImplementation(platform(libs.test.junit5.bom))
+  testRuntimeOnly(libs.test.junit5.engine)
+  testRuntimeOnly(libs.test.junit5.launcher)
   testImplementation(libs.test.konsist)
   testImplementation(libs.test.kotest.assertions.core)
   testImplementation(libs.test.kotest.assertions.shared)
