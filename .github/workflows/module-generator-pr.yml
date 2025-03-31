@@ -12,40 +12,29 @@ permissions:
   contents: read
 
 jobs:
-  detekt_module-generator:
+  module-generator-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            module-generator:
+              - '.support/module-generator/**'
 
       - name: Setup for building
-        uses: ./.github/actions/build-setup
-
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            module-generator:
-              - '.support/module-generator/**'
-
-      - name: Run detekt
         if: steps.changes.outputs.module-generator == 'true'
-        run: ./gradlew -p .support/module-generator detektMain -Pkotlin.incremental=false
-
-  ktlint_module-generator:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            module-generator:
-              - '.support/module-generator/**'
+        uses: ./.github/actions/build-setup
 
       - name: Run ktlint
         if: steps.changes.outputs.module-generator == 'true'
         run: ./format --no-format --check-support
+
+      - name: Run detekt
+        if: steps.changes.outputs.module-generator == 'true'
+        run: ./gradlew -p .support/module-generator detektMain -Pkotlin.incremental=false
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -XX:MaxMetaspaceSize=1024m"

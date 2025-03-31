@@ -12,68 +12,10 @@ permissions:
   contents: read
 
 jobs:
-  ktlint_template-lint:
+  template-lint-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            template-lint:
-              - '.support/template-lint/**'
-
-      - name: Run ktlint
-        if: steps.changes.outputs.template-lint == 'true'
-        run: ./format --no-format --check-support
-
-  detekt_template-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup for building
-        uses: ./.github/actions/build-setup
-
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            template-lint:
-              - '.support/template-lint/**'
-
-      - name: Run detekt
-        if: steps.changes.outputs.template-lint == 'true'
-        run: ./gradlew -p .support/template-lint :checks:detektMain
-
-  test_template-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup for building
-        uses: ./.github/actions/build-setup
-
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            template-lint:
-              - '.support/template-lint/**'
-
-      - name: Run template-lint tests
-        run: ./gradlew -p .support/template-lint :checks:test
-
-  check_template-lint_binary:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      - name: Setup for building
-        uses: ./.github/actions/build-setup
 
       - uses: dorny/paths-filter@v3
         id: changes
@@ -90,6 +32,22 @@ jobs:
             echo 'Run .scripts/publish_included_builds to regenerate the template-lint binary'
             exit 1
           fi
+
+      - name: Setup for building
+        if: steps.changes.outputs.template-lint == 'true'
+        uses: ./.github/actions/build-setup
+
+      - name: Run ktlint
+        if: steps.changes.outputs.template-lint == 'true'
+        run: ./format --no-format --check-support
+
+      - name: Run detekt
+        if: steps.changes.outputs.template-lint == 'true'
+        run: ./gradlew -p .support/template-lint :checks:detektMain
+
+      - name: Run template-lint tests
+        if: steps.changes.outputs.template-lint == 'true'
+        run: ./gradlew -p .support/template-lint :checks:test
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -XX:MaxMetaspaceSize=1024m"
