@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.12"
+      "version": "8.12.1"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76297,
-          "sha512": "5c00dc97cd393ba4a819f0811f5c4cb79ea330efebf3bc2fd892e824cbb5ba2ea2f9a10141b350b66437d37f258e9c049a8ca4f0d5f8417cd686d035da449e5c",
-          "sha256": "be942733ca9951f09d3e59ea177a7bd51c12a4b99b591a7fdc4af1fa6d65ebb6",
-          "sha1": "4c427d07e311ccd5b1940c13ba9aba74f73af9ff",
-          "md5": "e0348347b8ec30639e9440de4cb34e96"
+          "size": 76354,
+          "sha512": "7aa76b040c8cb76a30634153add92435232791e7acec35425fe4a95c1bbab79c6d383deca6241d8bbbc77bc1dd5d6f7b1bfaf82fc86132214fbab89580a207e3",
+          "sha256": "13eed922b2a7e88387e6f07c06e7f955672e274f34912d221511cca5705ffa1f",
+          "sha1": "c8bc9da822781c5df15c2b7ba9025e0bb0ac0a01",
+          "md5": "ee92bff2cf001622e07c1af988f60a3e"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "8.8.0"
+            "requires": "8.9.1"
           }
         },
         {
@@ -74,21 +74,21 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-gradle-plugin",
           "version": {
-            "requires": "2.1.0"
+            "requires": "2.1.20"
           }
         },
         {
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.1.10-1.0.29"
+            "requires": "2.1.20-1.0.32"
           }
         },
         {
           "group": "org.jetbrains.kotlinx",
           "module": "kotlinx-serialization-json",
           "version": {
-            "requires": "1.8.0"
+            "requires": "1.8.1"
           }
         }
       ],
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76297,
-          "sha512": "5c00dc97cd393ba4a819f0811f5c4cb79ea330efebf3bc2fd892e824cbb5ba2ea2f9a10141b350b66437d37f258e9c049a8ca4f0d5f8417cd686d035da449e5c",
-          "sha256": "be942733ca9951f09d3e59ea177a7bd51c12a4b99b591a7fdc4af1fa6d65ebb6",
-          "sha1": "4c427d07e311ccd5b1940c13ba9aba74f73af9ff",
-          "md5": "e0348347b8ec30639e9440de4cb34e96"
+          "size": 76354,
+          "sha512": "7aa76b040c8cb76a30634153add92435232791e7acec35425fe4a95c1bbab79c6d383deca6241d8bbbc77bc1dd5d6f7b1bfaf82fc86132214fbab89580a207e3",
+          "sha256": "13eed922b2a7e88387e6f07c06e7f955672e274f34912d221511cca5705ffa1f",
+          "sha1": "c8bc9da822781c5df15c2b7ba9025e0bb0ac0a01",
+          "md5": "ee92bff2cf001622e07c1af988f60a3e"
         }
       ]
     }
