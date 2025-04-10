@@ -80,7 +80,7 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
 ksp = { id = "com.google.devtools.ksp" }
-licensee = { id = "app.cash.licensee", version = "1.12.0" }
+licensee = { id = "app.cash.licensee", version = "1.13.0" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.31.0" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 playStoreApi = { id = "com.github.triplet.play", version = "3.12.1" }
