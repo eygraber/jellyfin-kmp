@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.12.1"
+      "version": "8.13"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76354,
-          "sha512": "7aa76b040c8cb76a30634153add92435232791e7acec35425fe4a95c1bbab79c6d383deca6241d8bbbc77bc1dd5d6f7b1bfaf82fc86132214fbab89580a207e3",
-          "sha256": "13eed922b2a7e88387e6f07c06e7f955672e274f34912d221511cca5705ffa1f",
-          "sha1": "c8bc9da822781c5df15c2b7ba9025e0bb0ac0a01",
-          "md5": "ee92bff2cf001622e07c1af988f60a3e"
+          "size": 76504,
+          "sha512": "8e7bffca0f9e16eca5e18d6e9fcd96d633b2438f4bdd56053d2b41ce2898ff95727e0a838ed1fdfdcf09099cfc9fb926f2fa16e1f36e5ee7ee614f4cd4aed841",
+          "sha256": "6e73f6f9da840aa2f88ded018462fcd96865371822883fcb2fa5cfe96f036554",
+          "sha1": "888ef0f9ad0906857d9bd2492f67875bc532b289",
+          "md5": "18b6972d34688a1c60433c1f7083da15"
         }
       ]
     },
@@ -81,7 +81,7 @@
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.1.20-1.0.32"
+            "requires": "2.1.20-2.0.0"
           }
         },
         {
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76354,
-          "sha512": "7aa76b040c8cb76a30634153add92435232791e7acec35425fe4a95c1bbab79c6d383deca6241d8bbbc77bc1dd5d6f7b1bfaf82fc86132214fbab89580a207e3",
-          "sha256": "13eed922b2a7e88387e6f07c06e7f955672e274f34912d221511cca5705ffa1f",
-          "sha1": "c8bc9da822781c5df15c2b7ba9025e0bb0ac0a01",
-          "md5": "ee92bff2cf001622e07c1af988f60a3e"
+          "size": 76504,
+          "sha512": "8e7bffca0f9e16eca5e18d6e9fcd96d633b2438f4bdd56053d2b41ce2898ff95727e0a838ed1fdfdcf09099cfc9fb926f2fa16e1f36e5ee7ee614f4cd4aed841",
+          "sha256": "6e73f6f9da840aa2f88ded018462fcd96865371822883fcb2fa5cfe96f036554",
+          "sha1": "888ef0f9ad0906857d9bd2492f67875bc532b289",
+          "md5": "18b6972d34688a1c60433c1f7083da15"
         }
       ]
     }

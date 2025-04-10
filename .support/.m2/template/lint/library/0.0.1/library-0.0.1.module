@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.12.1"
+      "version": "8.13"
     }
   },
   "variants": [
@@ -36,10 +36,10 @@
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
           "size": 8134,
-          "sha512": "dbd65cc03a7c0812a8a146224313607109ed2ec9489326edab571392fb1e8705a2a52944aed4ef650e978b491c3c1c8fa226edcb4b79b0bd0aea43d9c734f7af",
-          "sha256": "0e64916e3a6f66e3674b7d7fe3c8e732affdaf654aa5436626742102ff0fa4fa",
-          "sha1": "4019e8ae27b8203fc952c965b33c241cd98ace37",
-          "md5": "dd230f7191e0ae749baa8aba1d7b3521"
+          "sha512": "7ad83be9dbb597e89d587f29c3547a2dbe2295a56a6b75094afc5329c312522b4f758165223d7ed074757493ef3b2f24f7ed240bd65b8c6dfb3d3f9ff3afa8b3",
+          "sha256": "2004bd28e2633d8a8917b77faf08553ed0c282da89e0972caf97c7a98b59afaa",
+          "sha1": "bb20c0308da9217a1173006c921a4cd21e60bc27",
+          "md5": "ea0817dda8ccd3c88dade2bcfd3c5b77"
         }
       ]
     },
@@ -65,10 +65,10 @@
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
           "size": 8134,
-          "sha512": "dbd65cc03a7c0812a8a146224313607109ed2ec9489326edab571392fb1e8705a2a52944aed4ef650e978b491c3c1c8fa226edcb4b79b0bd0aea43d9c734f7af",
-          "sha256": "0e64916e3a6f66e3674b7d7fe3c8e732affdaf654aa5436626742102ff0fa4fa",
-          "sha1": "4019e8ae27b8203fc952c965b33c241cd98ace37",
-          "md5": "dd230f7191e0ae749baa8aba1d7b3521"
+          "sha512": "7ad83be9dbb597e89d587f29c3547a2dbe2295a56a6b75094afc5329c312522b4f758165223d7ed074757493ef3b2f24f7ed240bd65b8c6dfb3d3f9ff3afa8b3",
+          "sha256": "2004bd28e2633d8a8917b77faf08553ed0c282da89e0972caf97c7a98b59afaa",
+          "sha1": "bb20c0308da9217a1173006c921a4cd21e60bc27",
+          "md5": "ea0817dda8ccd3c88dade2bcfd3c5b77"
         }
       ]
     }
