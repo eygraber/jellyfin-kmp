@@ -48,7 +48,6 @@ private fun Content(
       Box(modifier = modifier) {
         TemplateNav(
           navComponent = navComponent,
-          isDarkMode = isDarkMode,
         )
       }
     }

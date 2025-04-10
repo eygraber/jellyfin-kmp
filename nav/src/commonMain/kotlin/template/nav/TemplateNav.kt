@@ -38,7 +38,6 @@ import template.nav.dev.templateDevNavGraph
 @Composable
 fun TemplateNav(
   navComponent: TemplateNavComponent,
-  isDarkMode: Boolean,
 ) {
   val bottomSheetNavigator = rememberModalBottomSheetNavigator()
   val navController = rememberNavController(bottomSheetNavigator)
@@ -71,7 +70,6 @@ fun TemplateNav(
           templateNavGraph(
             navComponent = navComponent,
             navController = navController,
-            isDarkMode = isDarkMode,
           )
         }
       }
@@ -82,11 +80,9 @@ fun TemplateNav(
 private fun NavGraphBuilder.templateNavGraph(
   navComponent: TemplateNavComponent,
   navController: NavController,
-  isDarkMode: Boolean,
 ) {
   templateDevNavGraph(
     navComponent = navComponent,
-    isDarkMode = isDarkMode,
   )
 
   comingSoonRoute()

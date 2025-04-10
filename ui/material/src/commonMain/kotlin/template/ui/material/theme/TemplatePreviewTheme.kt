@@ -47,7 +47,7 @@ fun TemplateModalBottomSheetPreviewTheme(
   isDarkMode: Boolean = isSystemInDarkTheme(),
   skipPartiallyExpanded: Boolean = false,
   initialValue: SheetValue = SheetValue.PartiallyExpanded,
-  properties: ModalBottomSheetProperties = defaultModalBottomSheetProperties(isDarkMode),
+  properties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
   content: @Composable ColumnScope.() -> Unit,
 ) {
   TemplatePreviewTheme(
@@ -74,7 +74,7 @@ fun TemplateEdgeToEdgeModalBottomSheetPreviewTheme(
   isDarkMode: Boolean = isSystemInDarkTheme(),
   skipPartiallyExpanded: Boolean = false,
   initialValue: SheetValue = SheetValue.PartiallyExpanded,
-  properties: ModalBottomSheetProperties = defaultModalBottomSheetProperties(isDarkMode),
+  properties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
   content: @Composable ColumnScope.() -> Unit,
 ) {
   TemplateEdgeToEdgePreviewTheme(
@@ -124,11 +124,3 @@ private fun ModalBottomSheetPreview(
     content = content,
   )
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-private fun defaultModalBottomSheetProperties(
-  isDarkMode: Boolean,
-) = ModalBottomSheetProperties(
-  isAppearanceLightNavigationBars = !isDarkMode,
-  isAppearanceLightStatusBars = !isDarkMode,
-)

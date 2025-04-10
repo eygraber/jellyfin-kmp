@@ -6,7 +6,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -24,18 +24,14 @@ import template.nav.TemplateNavComponent
 internal object TemplateRoutesDevSettings
 
 @OptIn(ExperimentalMaterial3Api::class)
-internal expect fun platformModalBottomSheetProperties(isDarkMode: Boolean): ModalBottomSheetProperties
-
-@OptIn(ExperimentalMaterial3Api::class)
 internal fun NavGraphBuilder.templateDevNavGraph(
   navComponent: TemplateNavComponent,
-  isDarkMode: Boolean,
 ) {
   navigation<TemplateRoutesDevSettings>(
     startDestination = DevSettingsRoute,
   ) {
     bottomSheet<DevSettingsRoute>(
-      modalBottomSheetProperties = platformModalBottomSheetProperties(isDarkMode = isDarkMode),
+      modalBottomSheetProperties = ModalBottomSheetDefaults.properties,
       skipPartiallyExpanded = false,
     ) {
       val devNavController = rememberNavController()
