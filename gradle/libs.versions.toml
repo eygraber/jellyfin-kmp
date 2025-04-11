@@ -27,7 +27,7 @@ ejson = "1.0.9"
 
 googleServices = "4.4.2"
 
-junit5 = "5.12.1"
+junit5 = "5.12.2"
 
 jvmTarget = "17"
 
