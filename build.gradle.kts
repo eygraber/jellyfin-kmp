@@ -2,7 +2,6 @@ import com.eygraber.conventions.Env
 import com.eygraber.conventions.android.ProductFlavor
 import com.eygraber.conventions.kotlin.KotlinFreeCompilerArg
 import com.eygraber.conventions.tasks.deleteRootBuildDirWhenCleaning
-import com.google.common.base.CaseFormat
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import template.gradle.findToolchainIfNeeded
@@ -118,6 +117,8 @@ gradleConventionsKmpDefaults {
 }
 
 dependencyAnalysis {
+  useTypesafeProjectAccessors(true)
+
   issues {
     all {
       onModuleStructure {
@@ -154,14 +155,6 @@ dependencyAnalysis {
         // needed for running ui tests
         exclude("androidx.compose.ui:ui-test-manifest")
       }
-    }
-  }
-
-  structure {
-    // Adds the defined aliases for modules to be used when printing advice and rewriting build scripts.
-    subprojects.forEach { subproject ->
-      val projectAccessor = CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, subproject.path.replace(':', '.'))
-      map.put(subproject.path, "projects$projectAccessor")
     }
   }
 }
