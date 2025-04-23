@@ -108,7 +108,7 @@ androidx-navigation-common = { module = "org.jetbrains.androidx.navigation:navig
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-runtime = { module = "org.jetbrains.androidx.navigation:navigation-runtime", version.ref = "androidx-navigation" }
 
-androidx-splash = "androidx.core:core-splashscreen:1.2.0-beta01"
+androidx-splash = "androidx.core:core-splashscreen:1.2.0-beta02"
 
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 
