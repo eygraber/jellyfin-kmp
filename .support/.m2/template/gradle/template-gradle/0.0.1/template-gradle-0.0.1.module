@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.13"
+      "version": "8.14"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76504,
-          "sha512": "8e7bffca0f9e16eca5e18d6e9fcd96d633b2438f4bdd56053d2b41ce2898ff95727e0a838ed1fdfdcf09099cfc9fb926f2fa16e1f36e5ee7ee614f4cd4aed841",
-          "sha256": "6e73f6f9da840aa2f88ded018462fcd96865371822883fcb2fa5cfe96f036554",
-          "sha1": "888ef0f9ad0906857d9bd2492f67875bc532b289",
-          "md5": "18b6972d34688a1c60433c1f7083da15"
+          "size": 76488,
+          "sha512": "033245e93d04cfdd9ef7fff00b59a4d2641fe0021df866087604ad124c9415b4672e06d2ec5eec2e04d24e758901f85b19cb65d203f641abd06e01ac7019ac41",
+          "sha256": "e7056a8aeab7ae634d5d435b7b3609879a3b7f44e937c76bfca67eaf27033410",
+          "sha1": "43c8f450017263415d308842ed51b606ae00f831",
+          "md5": "4a9f7ca91605df3d6b076b6aefd7098b"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "8.9.1"
+            "requires": "8.9.2"
           }
         },
         {
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76504,
-          "sha512": "8e7bffca0f9e16eca5e18d6e9fcd96d633b2438f4bdd56053d2b41ce2898ff95727e0a838ed1fdfdcf09099cfc9fb926f2fa16e1f36e5ee7ee614f4cd4aed841",
-          "sha256": "6e73f6f9da840aa2f88ded018462fcd96865371822883fcb2fa5cfe96f036554",
-          "sha1": "888ef0f9ad0906857d9bd2492f67875bc532b289",
-          "md5": "18b6972d34688a1c60433c1f7083da15"
+          "size": 76488,
+          "sha512": "033245e93d04cfdd9ef7fff00b59a4d2641fe0021df866087604ad124c9415b4672e06d2ec5eec2e04d24e758901f85b19cb65d203f641abd06e01ac7019ac41",
+          "sha256": "e7056a8aeab7ae634d5d435b7b3609879a3b7f44e937c76bfca67eaf27033410",
+          "sha1": "43c8f450017263415d308842ed51b606ae00f831",
+          "md5": "4a9f7ca91605df3d6b076b6aefd7098b"
         }
       ]
     }

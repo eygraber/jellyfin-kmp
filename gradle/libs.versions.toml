@@ -17,7 +17,7 @@ atomicfu = "0.27.0"
 compose-bom = "2025.04.01"
 composeJetbrains = "1.8.0-rc01"
 
-conventions = "0.0.81"
+conventions = "0.0.82"
 
 detekt = "1.23.8"
 detektCompose = "0.4.22"
@@ -51,7 +51,6 @@ paparazzi = "1.3.5"
 square-sqldelight = "2.0.2"
 
 vice = "0.9.9"
-virtue = "0.0.1-SNAPSHOT"
 uiToolingPreviewAndroid = "1.7.3"
 
 [plugins]
@@ -206,13 +205,6 @@ vice-core = { module = "com.eygraber:vice-core", version.ref = "vice" }
 vice-nav = { module = "com.eygraber:vice-nav", version.ref = "vice" }
 vice-nav-material3 = { module = "com.eygraber:vice-nav-material3", version.ref = "vice" }
 vice-sources = { module = "com.eygraber:vice-sources", version.ref = "vice" }
-
-virtue-android = { module = "com.eygraber:virtue-android", version.ref = "virtue" }
-virtue-app = { module = "com.eygraber:virtue-app", version.ref = "virtue" }
-virtue-appCompat = { module = "com.eygraber:virtue-app-compat", version.ref = "virtue" }
-virtue-diScopes = { module = "com.eygraber:virtue-di-scopes", version.ref = "virtue" }
-virtue-init = { module = "com.eygraber:virtue-init", version.ref = "virtue" }
-virtue-session = { module = "com.eygraber:virtue-session", version.ref = "virtue" }
 
 [bundles]
 androidx-appCompat = ["androidx-activity", "androidx-activityCompose", "androidx-appCompat"]

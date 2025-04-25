@@ -32,8 +32,6 @@ kotlin {
       implementation(libs.androidx.coreKtx)
       api(libs.androidx.appCompat)
       implementation(libs.androidx.splash)
-
-      implementation(libs.virtue.android)
     }
 
     commonMain.dependencies {

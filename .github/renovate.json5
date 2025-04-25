@@ -73,6 +73,13 @@
         "https://dl.google.com/dl/android/maven2/",
         "https://plugins.gradle.org/m2",
       ]
-    }
+    },
+    {
+      matchPackageNames: [
+        "template.lint:library",
+        "template-gradle:template-gradle.gradle.plugin"
+      ],
+      enabled: false,
+    },
   ]
 }

@@ -54,7 +54,7 @@ dependencyResolutionManagement {
 plugins {
   id("com.gradle.develocity") version "4.0.1"
   id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
-  id("com.eygraber.conventions.settings") version "0.0.81"
+  id("com.eygraber.conventions.settings") version "0.0.82"
 }
 
 rootProject.name = "module-generator"
