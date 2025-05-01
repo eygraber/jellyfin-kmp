@@ -126,7 +126,7 @@ buildscript-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gr
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-animation-core = { module = "androidx.compose.animation:animation-core" }
-compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.6.0"
+compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.7.1"
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundationLayout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-materialIcons = { module = "androidx.compose.material:material-icons-core" }
