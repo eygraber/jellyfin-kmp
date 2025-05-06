@@ -93,7 +93,7 @@ android {
 
       signingConfig = signingConfigs.named("internal").get()
 
-      // firebaseAppDistribution {
+      // com.google.firebase.appdistribution.gradle.firebaseAppDistribution {
       //   serviceCredentialsFile = rootProject.file("tmp/firebase_app_distribution_dev_cred").absolutePath
       //   artifactType = "APK"
       // }

@@ -36,10 +36,10 @@
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
           "size": 8143,
-          "sha512": "1a43e35397e6e9a1a1223dc711ec4d5379438c0961b0c52fda76766d221055e460ddaa0eac02f8ccc67e0d5ca7478da69b3bec269217d9542fca3b683117a1e7",
-          "sha256": "547cfaaa429ccbea50cea07b882b5b0b1adc13d354a92da515230b82f14b6cd4",
-          "sha1": "5204a13fb4328f800bf11e6eae49a74ca181055e",
-          "md5": "ce4ce7d753b50006a15bfc6e77fe2db3"
+          "sha512": "da68d01f90bbe8e0030fe8a93324733156b6ca6c5b8eeac5d85873d23caa3a61919ff6585966a5922d12b6a78a86577f2cba5d35bc0321e09295fea948d66f32",
+          "sha256": "4a5be7f9534a133065a0bcbe0cd02788c676f87ce8af4435ac495cea27508416",
+          "sha1": "0ffce5846982f54ff939afe8f18dbc7c0cf89e63",
+          "md5": "d8d6bc3de4d89bd3a071ad855d1a231a"
         }
       ]
     },
@@ -65,10 +65,10 @@
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
           "size": 8143,
-          "sha512": "1a43e35397e6e9a1a1223dc711ec4d5379438c0961b0c52fda76766d221055e460ddaa0eac02f8ccc67e0d5ca7478da69b3bec269217d9542fca3b683117a1e7",
-          "sha256": "547cfaaa429ccbea50cea07b882b5b0b1adc13d354a92da515230b82f14b6cd4",
-          "sha1": "5204a13fb4328f800bf11e6eae49a74ca181055e",
-          "md5": "ce4ce7d753b50006a15bfc6e77fe2db3"
+          "sha512": "da68d01f90bbe8e0030fe8a93324733156b6ca6c5b8eeac5d85873d23caa3a61919ff6585966a5922d12b6a78a86577f2cba5d35bc0321e09295fea948d66f32",
+          "sha256": "4a5be7f9534a133065a0bcbe0cd02788c676f87ce8af4435ac495cea27508416",
+          "sha1": "0ffce5846982f54ff939afe8f18dbc7c0cf89e63",
+          "md5": "d8d6bc3de4d89bd3a071ad855d1a231a"
         }
       ]
     }
