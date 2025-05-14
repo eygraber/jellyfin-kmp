@@ -7,6 +7,7 @@ buildscript {
     classpath(libs.buildscript.compose.compiler)
     classpath(libs.buildscript.detekt)
     classpath(libs.buildscript.kotlin)
+    classpath(libs.buildscript.publish)
   }
 }
 

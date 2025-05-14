@@ -17,6 +17,7 @@ buildscript {
     classpath(libs.buildscript.kotlin)
     classpath(libs.buildscript.kotlinxSerialization)
     classpath(libs.buildscript.ksp)
+    classpath(libs.buildscript.publish)
   }
 }
 

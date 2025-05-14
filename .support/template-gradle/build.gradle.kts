@@ -3,6 +3,12 @@ import com.eygraber.conventions.kotlin.configureKgp
 import com.eygraber.conventions.repositories.addCommonRepositories
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+buildscript {
+  dependencies {
+    classpath(templateGradleLibs.buildscript.publish)
+  }
+}
+
 plugins {
   `kotlin-dsl`
   alias(templateGradleLibs.plugins.conventionsBase)

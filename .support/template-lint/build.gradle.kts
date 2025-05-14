@@ -9,6 +9,7 @@ buildscript {
     classpath(libs.buildscript.androidCacheFix)
     classpath(libs.buildscript.detekt)
     classpath(libs.buildscript.kotlin)
+    classpath(libs.buildscript.publish)
   }
 }
 
