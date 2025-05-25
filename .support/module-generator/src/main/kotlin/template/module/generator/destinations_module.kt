@@ -54,6 +54,7 @@ internal fun createDestinationModule(
         |  implementation(projects.ui.compose)
         |  implementation(projects.ui.material)
         |
+        |  implementation(libs.compose.foundation)
         |  implementation(libs.compose.foundationLayout)
         |  implementation(libs.compose.material3)
         |  implementation(libs.compose.runtime)
