@@ -44,6 +44,8 @@ kotlin {
       api(libs.kotlinInject.anvilRuntimeOptional)
 
       implementation(libs.kotlinx.coroutines.core)
+
+      api(libs.vice.nav)
     }
   }
 }

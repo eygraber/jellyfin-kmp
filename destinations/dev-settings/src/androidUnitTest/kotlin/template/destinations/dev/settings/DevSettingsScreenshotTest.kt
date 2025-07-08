@@ -13,7 +13,7 @@ import template.ui.material.theme.TemplateEdgeToEdgeModalBottomSheetPreviewTheme
 
 @RunWith(TestParameterInjector::class)
 class DevSettingsScreenshotTest(
-  @TestParameter
+  @param:TestParameter
   private val deviceConfig: PaparazziDeviceConfig,
 ) {
   @get:Rule

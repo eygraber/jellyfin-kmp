@@ -12,7 +12,7 @@ import template.ui.material.theme.TemplateEdgeToEdgePreviewTheme
 
 @RunWith(TestParameterInjector::class)
 class WelcomeScreenshotTest(
-  @TestParameter
+  @param:TestParameter
   private val deviceConfig: PaparazziDeviceConfig,
 ) {
   @get:Rule
