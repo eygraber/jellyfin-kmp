@@ -48,7 +48,7 @@ ktlint = "1.6.0"
 
 paparazzi = "1.3.5"
 
-publish = "0.33.0"
+publish = "0.34.0"
 
 square-sqldelight = "2.1.0"
 
