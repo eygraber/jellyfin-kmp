@@ -134,7 +134,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundationLayout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-materialIcons = { module = "androidx.compose.material:material-icons-core" }
 # the stable BOM doesn't include material3 1.4.0 because Google is keeping it in alpha for now
-compose-material3 = "androidx.compose.material3:material3:1.4.0-alpha17"
+compose-material3 = "androidx.compose.material3:material3:1.4.0-alpha18"
 compose-material3Navigation = "com.eygraber:compose-material3-navigation:0.0.8"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-ui = { module = "androidx.compose.ui:ui" }
