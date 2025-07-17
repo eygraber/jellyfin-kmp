@@ -73,7 +73,7 @@ rootProject.name = "cmp-app-template"
 plugins {
   id("com.eygraber.conventions.settings") version "0.0.86"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("com.gradle.develocity") version "4.0.2"
+  id("com.gradle.develocity") version "4.1"
 }
 
 include(":android")
