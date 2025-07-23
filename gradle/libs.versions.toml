@@ -31,7 +31,7 @@ junit5 = "5.13.4"
 
 jvmTarget = "17"
 
-khronicle = "0.5.1"
+khronicle = "0.5.2"
 
 kotest = "5.9.1"
 
