@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.14"
+      "version": "9.0.0"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76478,
-          "sha512": "73190a6751b2217be4facf6f4d828394512dde98928cf42e1c83aa9ceba3f7f13062f6aa51e3dac506f727a38ea88ee80c59b1ae8edbe1b12a1c86f96d63f7b2",
-          "sha256": "fe67e4e285aa8bedcda8b14a6411d1f1ca3bd820e433620bf3a1cf77abc720b5",
-          "sha1": "69f70736f622bae1bf2effe9ce9ba7d1b591a436",
-          "md5": "2f46f20127d02f38ba6119436a8b7dc7"
+          "size": 66010,
+          "sha512": "5691f303ba0f35c6f0429980120772acee6206bdd80abf514a7faa07d6bdc72604cc53d4e4ec3cf1abe8620959c6dc255985c1ee066add512a4670784228fd7a",
+          "sha256": "c2ff4803bab03b8ad20f19b5693018a8617f35898db27a1c318d97067f964447",
+          "sha1": "09c1726ed4fd3d6b67b9083d604a69aa3cdbf19e",
+          "md5": "1ea254444ab1e7c27c8eeaf91a71b186"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "8.10.0"
+            "requires": "8.12.0"
           }
         },
         {
@@ -67,28 +67,28 @@
           "group": "com.google.gms",
           "module": "google-services",
           "version": {
-            "requires": "4.4.2"
+            "requires": "4.4.3"
           }
         },
         {
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-gradle-plugin",
           "version": {
-            "requires": "2.1.21"
+            "requires": "2.2.0"
           }
         },
         {
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.1.21-2.0.1"
+            "requires": "2.2.0-2.0.2"
           }
         },
         {
           "group": "org.jetbrains.kotlinx",
           "module": "kotlinx-serialization-json",
           "version": {
-            "requires": "1.8.1"
+            "requires": "1.9.0"
           }
         }
       ],
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 76478,
-          "sha512": "73190a6751b2217be4facf6f4d828394512dde98928cf42e1c83aa9ceba3f7f13062f6aa51e3dac506f727a38ea88ee80c59b1ae8edbe1b12a1c86f96d63f7b2",
-          "sha256": "fe67e4e285aa8bedcda8b14a6411d1f1ca3bd820e433620bf3a1cf77abc720b5",
-          "sha1": "69f70736f622bae1bf2effe9ce9ba7d1b591a436",
-          "md5": "2f46f20127d02f38ba6119436a8b7dc7"
+          "size": 66010,
+          "sha512": "5691f303ba0f35c6f0429980120772acee6206bdd80abf514a7faa07d6bdc72604cc53d4e4ec3cf1abe8620959c6dc255985c1ee066add512a4670784228fd7a",
+          "sha256": "c2ff4803bab03b8ad20f19b5693018a8617f35898db27a1c318d97067f964447",
+          "sha1": "09c1726ed4fd3d6b67b9083d604a69aa3cdbf19e",
+          "md5": "1ea254444ab1e7c27c8eeaf91a71b186"
         }
       ]
     }

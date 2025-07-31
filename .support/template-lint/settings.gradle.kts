@@ -60,7 +60,7 @@ dependencyResolutionManagement {
 rootProject.name = "template-lint"
 
 plugins {
-  id("com.eygraber.conventions.settings") version "0.0.86"
+  id("com.eygraber.conventions.settings") version "0.0.87"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
   id("com.gradle.develocity") version "4.1"
 }
