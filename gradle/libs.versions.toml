@@ -52,7 +52,7 @@ publish = "0.34.0"
 
 square-sqldelight = "2.1.0"
 
-vice = "0.9.13"
+vice = "0.9.14"
 uiToolingPreviewAndroid = "1.7.3"
 
 [plugins]
