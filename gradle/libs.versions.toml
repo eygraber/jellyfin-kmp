@@ -75,7 +75,7 @@ dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
 dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "2.19.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.1.1" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.5" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 googleServices = { id = "com.google.gms.google-services" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
