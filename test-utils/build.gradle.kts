@@ -17,7 +17,13 @@ android {
     implementation(compose.runtime)
     implementation(compose.uiTooling)
 
+    implementation(libs.bundles.test.composeUi)
+    api(libs.test.junit)
+
     api(libs.test.paparazzi)
+
+    implementation(libs.test.robolectric)
+    api(libs.test.robolectric.annotations)
 
     debugImplementation(libs.test.compose.uiManifest)
   }
@@ -31,6 +37,8 @@ kotlin {
   sourceSets {
     commonMain.dependencies {
       implementation(libs.kotlinx.coroutines.core)
+
+      implementation(libs.test.kotlinx.coroutines)
     }
   }
 }

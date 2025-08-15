@@ -17,7 +17,11 @@
     <activity
       android:theme="@style/Theme.TemplateSplash"
       android:name="template.app.TemplateActivity"
-      android:configChanges="colorMode|density|fontScale|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+      android:configChanges="assetsPaths|colorMode|density|fontScale
+        |fontWeightAdjustment|grammaticalGender|keyboard|keyboardHidden
+        |layoutDirection|locale|mcc|mnc|navigation|orientation|screenLayout
+        |screenSize|smallestScreenSize|touchscreen|uiMode
+        |resourcesUnused"
       android:exported="true"
       android:launchMode="singleInstance"
       android:windowSoftInputMode="adjustResize">
