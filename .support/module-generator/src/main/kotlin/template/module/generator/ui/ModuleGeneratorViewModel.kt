@@ -58,9 +58,12 @@ internal class ModuleGeneratorViewModel {
   var progressText by mutableStateOf("")
 
   val isGenerationEnabled by derivedStateOf {
-    moduleName.isNotEmpty() && moduleNameError == null &&
-      packageName.isNotEmpty() && packageNameError == null &&
-      featureName.isNotEmpty() && featureNameError == null
+    moduleName.isNotEmpty() &&
+      moduleNameError == null &&
+      packageName.isNotEmpty() &&
+      packageNameError == null &&
+      featureName.isNotEmpty() &&
+      featureNameError == null
   }
 
   fun onGenerateViceEffectsChange(newValue: Boolean) {
