@@ -9,7 +9,7 @@ android-sdk-min = "28"
 
 androidx-activity = "1.10.1"
 androidx-core = "1.17.0"
-androidx-lifecycle = "2.9.2"
+androidx-lifecycle = "2.9.3"
 androidx-navigation = "2.9.0-beta05"
 
 atomicfu = "0.29.0"
