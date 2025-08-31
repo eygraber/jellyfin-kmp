@@ -153,7 +153,7 @@ detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", v
 detektEygraber-style = { module = "com.eygraber.detekt.rules:style", version.ref = "detektEygraber" }
 
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-bom = "com.google.firebase:firebase-bom:34.1.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.2.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
