@@ -14,7 +14,7 @@ androidx-navigation = "2.9.0-rc01"
 
 atomicfu = "0.29.0"
 
-compose-bom = "2025.08.01"
+compose-bom = "2025.09.00"
 composeJetbrains = "1.8.2"
 
 conventions = "0.0.87"
