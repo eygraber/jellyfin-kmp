@@ -89,7 +89,7 @@ paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 playStoreApi = { id = "com.github.triplet.play", version = "3.12.1" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "square-sqldelight" }
 templateGradle = { id = "template-gradle", version = "0.0.1" }
-testBurst = { id = "app.cash.burst", version = "2.10.0" }
+testBurst = { id = "app.cash.burst", version = "2.10.2" }
 
 [libraries]
 android-desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
