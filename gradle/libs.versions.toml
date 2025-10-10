@@ -14,7 +14,7 @@ androidx-navigation = "2.9.0"
 
 atomicfu = "0.29.0"
 
-compose-bom = "2025.09.01"
+compose-bom = "2025.10.00"
 composeJetbrains = "1.9.0"
 
 conventions = "0.0.87"
@@ -25,7 +25,7 @@ detektEygraber = "1.0.12"
 
 ejson = "1.0.9"
 
-googleServices = "4.4.3"
+googleServices = "4.4.4"
 
 junit5 = "6.0.0"
 
@@ -42,7 +42,7 @@ kotlinInjectAnvil = "0.1.6"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.9.0"
 
-ksp = "2.2.20-2.0.2"
+ksp = "2.2.20-2.0.4"
 
 ktlint = "1.7.1"
 
@@ -54,7 +54,7 @@ robolectric = "4.16"
 
 square-sqldelight = "2.1.0"
 
-vice = "1.0.1"
+vice = "1.0.2"
 uiToolingPreviewAndroid = "1.7.3"
 
 [plugins]
@@ -74,7 +74,7 @@ conventionsKotlin = { id = "com.eygraber.conventions-kotlin-library" }
 conventionsKotlinMultiplatform = { id = "com.eygraber.conventions-kotlin-multiplatform" }
 conventionsProjectCommon = { id = "com.eygraber.conventions-project-common" }
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
-dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.0.4" }
+dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.1.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.1.1" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
@@ -83,7 +83,7 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
 ksp = { id = "com.google.devtools.ksp" }
-licensee = { id = "app.cash.licensee", version = "1.13.0" }
+licensee = { id = "app.cash.licensee", version = "1.14.1" }
 mavenPublish = { id = "com.vanniktech.maven.publish" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 playStoreApi = { id = "com.github.triplet.play", version = "3.12.1" }
@@ -116,7 +116,7 @@ androidx-splash = "androidx.core:core-splashscreen:1.2.0-rc01"
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 
 buildscript-android = { module = "com.android.tools.build:gradle", version.ref = "android-plugin" }
-buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:android-cache-fix-gradle-plugin", version = "3.0.1" }
+buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:android-cache-fix-gradle-plugin", version = "3.0.2" }
 buildscript-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 buildscript-compose-jetbrains = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeJetbrains" }
 buildscript-conventions = { module = "com.eygraber:gradle-conventions", version.ref = "conventions" }
@@ -135,8 +135,7 @@ compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.7.1"
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundationLayout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-materialIcons = { module = "androidx.compose.material:material-icons-core" }
-# the stable BOM doesn't include material3 1.4.0 because Google is keeping it in alpha for now
-compose-material3 = "androidx.compose.material3:material3:1.4.0-rc01"
+compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-material3Navigation = "com.eygraber:compose-material3-navigation:0.0.8"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -153,7 +152,7 @@ detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", v
 detektEygraber-style = { module = "com.eygraber.detekt.rules:style", version.ref = "detektEygraber" }
 
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-bom = "com.google.firebase:firebase-bom:34.3.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.4.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }

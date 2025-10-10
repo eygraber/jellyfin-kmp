@@ -67,7 +67,7 @@
           "group": "com.google.gms",
           "module": "google-services",
           "version": {
-            "requires": "4.4.3"
+            "requires": "4.4.4"
           }
         },
         {
@@ -81,7 +81,7 @@
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.2.20-2.0.2"
+            "requires": "2.2.20-2.0.4"
           }
         },
         {

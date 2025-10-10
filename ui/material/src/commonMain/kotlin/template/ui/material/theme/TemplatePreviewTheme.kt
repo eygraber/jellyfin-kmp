@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalDensity
 import com.eygraber.vice.nav.LocalAnimatedVisibilityScope
 import com.eygraber.vice.nav.LocalSharedTransitionScope
 
@@ -98,11 +97,11 @@ private fun ModalBottomSheetPreview(
   properties: ModalBottomSheetProperties,
   content: @Composable ColumnScope.() -> Unit,
 ) {
-  val density = LocalDensity.current
   val sheetState = remember {
     SheetState(
       skipPartiallyExpanded = skipPartiallyExpanded,
-      density = density,
+      positionalThreshold = { 1F },
+      velocityThreshold = { 1F },
       initialValue = initialValue,
       skipHiddenState = false,
       confirmValueChange = { true },
