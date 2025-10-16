@@ -28,8 +28,7 @@ kotlin {
 
       implementation(compose.animation)
       implementation(compose.foundation)
-      // needed until CMP 1.9.1 is released
-      implementation("org.jetbrains.compose.material3:material3:1.9.0-beta06")
+      implementation(compose.material3)
       api(compose.runtime)
       implementation(compose.ui)
 
