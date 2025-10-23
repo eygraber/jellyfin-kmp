@@ -35,7 +35,7 @@ khronicle = "0.5.2"
 
 kotest = "6.0.4"
 
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kotlinInject = "0.8.0"
 kotlinInjectAnvil = "0.1.6"
 
