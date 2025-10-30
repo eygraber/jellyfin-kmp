@@ -74,14 +74,14 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-gradle-plugin",
           "version": {
-            "requires": "2.2.20"
+            "requires": "2.2.21"
           }
         },
         {
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.2.20-2.0.4"
+            "requires": "2.3.0"
           }
         },
         {
