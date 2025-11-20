@@ -52,7 +52,7 @@ publish = "0.35.0"
 
 robolectric = "4.16"
 
-square-sqldelight = "2.1.0"
+square-sqldelight = "2.2.1"
 
 vice = "1.0.4"
 uiToolingPreviewAndroid = "1.7.3"
