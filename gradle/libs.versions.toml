@@ -116,7 +116,7 @@ androidx-splash = "androidx.core:core-splashscreen:1.2.0-rc01"
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 
 buildscript-android = { module = "com.android.tools.build:gradle", version.ref = "android-plugin" }
-buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:android-cache-fix-gradle-plugin", version = "3.0.2" }
+buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:android-cache-fix-gradle-plugin", version = "3.0.3" }
 buildscript-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 buildscript-compose-jetbrains = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeJetbrains" }
 buildscript-conventions = { module = "com.eygraber:gradle-conventions", version.ref = "conventions" }
