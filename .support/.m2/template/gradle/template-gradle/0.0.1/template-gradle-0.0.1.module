@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "9.1.0"
+      "version": "9.2.1"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 66010,
-          "sha512": "5691f303ba0f35c6f0429980120772acee6206bdd80abf514a7faa07d6bdc72604cc53d4e4ec3cf1abe8620959c6dc255985c1ee066add512a4670784228fd7a",
-          "sha256": "c2ff4803bab03b8ad20f19b5693018a8617f35898db27a1c318d97067f964447",
-          "sha1": "09c1726ed4fd3d6b67b9083d604a69aa3cdbf19e",
-          "md5": "1ea254444ab1e7c27c8eeaf91a71b186"
+          "size": 66163,
+          "sha512": "6231461e43aae80ce09b77eb739f4f29f4335397c15aadb9f18f042a8f09d18e62057bdd551cadf790cf334b7f12f4bba4c397f15333bfe430706d7565987902",
+          "sha256": "6d859f2770d314939f4a5affa8c4f0650c9d1346405f2333301325bd56b0d437",
+          "sha1": "cbf7fde2fe36aaefc8935fbb4a2e138b70713cce",
+          "md5": "fc0cc8f568806f0dd424b94686092578"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "8.13.0"
+            "requires": "8.13.1"
           }
         },
         {
@@ -81,7 +81,7 @@
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.3.0"
+            "requires": "2.3.2"
           }
         },
         {
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 66010,
-          "sha512": "5691f303ba0f35c6f0429980120772acee6206bdd80abf514a7faa07d6bdc72604cc53d4e4ec3cf1abe8620959c6dc255985c1ee066add512a4670784228fd7a",
-          "sha256": "c2ff4803bab03b8ad20f19b5693018a8617f35898db27a1c318d97067f964447",
-          "sha1": "09c1726ed4fd3d6b67b9083d604a69aa3cdbf19e",
-          "md5": "1ea254444ab1e7c27c8eeaf91a71b186"
+          "size": 66163,
+          "sha512": "6231461e43aae80ce09b77eb739f4f29f4335397c15aadb9f18f042a8f09d18e62057bdd551cadf790cf334b7f12f4bba4c397f15333bfe430706d7565987902",
+          "sha256": "6d859f2770d314939f4a5affa8c4f0650c9d1346405f2333301325bd56b0d437",
+          "sha1": "cbf7fde2fe36aaefc8935fbb4a2e138b70713cce",
+          "md5": "fc0cc8f568806f0dd424b94686092578"
         }
       ]
     }
