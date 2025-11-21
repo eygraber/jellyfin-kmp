@@ -201,7 +201,7 @@ test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", ver
 test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared", version.ref = "kotest" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 test-paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
-test-parameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.19"
+test-parameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.20"
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 test-robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }
 test-robolectric-shadows = { module = "org.robolectric:shadows-framework", version.ref = "robolectric" }
