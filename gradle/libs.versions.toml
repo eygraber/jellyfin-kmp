@@ -54,7 +54,7 @@ robolectric = "4.16"
 
 square-sqldelight = "2.2.1"
 
-vice = "1.0.4"
+vice = "1.0.5"
 uiToolingPreviewAndroid = "1.7.3"
 
 [plugins]
