@@ -176,7 +176,7 @@ kotlinInject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime-kmp",
 # not actually used; just here so renovate picks it up
 ktlint = { module = "com.pinterest.ktlint:ktlint-bom", version.ref = "ktlint" }
 
-libphonenumber = "io.github.luca992.libphonenumber-kotlin:libphonenumber:0.1.8"
+libphonenumber = "io.github.luca992.libphonenumber-kotlin:libphonenumber:0.1.9"
 
 square-molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 square-seismic = "com.squareup:seismic:1.0.3"
