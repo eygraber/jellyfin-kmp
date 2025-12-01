@@ -7,10 +7,6 @@ url="https://github.com/pinterest/ktlint/releases/download/$version/ktlint"
 destination_dir="/tmp"
 file_name="ktlint-$version"
 
-mkdir -p $destination_dir
-
-
-
 # Check if the file already exists in the destination directory
 if [ ! -e "$destination_dir/$file_name" ]; then
   if command -v curl >/dev/null 2>&1; then
@@ -54,7 +50,7 @@ args+=("$@")
 
 if [ "$check_support" = true ]; then
   cd .support
-  "../$destination_dir/$file_name" **/*.kt **/*.kts \!**/build/** \!Dangerfile.df.kts --color --color-name=YELLOW "${args[@]}"
+  "$destination_dir/$file_name" **/*.kt **/*.kts \!**/build/** \!Dangerfile.df.kts --color --color-name=YELLOW "${args[@]}"
 else
   "$destination_dir/$file_name" **/*.kt **/*.kts \!**/build/** \!Dangerfile.df.kts --color --color-name=YELLOW "${args[@]}"
 fi
