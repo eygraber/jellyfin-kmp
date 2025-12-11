@@ -1,7 +1,7 @@
 [versions]# If the AGP version is X.Y.Z, then the Lint library version is X+23.Y.Z.
-android-lint = "31.13.1"
+android-lint = "31.13.2"
 
-android-plugin = "8.13.1"
+android-plugin = "8.13.2"
 
 android-sdk-compile = "36"
 android-sdk-target = "36"
