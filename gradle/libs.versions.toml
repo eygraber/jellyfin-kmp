@@ -17,7 +17,7 @@ atomicfu = "0.29.0"
 compose-bom = "2025.11.01"
 composeJetbrains = "1.9.3"
 
-conventions = "0.0.89"
+conventions = "0.0.91"
 
 detekt = "1.23.8"
 detektCompose = "0.4.28"
