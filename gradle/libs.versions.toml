@@ -18,7 +18,7 @@ compose-bom = "2025.12.01"
 composeJetbrains = "1.10.0-rc02"
 composeMaterial3Jetbrains = "1.9.0"
 
-conventions = "0.0.93"
+conventions = "0.0.94"
 
 detekt = "2.0.0-alpha.1"
 detektCompose = "0.5.3"
