@@ -1,7 +1,7 @@
 import template.gradle.createCmpGroup
 
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
@@ -9,14 +9,15 @@ plugins {
   alias(libs.plugins.ksp)
 }
 
-android {
-  namespace = "template.services.splash.screen.impl"
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.services.splash.screen.impl",
   )
+
+  androidLibrary {
+    androidResources.enable = true
+  }
 
   createCmpGroup()
 

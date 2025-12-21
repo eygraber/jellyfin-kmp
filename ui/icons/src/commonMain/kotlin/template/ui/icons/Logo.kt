@@ -29,8 +29,8 @@ val TemplateIcons.Logo: ImageVector
           0.0f to Color(0x44000000),
           1.0f to Color(0x00000000),
           start =
-            Offset(42.9492f, 49.59793f),
-          end = Offset(85.84757f, 92.4963f),
+            Offset(x = 42.9492f, y = 49.59793f),
+          end = Offset(x = 85.84757f, y = 92.4963f),
         ),
         stroke = null,
         strokeLineWidth = 0.0f,

@@ -1,18 +1,30 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
+
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.buildKonfig)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.licensee)
 }
 
-android {
-  namespace = "template.apps.shared"
+buildkonfig {
+  packageName = "template.apps.shared"
+
+  defaultConfigs {
+    buildConfigField(BOOLEAN, "isDev", "false")
+  }
+
+  defaultConfigs("dev") {
+    buildConfigField(BOOLEAN, "isDev", "true")
+  }
 }
 
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.apps.shared",
   )
 
   sourceSets {
@@ -32,10 +44,10 @@ kotlin {
 
       api(projects.ui.material)
 
-      api(compose.foundation)
-      api(compose.material3)
-      api(compose.runtime)
-      api(compose.ui)
+      api(libs.compose.foundation)
+      api(libs.compose.material3)
+      api(libs.compose.runtime)
+      api(libs.compose.ui)
 
       api(libs.khronicle)
 

@@ -4,6 +4,7 @@ import org.gradle.api.initialization.resolve.RepositoriesMode.FAIL_ON_PROJECT_RE
 
 pluginManagement {
   repositories {
+    mavenLocal()
     google {
       content {
         includeGroupByRegex("com\\.google.*")
@@ -43,6 +44,7 @@ dependencyResolutionManagement {
   }
 
   repositories {
+    mavenLocal()
     addCommonRepositories(
       includeMavenCentral = true,
       includeMavenCentralSnapshots = true,
@@ -54,7 +56,7 @@ dependencyResolutionManagement {
 plugins {
   id("com.gradle.develocity") version "4.3"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("com.eygraber.conventions.settings") version "0.0.91"
+  id("com.eygraber.conventions.settings") version "0.0.93"
 }
 
 rootProject.name = "module-generator"

@@ -16,12 +16,13 @@ atomicfu = "0.29.0"
 
 compose-bom = "2025.12.01"
 composeJetbrains = "1.10.0-rc02"
+composeMaterial3Jetbrains = "1.9.0"
 
-conventions = "0.0.91"
+conventions = "0.0.93"
 
-detekt = "1.23.8"
-detektCompose = "0.4.28"
-detektEygraber = "1.0.12"
+detekt = "2.0.0-alpha.1"
+detektCompose = "0.5.3"
+detektEygraber = "1.0.14"
 
 ejson = "1.0.9"
 
@@ -31,11 +32,11 @@ junit5 = "6.0.1"
 
 jvmTarget = "17"
 
-khronicle = "0.6.0"
+khronicle = "0.5.2"
 
 kotest = "6.0.7"
 
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinInject = "0.8.0"
 kotlinInjectAnvil = "0.1.6"
 
@@ -62,20 +63,22 @@ androidApp = { id = "com.android.application" }
 androidCacheFix = { id = "org.gradle.android.cache-fix" }
 androidLint = { id = "com.android.lint" }
 atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
+buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.1" }
 completeKotlin = { id = "com.louiscad.complete-kotlin", version = "1.1.0" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeJetbrains" }
 conventionsAndroidLibrary = { id = "com.eygraber.conventions-android-library" }
+conventionsAndroidKmpLibrary = { id = "com.eygraber.conventions-android-kmp-library" }
 conventionsBase = { id = "com.eygraber.conventions", version.ref = "conventions" }
 conventionsCompose = { id = "com.eygraber.conventions-compose" }
 conventionsComposeMultiplatform = { id = "com.eygraber.conventions-compose-jetbrains" }
-conventionsDetekt = { id = "com.eygraber.conventions-detekt" }
+conventionsDetekt = { id = "com.eygraber.conventions-detekt2" }
 conventionsKotlin = { id = "com.eygraber.conventions-kotlin-library" }
 conventionsKotlinMultiplatform = { id = "com.eygraber.conventions-kotlin-multiplatform" }
 conventionsProjectCommon = { id = "com.eygraber.conventions-project-common" }
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
 dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.5.1" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.2.0" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 googleServices = { id = "com.google.gms.google-services" }
@@ -120,7 +123,7 @@ buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:andro
 buildscript-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 buildscript-compose-jetbrains = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeJetbrains" }
 buildscript-conventions = { module = "com.eygraber:gradle-conventions", version.ref = "conventions" }
-buildscript-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+buildscript-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 buildscript-ejson = { module = "com.eygraber:ejson-gradle", version.ref = "ejson" }
 buildscript-googleServices = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 buildscript-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -129,23 +132,22 @@ buildscript-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gr
 buildscript-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "publish" }
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-compose-animation = { module = "androidx.compose.animation:animation" }
-compose-animation-core = { module = "androidx.compose.animation:animation-core" }
+compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref="composeJetbrains" }
 compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.7.1"
-compose-foundation = { module = "androidx.compose.foundation:foundation" }
-compose-foundationLayout = { module = "androidx.compose.foundation:foundation-layout" }
-compose-materialIcons = { module = "androidx.compose.material:material-icons-core" }
-compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeJetbrains" }
+compose-foundationLayout = { module = "org.jetbrains.compose.foundation:foundation-layout", version.ref = "composeJetbrains" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3Jetbrains" }
 compose-material3Navigation = "com.eygraber:compose-material3-navigation:0.0.8"
-compose-runtime = { module = "androidx.compose.runtime:runtime" }
-compose-ui = { module = "androidx.compose.ui:ui" }
-compose-ui-geometry = { module = "androidx.compose.ui:ui-geometry" }
-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
-compose-ui-text = { module = "androidx.compose.ui:ui-text" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-ui-unit = { module = "androidx.compose.ui:ui-unit" }
-composeMaterialIconsCore = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.3" }
+compose-materialIcons = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.3" }
+compose-navigation = "org.jetbrains.androidx.navigation:navigation-compose:2.9.1"
+compose-navigationAndroid = "androidx.navigation:navigation-compose:2.9.6"
+compose-navigationMaterial3 = "com.eygraber:compose-material3-navigation:0.0.8"
+compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeJetbrains" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeJetbrains" }
+compose-runtimeSaveable = { module = "org.jetbrains.compose.runtime:runtime-saveable", version.ref = "composeJetbrains" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeJetbrains" }
+compose-uiTest = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeJetbrains" }
+compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeJetbrains" }
 
 detektCompose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
 detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", version.ref = "detektEygraber" }

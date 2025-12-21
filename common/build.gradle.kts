@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
@@ -7,19 +7,16 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
 }
 
-android {
-  namespace = "template.common"
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.common",
   )
 
   sourceSets {
     commonMain.dependencies {
-      implementation(compose.components.resources)
-      implementation(compose.runtime)
+      implementation(libs.compose.resources)
+      implementation(libs.compose.runtime)
     }
   }
 }

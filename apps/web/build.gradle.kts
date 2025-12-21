@@ -39,8 +39,8 @@ kotlin {
     wasmJsMain.dependencies {
       implementation(projects.apps.shared)
 
-      implementation(compose.components.resources)
-      implementation(compose.ui)
+      implementation(libs.compose.resources)
+      implementation(libs.compose.ui)
     }
   }
 }

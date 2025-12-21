@@ -13,6 +13,7 @@ import template.ui.material.theme.TemplateEdgeToEdgeModalBottomSheetPreviewTheme
 
 @RunWith(TestParameterInjector::class)
 class DevSettingsScreenshotTest(
+  @Suppress("UnnecessaryAnnotationUseSiteTarget")
   @param:TestParameter
   private val deviceConfig: PaparazziDeviceConfig,
 ) {

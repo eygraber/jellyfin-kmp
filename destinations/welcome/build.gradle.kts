@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
@@ -7,14 +7,10 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.kotlinxSerialization)
   alias(libs.plugins.ksp)
-  alias(libs.plugins.paparazzi)
+  // alias(libs.plugins.paparazzi)
 }
 
 val pkg = "template.destinations.welcome"
-
-android {
-  namespace = pkg
-}
 
 compose {
   resources {
@@ -25,14 +21,24 @@ compose {
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = pkg,
   )
+
+  androidLibrary {
+    androidResources.enable = true
+
+    withHostTest {
+      isIncludeAndroidResources = true
+    }
+  }
 
   kspDependenciesForAllTargets {
     ksp(libs.kotlinInject.anvilCompiler)
   }
 
   sourceSets {
-    androidUnitTest.dependencies {
+    // https://youtrack.jetbrains.com/issue/KT-83321/
+    named("androidHostTest").dependencies {
       implementation(projects.testUtils)
       implementation(libs.bundles.test.paparazzi)
     }
@@ -48,12 +54,13 @@ kotlin {
       implementation(projects.ui.icons)
       implementation(projects.ui.material)
 
-      implementation(compose.animation)
-      implementation(compose.components.resources)
-      implementation(compose.foundation)
-      implementation(compose.material3)
-      implementation(compose.runtime)
-      implementation(compose.ui)
+      implementation(libs.compose.animation)
+      implementation(libs.compose.foundation)
+      implementation(libs.compose.material3)
+      implementation(libs.compose.resources)
+      implementation(libs.compose.runtime)
+      implementation(libs.compose.ui)
+      implementation(libs.compose.uiToolingPreview)
 
       implementation(libs.kotlinInject.anvilRuntime)
       implementation(libs.kotlinInject.anvilRuntimeOptional)

@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
@@ -7,21 +7,18 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
 }
 
-android {
-  namespace = "template.ui.compose"
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.ui.compose",
   )
 
   sourceSets {
     commonMain.dependencies {
-      implementation(compose.animation)
-      implementation(compose.foundation)
-      api(compose.runtime)
-      implementation(compose.ui)
+      implementation(libs.compose.animation)
+      implementation(libs.compose.foundation)
+      api(libs.compose.runtime)
+      implementation(libs.compose.ui)
 
       implementation(libs.kotlinx.coroutines.core)
 

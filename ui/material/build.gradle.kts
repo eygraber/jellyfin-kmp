@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
@@ -7,13 +7,10 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
 }
 
-android {
-  namespace = "template.ui.material"
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.ui.material",
   )
 
   sourceSets {
@@ -26,11 +23,12 @@ kotlin {
       implementation(projects.composePreview)
       implementation(projects.ui.icons)
 
-      implementation(compose.animation)
-      implementation(compose.foundation)
-      implementation(compose.material3)
-      api(compose.runtime)
-      implementation(compose.ui)
+      implementation(libs.compose.animation)
+      implementation(libs.compose.foundation)
+      implementation(libs.compose.material3)
+      api(libs.compose.runtime)
+      implementation(libs.compose.ui)
+      implementation(libs.compose.uiToolingPreview)
 
       implementation(libs.vice.nav)
     }

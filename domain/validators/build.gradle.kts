@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
@@ -8,18 +8,15 @@ plugins {
   alias(libs.plugins.testBurst)
 }
 
-android {
-  namespace = "template.domain.validators"
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.domain.validators",
   )
 
   sourceSets {
     commonMain.dependencies {
-      implementation(compose.runtime)
+      implementation(libs.compose.runtime)
 
       implementation(libs.kotlinInject.runtime)
     }

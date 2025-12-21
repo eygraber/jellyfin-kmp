@@ -12,6 +12,7 @@ import template.ui.material.theme.TemplateEdgeToEdgePreviewTheme
 
 @RunWith(TestParameterInjector::class)
 class WelcomeScreenshotTest(
+  @Suppress("UnnecessaryAnnotationUseSiteTarget")
   @param:TestParameter
   private val deviceConfig: PaparazziDeviceConfig,
 ) {

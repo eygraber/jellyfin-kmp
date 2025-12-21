@@ -8,7 +8,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.CanvasBasedWindow
+import androidx.compose.ui.window.ComposeViewport
 import kotlinx.browser.window
 import org.jetbrains.compose.resources.configureWebResources
 import template.app.di.TemplateWebAppComponent
@@ -40,7 +40,7 @@ fun main() {
     }
   }
 
-  CanvasBasedWindow("Template") {
+  ComposeViewport {
     TemplateAppSession(
       onDarkMode = {},
       navComponent = navComponent,

@@ -82,11 +82,13 @@ gradleConventionsDefaults {
       }
     }
 
-    projectDependencies {
+    kmpSourceSetProjectDependencies(
+      sourceSetPredicate = { it.name == "androidMain" },
+    ) {
       implementation(platform(libs.firebase.bom))
       implementation(platform(libs.compose.bom))
 
-      add("runtimeOnly", libs.templateLint)
+      runtimeOnly(libs.templateLint)
     }
   }
 

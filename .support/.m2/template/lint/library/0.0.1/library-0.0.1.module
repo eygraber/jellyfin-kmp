@@ -27,7 +27,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib",
           "version": {
-            "requires": "2.2.21"
+            "requires": "2.3.0"
           }
         }
       ],
@@ -35,11 +35,11 @@
         {
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
-          "size": 8135,
-          "sha512": "00e17fb92e8aaa69f4008f0cfa38bb53b85f6d4fea2d837734e247c6d879bf8d5f1701e4c52e3ab3a2df6139be458a199b9d5e8d3dfdaf7907f05ad6783d67e9",
-          "sha256": "7ce5179b4ee3d00676a3ca31fa76abcd75a7da56274dfe5830470e43653eeaa0",
-          "sha1": "681c725fa3d24272d0e68139d6ec6a9d0bd32bb2",
-          "md5": "057cb6ed9528c124df668ef2f5c14fd8"
+          "size": 8150,
+          "sha512": "13bb1a41f6598839588a520000f791bfff1ed54349c703edc05444f33cf01bea3020bb0b30af883acc90bb06c0ba4221abb76bb2805c8632caedc5ae75883ca3",
+          "sha256": "047d0490d06a9604880e22f799f2a42f082f27e1d6f6c87c7e88c15e86a6e46a",
+          "sha1": "f515efd4792786734d78a7ca7f023f2c0a881539",
+          "md5": "a345c53feb3c8a393119772790a1df37"
         }
       ]
     },
@@ -56,7 +56,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib",
           "version": {
-            "requires": "2.2.21"
+            "requires": "2.3.0"
           }
         }
       ],
@@ -64,11 +64,11 @@
         {
           "name": "library-0.0.1.aar",
           "url": "library-0.0.1.aar",
-          "size": 8135,
-          "sha512": "00e17fb92e8aaa69f4008f0cfa38bb53b85f6d4fea2d837734e247c6d879bf8d5f1701e4c52e3ab3a2df6139be458a199b9d5e8d3dfdaf7907f05ad6783d67e9",
-          "sha256": "7ce5179b4ee3d00676a3ca31fa76abcd75a7da56274dfe5830470e43653eeaa0",
-          "sha1": "681c725fa3d24272d0e68139d6ec6a9d0bd32bb2",
-          "md5": "057cb6ed9528c124df668ef2f5c14fd8"
+          "size": 8150,
+          "sha512": "13bb1a41f6598839588a520000f791bfff1ed54349c703edc05444f33cf01bea3020bb0b30af883acc90bb06c0ba4221abb76bb2805c8632caedc5ae75883ca3",
+          "sha256": "047d0490d06a9604880e22f799f2a42f082f27e1d6f6c87c7e88c15e86a6e46a",
+          "sha1": "f515efd4792786734d78a7ca7f023f2c0a881539",
+          "md5": "a345c53feb3c8a393119772790a1df37"
         }
       ]
     }

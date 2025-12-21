@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.conventionsAndroidLibrary)
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
@@ -7,20 +7,16 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
 }
 
-android {
-  namespace = "template.ui.icons"
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
+    androidNamespace = "template.ui.icons",
   )
 
   sourceSets {
     commonMain.dependencies {
-      api(compose.ui)
-
-      implementation(libs.composeMaterialIconsCore)
+      implementation(libs.compose.materialIcons)
+      api(libs.compose.ui)
     }
   }
 }

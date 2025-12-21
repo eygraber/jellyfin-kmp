@@ -1,4 +1,4 @@
-import com.eygraber.conventions.detekt.configureDetekt
+import com.eygraber.conventions.detekt.configureDetekt2
 import com.eygraber.conventions.kotlin.configureKgp
 import com.eygraber.conventions.repositories.addCommonRepositories
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -35,7 +35,7 @@ configureKgp(
   jvmDistribution = JvmVendorSpec.AZUL.takeIf { toolchainVersion != null },
 )
 
-configureDetekt(
+configureDetekt2(
   jvmTargetVersion = jvmTarget,
   useRootConfigFile = false,
   useProjectConfigFile = false,
