@@ -29,13 +29,13 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
-      api(projects.screens.devSettings)
-      api(projects.screens.root)
-      api(projects.screens.welcome)
-
       api(projects.di)
 
       api(projects.nav)
+
+      api(projects.screens.devSettings)
+      api(projects.screens.root)
+      api(projects.screens.welcome)
 
       api(projects.services.deviceSensors.impl)
       api(projects.services.deviceSensors.public)

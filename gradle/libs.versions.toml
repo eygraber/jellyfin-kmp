@@ -16,6 +16,7 @@ atomicfu = "0.29.0"
 
 compose-bom = "2026.01.00"
 composeJetbrains = "1.10.0"
+composeJetpack = "1.10.1"
 composeMaterial3Jetbrains = "1.9.0"
 composeNav3 = "1.0.0-alpha06"
 
@@ -35,7 +36,7 @@ jvmTarget = "17"
 
 khronicle = "0.5.2"
 
-kotest = "6.0.7"
+kotest = "6.1.0"
 
 kotlin = "2.3.0"
 kotlinInject = "0.9.0"
@@ -137,11 +138,13 @@ compose-materialIcons = { module = "org.jetbrains.compose.material:material-icon
 compose-nav3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-nav3" }
 compose-nav3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "composeNav3" }
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeJetbrains" }
-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeJetbrains" }
+compose-runtime = { module = "androidx.compose.runtime:runtime-annotation", version.ref = "composeJetpack" }
+compose-runtimeAnnotation = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeJetbrains" }
 compose-runtimeSaveable = { module = "org.jetbrains.compose.runtime:runtime-saveable", version.ref = "composeJetbrains" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeJetbrains" }
 compose-uiTest = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeJetbrains" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeJetbrains" }
+compose-uiToolingPreviewIde = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeJetbrains" }
 
 detektCompose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
 detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", version.ref = "detektEygraber" }

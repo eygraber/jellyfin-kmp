@@ -17,8 +17,8 @@ data object RootKey : NavKey
 class RootNavEntryProvider(
   override val compositor: RootCompositor,
   override val effects: RootEffects,
-) : ViceNavEntryProvider<RootKey, RootIntent, RootCompositor, RootEffects, RootViewState>() {
-  override val view: RootView = { state, onIntent -> RootView(state, onIntent) }
+) : ViceNavEntryProvider<Key, Intent, Compositor, Effects, ViewState>() {
+  override val view: View = { state, onIntent -> RootView(state, onIntent) }
 }
 
 @ContributesSubcomponent(ScreenScope::class)
@@ -34,3 +34,10 @@ interface RootComponent {
     ): RootComponent
   }
 }
+
+private typealias Key = RootKey
+private typealias View = RootView
+private typealias Intent = RootIntent
+private typealias Compositor = RootCompositor
+private typealias Effects = RootEffects
+private typealias ViewState = RootViewState

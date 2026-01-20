@@ -15,4 +15,9 @@ for arg in "$@"; do
   fi
 done
 
-./format && ./detekt :apps:android:lintDebug $additional_gradle_tasks ${args:+$args}
+lint_task=":apps:android:lintDevDebug"
+if [ "$CI" = "true" ]; then
+  lint_task=":apps:android:lintDevRelease"
+fi
+
+./format && ./detekt $lint_task $additional_gradle_tasks ${args:+$args}

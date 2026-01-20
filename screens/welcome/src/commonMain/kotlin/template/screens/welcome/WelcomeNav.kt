@@ -17,8 +17,8 @@ data object WelcomeKey : NavKey
 @SingleIn(ScreenScope::class)
 class WelcomeNavEntryProvider(
   override val compositor: WelcomeCompositor,
-) : ViceNavEntryProvider<WelcomeKey, WelcomeIntent, WelcomeCompositor, ViceEffects, WelcomeViewState>() {
-  override val view: WelcomeView = { state, onIntent -> WelcomeView(state, onIntent) }
+) : ViceNavEntryProvider<Key, Intent, Compositor, Effects, ViewState>() {
+  override val view: View = { state, onIntent -> WelcomeView(state, onIntent) }
   override val effects: ViceEffects = ViceEffects.None
 }
 
@@ -35,3 +35,10 @@ interface WelcomeComponent {
     ): WelcomeComponent
   }
 }
+
+private typealias Key = WelcomeKey
+private typealias View = WelcomeView
+private typealias Intent = WelcomeIntent
+private typealias Compositor = WelcomeCompositor
+private typealias Effects = ViceEffects
+private typealias ViewState = WelcomeViewState

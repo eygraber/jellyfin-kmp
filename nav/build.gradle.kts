@@ -21,11 +21,11 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
+      api(projects.di)
+
       implementation(projects.screens.devSettings)
       implementation(projects.screens.root)
       implementation(projects.screens.welcome)
-
-      api(projects.di)
 
       api(projects.services.deviceSensors.public)
 

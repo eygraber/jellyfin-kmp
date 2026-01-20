@@ -37,8 +37,6 @@ kotlin {
     }
 
     commonMain.dependencies {
-      api(projects.composePreview)
-
       api(projects.di)
 
       api(projects.services.splashScreen.public)
@@ -52,6 +50,7 @@ kotlin {
       implementation(libs.compose.material3)
       implementation(libs.compose.resources)
       implementation(libs.compose.runtime)
+      implementation(libs.compose.runtimeAnnotation)
       implementation(libs.compose.ui)
       implementation(libs.compose.uiToolingPreview)
 
@@ -66,4 +65,8 @@ kotlin {
       implementation(libs.vice.nav3)
     }
   }
+}
+
+dependencies {
+  androidRuntimeClasspath(libs.compose.uiToolingPreviewIde)
 }

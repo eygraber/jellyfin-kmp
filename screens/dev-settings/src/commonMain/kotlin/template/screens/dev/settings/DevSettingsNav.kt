@@ -18,7 +18,7 @@ data object DevSettingsKey : NavKey
 class DevSettingsNavEntryProvider(
   override val compositor: DevSettingsCompositor,
 ) : ViceNavEntryProvider<Key, Intent, Compositor, Effects, ViewState>() {
-  override val view: DevSettingsView = { state, onIntent -> DevSettingsView(state, onIntent) }
+  override val view: View = { state, onIntent -> DevSettingsView(state, onIntent) }
   override val effects: ViceEffects = ViceEffects.None
 }
 
@@ -37,6 +37,7 @@ interface DevSettingsComponent {
 }
 
 private typealias Key = DevSettingsKey
+private typealias View = DevSettingsView
 private typealias Intent = DevSettingsIntent
 private typealias Compositor = DevSettingsCompositor
 private typealias Effects = ViceEffects

@@ -20,7 +20,6 @@ kotlin {
     }
 
     commonMain.dependencies {
-      implementation(projects.composePreview)
       implementation(projects.ui.icons)
 
       implementation(libs.compose.animation)
@@ -34,4 +33,8 @@ kotlin {
       implementation(libs.vice.nav3)
     }
   }
+}
+
+dependencies {
+  androidRuntimeClasspath(libs.compose.uiToolingPreviewIde)
 }

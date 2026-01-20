@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.eygraber.vice.ViceView
+import template.ui.compose.PreviewTemplateScreen
 import template.ui.material.theme.TemplateEdgeToEdgeModalBottomSheetPreviewTheme
 
 internal typealias DevSettingsView = ViceView<DevSettingsIntent, DevSettingsViewState>
@@ -27,7 +28,7 @@ internal fun DevSettingsView(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@PreviewTemplateScreen
 @Composable
 private fun DevSettingsPreview() {
   TemplateEdgeToEdgeModalBottomSheetPreviewTheme {

@@ -20,6 +20,7 @@ kotlin {
       implementation(libs.compose.nav3.ui)
       api(libs.compose.runtime)
       implementation(libs.compose.ui)
+      implementation(libs.compose.uiToolingPreview)
 
       implementation(libs.kotlinx.coroutines.core)
 

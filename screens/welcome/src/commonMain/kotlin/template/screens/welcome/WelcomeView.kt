@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eygraber.vice.ViceView
 import org.jetbrains.compose.resources.stringResource
+import template.ui.compose.PreviewTemplateScreen
 import template.ui.compose.WithMaxDensity
 import template.ui.compose.sharedSplashScreenIcon
 import template.ui.icons.Logo
@@ -117,7 +118,7 @@ private fun SplashScreenLogo(
   }
 }
 
-@Preview
+@PreviewTemplateScreen
 @Composable
 private fun WelcomePreview() {
   TemplatePreviewTheme {

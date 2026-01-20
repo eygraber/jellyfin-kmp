@@ -50,4 +50,4 @@ if [ ! -f "$JAR_PATH" ]; then
 fi
 
 # Run the generator
-java -jar "$JAR_PATH" --project-name="Template" --project-package="template" "$@"
+java -jar "$JAR_PATH" --kmp --project-name="Template" --project-package="template" "$@"
