@@ -11,11 +11,11 @@ while read -r dir; do
   src_path=${src_path#.}
   src_path=${src_path//\//:}
 
-  # Append ":detektDevRelease" to the extracted and formatted path
-  src_path+=":detektDevRelease"
+  # Append ":detektRelease" to the extracted and formatted path
+  src_path+=":detektReleaseSourceSet"
 
   # Concatenate the extracted, formatted, and appended path with a space delimiter
   concatenated_output+=" $src_path"
 done < <(find . -type d \( -name "devRelease" -o -name "release" \) ! -path "*/build/*")
 
-./gradlew detektDevDebug $concatenated_output "$@"
+./gradlew detektDebugSourceSet $concatenated_output "$@"

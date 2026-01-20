@@ -1,73 +1,33 @@
 package template.nav.dev
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheetDefaults
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
-import com.eygraber.compose.material3.navigation.bottomSheet
-import com.eygraber.vice.nav.viceComposable
-import kotlinx.serialization.Serializable
-import template.destinations.dev.settings.DevSettingsDestinationComponent
-import template.destinations.dev.settings.DevSettingsNavigator
-import template.destinations.dev.settings.DevSettingsRoute
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import com.eygraber.vice.nav3.viceEntry
+import template.nav.BottomSheetSceneStrategy
 import template.nav.TemplateNavComponent
+import template.screens.dev.settings.DevSettingsComponent
+import template.screens.dev.settings.DevSettingsKey
 
-@Serializable
-internal object TemplateRoutesDevSettings
-
-@OptIn(ExperimentalMaterial3Api::class)
-internal fun NavGraphBuilder.templateDevNavGraph(
+internal fun EntryProviderScope<NavKey>.templateDevNavGraph(
   navComponent: TemplateNavComponent,
+  backStack: NavBackStack<NavKey>,
 ) {
-  navigation<TemplateRoutesDevSettings>(
-    startDestination = DevSettingsRoute,
-  ) {
-    bottomSheet<DevSettingsRoute>(
-      modalBottomSheetProperties = ModalBottomSheetDefaults.properties,
-      skipPartiallyExpanded = false,
-    ) {
-      val devNavController = rememberNavController()
-      NavHost(
-        navController = devNavController,
-        startDestination = DevSettingsRoute,
-        enterTransition = { slideInVertically(tween(500)) { it * 2 } },
-        popEnterTransition = { slideInHorizontally(tween(500)) { -it } },
-        popExitTransition = { slideOutHorizontally(tween(500)) { it * 2 } },
-        exitTransition = { slideOutVertically(tween(500)) { it * 2 } },
-      ) {
-        navGraph(
-          navComponent = navComponent,
-          navController = devNavController,
-        )
-      }
-    }
-  }
+  viceEntry<DevSettingsKey>(
+    provideDevSettings(navComponent, backStack),
+    metadata = BottomSheetSceneStrategy.bottomSheet(),
+  )
 }
 
-private fun NavGraphBuilder.navGraph(
+private fun provideDevSettings(
   navComponent: TemplateNavComponent,
-  navController: NavController,
-) {
-  viceComposable<DevSettingsRoute>(
-    enterTransition = { slideInVertically { it * 2 } },
-    exitTransition = { slideOutVertically { it * 2 } },
-  ) { entry ->
-    navComponent.devSettingsFactory.createDevSettingsComponent(
-      navigator = DevSettingsNavigator(
-        onNavigateBack = { navController.popBackStack() },
-      ),
-      route = entry.route,
-    ).destination
-  }
+  backStack: NavBackStack<NavKey>,
+) = { key: DevSettingsKey ->
+  navComponent.devSettingsFactory.createDevSettingsComponent(
+    navigator = devSettings(backStack),
+    key = key,
+  ).navEntryProvider
 }
 
 private val TemplateNavComponent.devSettingsFactory
-  get() = this as DevSettingsDestinationComponent.Factory
+  get() = this as DevSettingsComponent.Factory

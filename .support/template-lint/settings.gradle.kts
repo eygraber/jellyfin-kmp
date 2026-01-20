@@ -3,7 +3,6 @@ import com.eygraber.conventions.repositories.addCommonRepositories
 
 pluginManagement {
   repositories {
-    mavenLocal()
     mavenLocal {
       url = uri("../.m2")
 
@@ -44,7 +43,6 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
   repositories {
-    mavenLocal()
     addCommonRepositories(
       includeMavenCentral = true,
       includeMavenCentralSnapshots = true,
@@ -62,9 +60,9 @@ dependencyResolutionManagement {
 rootProject.name = "template-lint"
 
 plugins {
-  id("com.eygraber.conventions.settings") version "0.0.94"
+  id("com.eygraber.conventions.settings") version "0.0.98"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("com.gradle.develocity") version "4.3"
+  id("com.gradle.develocity") version "4.3.1"
 }
 
 include(":checks")

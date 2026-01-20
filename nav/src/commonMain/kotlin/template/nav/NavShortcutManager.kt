@@ -3,7 +3,8 @@ package template.nav
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.input.key.KeyEvent
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import me.tatarka.inject.annotations.Inject
@@ -44,11 +45,11 @@ class RealNavShortcutManager : NavShortcutManager {
 @Composable
 internal fun HandleNavShortcutsEffect(
   navShortcutManager: NavShortcutManager,
-  navController: NavController,
+  backStack: NavBackStack<NavKey>,
 ) {
   LaunchedEffect(Unit) {
     navShortcutManager.shortcutFlow.collect { shortcut ->
-      shortcut.handleEnvironment(navController)
+      shortcut.handleEnvironment(backStack)
     }
   }
 }

@@ -29,10 +29,10 @@ from a transitive dependencies present in the module's public API.
 1. No type resolution - You can run this mode using `./gradlew detekt`
 2. Type resolution - The Kotlin compiler is used to get more information from the codebase to
 run more advanced checks. The flavor of the app needs to be specified when running the task e.g.
-`./gradle detektDevDebug detektDevRelease`.
+`./gradle detektDebug detektRelease`.
 
-There is a `detekt` script that will run both modes, using both the `devDebug` and `devRelease`
-flavors for type resolution. It will only run the `devRelease` tasks on Gradle projects that have specific
+There is a `detekt` script that will run both modes, using both the `debug` and `release`
+flavors for type resolution. It will only run the `release` tasks on Gradle projects that have specific
 `release` or `devRelease` sources (so that it runs faster).
 
 Any arguments passed to `./detekt` will get forwarded

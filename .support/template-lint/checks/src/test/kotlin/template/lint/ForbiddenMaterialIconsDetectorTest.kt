@@ -7,6 +7,18 @@ import org.junit.Test
 
 @Suppress("TrimMultilineRawString")
 class ForbiddenMaterialIconsDetectorTest {
+  private val iconsFile = kotlin(
+    """
+      package androidx.compose.material.icons
+
+      @Suppress("ForbiddenMaterialIcons")
+      object Icons {
+        @Suppress("ForbiddenMaterialIcons")
+        object Defaults
+      }
+    """,
+  ).indented()
+
   @Test
   fun singleForbiddenMaterialIcons() {
     runTest(
@@ -26,14 +38,11 @@ class ForbiddenMaterialIconsDetectorTest {
           ~~~~~
         src/test.kt:6: Error: Usage of Icons from material-icons-core is not supported in Template. Use TemplateIcons instead. [ForbiddenMaterialIcons]
           Icons.Defaults
-          ~~~~~
-        src/test.kt:6: Error: Usage of Icons from material-icons-core is not supported in Template. Use TemplateIcons instead. [ForbiddenMaterialIcons]
-          Icons.Defaults
                 ~~~~~~~~
         src/test.kt:7: Error: Usage of Icons from material-icons-core is not supported in Template. Use TemplateIcons instead. [ForbiddenMaterialIcons]
           Defaults
           ~~~~~~~~
-        4 errors, 0 warnings
+        3 errors, 0 warnings
         """,
     )
   }
@@ -162,16 +171,4 @@ class ForbiddenMaterialIconsDetectorTest {
       .run()
       .expect(expectedOutput)
   }
-
-  private val iconsFile = kotlin(
-    """
-      package androidx.compose.material.icons
-
-      @Suppress("ForbiddenMaterialIcons")
-      object Icons {
-        @Suppress("ForbiddenMaterialIcons")
-        object Defaults
-      }
-    """,
-  ).indented()
 }

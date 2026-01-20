@@ -4,9 +4,11 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import template.nav.NavShortcuts
 import template.nav.RealNavShortcutManager
+import template.screens.dev.settings.DevSettingsKey
 
 internal fun RealNavShortcutManager.handleEnvironmentKeyEvent(event: KeyEvent): NavShortcuts? =
   when {
@@ -15,10 +17,10 @@ internal fun RealNavShortcutManager.handleEnvironmentKeyEvent(event: KeyEvent): 
   }
 
 internal fun NavShortcuts.handleEnvironment(
-  navController: NavController,
+  backStack: NavBackStack<NavKey>,
 ) = when(this) {
   NavShortcuts.DevSettings -> {
-    navController.navigate(TemplateRoutesDevSettings)
+    backStack.add(DevSettingsKey)
     true
   }
 }

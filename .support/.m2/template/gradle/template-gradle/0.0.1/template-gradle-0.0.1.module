@@ -29,11 +29,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 66163,
-          "sha512": "6231461e43aae80ce09b77eb739f4f29f4335397c15aadb9f18f042a8f09d18e62057bdd551cadf790cf334b7f12f4bba4c397f15333bfe430706d7565987902",
-          "sha256": "6d859f2770d314939f4a5affa8c4f0650c9d1346405f2333301325bd56b0d437",
-          "sha1": "cbf7fde2fe36aaefc8935fbb4a2e138b70713cce",
-          "md5": "fc0cc8f568806f0dd424b94686092578"
+          "size": 66040,
+          "sha512": "77c10c8bfa85b8f96d907ca56988f508fd6cd9051603a3f22a3e8089ce1ed1984983a311f930c8c0a2353dd0247093eec0462470e550e89032407fd6cafb3ab9",
+          "sha256": "6c36c3676e235ec5e843773cc69808a1433ad8fd0b1ee535122b0eaa9dac65a8",
+          "sha1": "96f770a328169251b9361eba3cf713a36324639b",
+          "md5": "490ab5b052c9b68479818f377db4b562"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "8.13.2"
+            "requires": "9.0.0"
           }
         },
         {
@@ -96,11 +96,11 @@
         {
           "name": "template-gradle-0.0.1.jar",
           "url": "template-gradle-0.0.1.jar",
-          "size": 66163,
-          "sha512": "6231461e43aae80ce09b77eb739f4f29f4335397c15aadb9f18f042a8f09d18e62057bdd551cadf790cf334b7f12f4bba4c397f15333bfe430706d7565987902",
-          "sha256": "6d859f2770d314939f4a5affa8c4f0650c9d1346405f2333301325bd56b0d437",
-          "sha1": "cbf7fde2fe36aaefc8935fbb4a2e138b70713cce",
-          "md5": "fc0cc8f568806f0dd424b94686092578"
+          "size": 66040,
+          "sha512": "77c10c8bfa85b8f96d907ca56988f508fd6cd9051603a3f22a3e8089ce1ed1984983a311f930c8c0a2353dd0247093eec0462470e550e89032407fd6cafb3ab9",
+          "sha256": "6c36c3676e235ec5e843773cc69808a1433ad8fd0b1ee535122b0eaa9dac65a8",
+          "sha1": "96f770a328169251b9361eba3cf713a36324639b",
+          "md5": "490ab5b052c9b68479818f377db4b562"
         }
       ]
     }

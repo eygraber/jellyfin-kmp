@@ -46,14 +46,6 @@ gradleConventionsDefaults {
     )
 
     useCoreLibraryDesugaring(libs.android.desugar)
-
-    addProductFlavors(
-      dimension = "environment",
-      flavors = listOf(
-        ProductFlavor(name = "dev"),
-        ProductFlavor(name = "prod", enabled = Env.isCI),
-      ),
-    )
   }
 
   detekt {

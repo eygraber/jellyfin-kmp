@@ -29,9 +29,9 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
-      api(projects.destinations.devSettings)
-      api(projects.destinations.root)
-      api(projects.destinations.welcome)
+      api(projects.screens.devSettings)
+      api(projects.screens.root)
+      api(projects.screens.welcome)
 
       api(projects.di)
 
@@ -57,7 +57,7 @@ kotlin {
 
       implementation(libs.kotlinx.coroutines.core)
 
-      api(libs.vice.nav)
+      api(libs.vice.nav3)
     }
   }
 }

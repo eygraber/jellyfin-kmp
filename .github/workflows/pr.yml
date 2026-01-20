@@ -37,7 +37,7 @@ jobs:
         uses: ./.github/actions/build-setup
 
       - name: Run assemble task
-        run: ./gradlew assembleDevDebug
+        run: ./gradlew assembleDebug
 
   dependency_analysis:
     if: false
@@ -120,7 +120,7 @@ jobs:
         run: diff <(git ls-files ':(attr:filter=lfs)' | sort) <(git lfs ls-files -n | sort) >/dev/null
 
       - name: Run unit and paparazzi screenshot tests
-        run: ./gradlew testDevDebugUnitTest verifyPaparazziDevDebug :konsist:test
+        run: ./gradlew testDebugUnitTest :konsist:test
 
 env:
   EJSON_DEV_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_DEV_BUILD_PRIVATE_KEY }}

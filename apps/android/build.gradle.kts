@@ -6,7 +6,6 @@ import template.gradle.getInternalKeystorePassword
 plugins {
   alias(libs.plugins.androidApp)
   alias(libs.plugins.androidCacheFix)
-  alias(libs.plugins.kotlinAndroid)
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.conventionsCompose)
   alias(libs.plugins.conventionsDetekt)

@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.eygraber.vice.nav.LocalAnimatedVisibilityScope
-import com.eygraber.vice.nav.LocalSharedTransitionScope
-import com.eygraber.vice.nav.rememberSharedContentState
-import com.eygraber.vice.nav.sharedElement
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.eygraber.vice.nav3.LocalSharedTransitionScope
+import com.eygraber.vice.nav3.rememberSharedContentState
+import com.eygraber.vice.nav3.sharedElement
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Suppress("ModifierComposable")
@@ -18,7 +18,7 @@ fun Modifier.sharedSplashScreenIcon() =
   requiredSize(288.dp)
     .sharedElement(
       sharedTransitionScope = LocalSharedTransitionScope.current,
-      animatedVisibilityScope = LocalAnimatedVisibilityScope.current,
+      animatedVisibilityScope = LocalNavAnimatedContentScope.current,
       boundsTransform = { _, _ -> tween(durationMillis = 650) },
       state = rememberSharedContentState("SplashScreenIcon"),
     )

@@ -2,10 +2,9 @@
 
 additional_gradle_tasks="
 :apps:shared:licensee
-testDevDebugUnitTest
+testDebugUnitTest
 :konsist:test
 "
-
 
 args=""
 for arg in "$@"; do
@@ -16,4 +15,4 @@ for arg in "$@"; do
   fi
 done
 
-./format && ./detekt :apps:android:lintDevRelease $additional_gradle_tasks ${args:+$args}
+./format && ./detekt :apps:android:lintDebug $additional_gradle_tasks ${args:+$args}

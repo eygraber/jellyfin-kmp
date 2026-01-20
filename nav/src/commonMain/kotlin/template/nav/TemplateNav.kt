@@ -1,155 +1,170 @@
 package template.nav
 
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
-import androidx.navigation.toRoute
-import com.eygraber.compose.material3.navigation.ModalBottomSheetLayout
-import com.eygraber.compose.material3.navigation.bottomSheet
-import com.eygraber.compose.material3.navigation.rememberModalBottomSheetNavigator
-import com.eygraber.vice.nav.LocalSharedTransitionScope
-import com.eygraber.vice.nav.viceComposable
+import androidx.compose.ui.unit.IntOffset
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.scene.DialogSceneStrategy
+import androidx.navigation3.scene.SinglePaneSceneStrategy
+import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.serialization.SavedStateConfiguration
+import com.eygraber.vice.nav3.LocalSharedTransitionScope
+import com.eygraber.vice.nav3.viceEntry
 import kotlinx.serialization.Serializable
-import template.destinations.root.RootDestinationComponent
-import template.destinations.root.RootNavigator
-import template.destinations.root.RootRoute
-import template.destinations.welcome.WelcomeDestinationComponent
-import template.destinations.welcome.WelcomeNavigator
-import template.destinations.welcome.WelcomeRoute
+import kotlinx.serialization.modules.PolymorphicModuleBuilder
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.serializer
 import template.nav.dev.DetectShakesEffect
 import template.nav.dev.templateDevNavGraph
+import template.screens.root.RootComponent
+import template.screens.root.RootKey
+import template.screens.welcome.WelcomeComponent
+import template.screens.welcome.WelcomeKey
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
+private val screenTransitionSpec: FiniteAnimationSpec<IntOffset> = tween(400)
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TemplateNav(
   navComponent: TemplateNavComponent,
+  modifier: Modifier = Modifier,
 ) {
-  val bottomSheetNavigator = rememberModalBottomSheetNavigator()
-  val navController = rememberNavController(bottomSheetNavigator)
+  val backStack = rememberNavBackStack(
+    configuration = SavedStateConfiguration {
+      serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+          addSubclasses()
+        }
+      }
+    },
+    elements = arrayOf(RootKey),
+  )
 
   DetectShakesEffect(
     shakeDetector = navComponent.shakeDetector,
-    navController = navController,
+    backStack = backStack,
   )
 
   HandleNavShortcutsEffect(
     navShortcutManager = navComponent.shortcutManager,
-    navController = navController,
+    backStack = backStack,
   )
 
   SharedTransitionLayout {
     CompositionLocalProvider(
       LocalSharedTransitionScope provides this,
     ) {
-      ModalBottomSheetLayout(
-        bottomSheetNavigator,
-      ) {
-        NavHost(
-          navController = navController,
-          startDestination = RootRoute,
-          enterTransition = { slideInHorizontally(tween(500)) { it * 2 } },
-          popEnterTransition = { slideInHorizontally(tween(500)) { -it } },
-          popExitTransition = { slideOutHorizontally(tween(500)) { it * 2 } },
-          exitTransition = { slideOutHorizontally(tween(500)) { -it } },
-        ) {
-          templateNavGraph(
-            navComponent = navComponent,
-            navController = navController,
+      NavDisplay(
+        backStack = backStack,
+        modifier = modifier,
+        sceneStrategy = DialogSceneStrategy<NavKey>() then BottomSheetSceneStrategy() then SinglePaneSceneStrategy(),
+        transitionSpec = {
+          ContentTransform(
+            targetContentEnter = slideInHorizontally(screenTransitionSpec) { it * 2 },
+            initialContentExit = slideOutHorizontally(screenTransitionSpec) { -it },
           )
-        }
+        },
+        popTransitionSpec = {
+          ContentTransform(
+            targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
+            initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
+          )
+        },
+        predictivePopTransitionSpec = { _ ->
+          ContentTransform(
+            targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
+            initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
+          )
+        },
+        onBack = { backStack.removeLastOrNull() },
+        entryProvider = remember(navComponent, backStack) {
+          templateNavEntryProvider(navComponent, backStack)
+        },
+      )
+    }
+  }
+}
+
+private fun templateNavEntryProvider(
+  navComponent: TemplateNavComponent,
+  backStack: NavBackStack<NavKey>,
+) = entryProvider {
+  viceEntry<RootKey>(
+    provideRoot(navComponent, backStack),
+  )
+
+  viceEntry<WelcomeKey>(
+    provideWelcome(navComponent, backStack),
+  )
+
+  templateDevNavGraph(
+    navComponent = navComponent,
+    backStack = backStack,
+  )
+
+  entry<TemplateNavKeys.ComingSoon>(
+    metadata = DialogSceneStrategy.dialog(),
+  ) { key ->
+    Card {
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .aspectRatio(2F),
+        contentAlignment = Alignment.Center,
+      ) {
+        Text("${key.feature} coming soon!")
       }
     }
   }
 }
 
-private fun NavGraphBuilder.templateNavGraph(
+private fun provideRoot(
   navComponent: TemplateNavComponent,
-  navController: NavController,
-) {
-  templateDevNavGraph(
-    navComponent = navComponent,
-  )
-
-  comingSoonRoute()
-
-  viceComposable<RootRoute> { entry ->
-    navComponent.rootFactory.createRootComponent(
-      navigator = RootNavigator(
-        onNavigateToOnboarding = {
-          navController.navigate(TemplateRoutes.Onboarding) {
-            popUpTo(RootRoute) {
-              inclusive = true
-            }
-          }
-        },
-      ),
-      route = entry.route,
-    ).destination
-  }
-
-  onboardingNavGraph(
-    navComponent = navComponent,
-    navController = navController,
-  )
+  backStack: NavBackStack<NavKey>,
+) = { key: RootKey ->
+  navComponent.rootFactory.createRootComponent(
+    navigator = TemplateNavigators.root(backStack),
+    key = key,
+  ).navEntryProvider
 }
 
-private fun NavGraphBuilder.onboardingNavGraph(
+private fun provideWelcome(
   navComponent: TemplateNavComponent,
-  navController: NavController,
-) {
-  navigation<TemplateRoutes.Onboarding>(
-    startDestination = WelcomeRoute,
-  ) {
-    viceComposable<WelcomeRoute> { entry ->
-      navComponent.welcomeFactory.createWelcomeComponent(
-        navigator = WelcomeNavigator(
-          onNavigateToSignUp = { navController.navigate(TemplateRoutes.ComingSoon("SignUp")) },
-          onNavigateToLogin = { navController.navigate(TemplateRoutes.ComingSoon("Login")) },
-        ),
-        route = entry.route,
-      ).destination
-    }
-  }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-private fun NavGraphBuilder.comingSoonRoute() {
-  bottomSheet<TemplateRoutes.ComingSoon> { entry ->
-    val comingSoon = entry.toRoute<TemplateRoutes.ComingSoon>()
-    Box(
-      modifier = Modifier.padding(16.dp),
-    ) {
-      Text("${comingSoon.feature} coming soon!")
-    }
-  }
+  backStack: NavBackStack<NavKey>,
+) = { key: WelcomeKey ->
+  navComponent.welcomeFactory.createWelcomeComponent(
+    navigator = TemplateNavigators.welcome(backStack),
+    key = key,
+  ).navEntryProvider
 }
 
 @Serializable
-private sealed interface TemplateRoutes {
+sealed interface TemplateNavKeys : NavKey {
   @Serializable
-  data class ComingSoon(val feature: String) : TemplateRoutes
-
-  @Serializable
-  data object Onboarding : TemplateRoutes
+  data class ComingSoon(val feature: String) : TemplateNavKeys
 }
 
 private val TemplateNavComponent.rootFactory
-  get() = this as RootDestinationComponent.Factory
+  get() = this as RootComponent.Factory
 
 private val TemplateNavComponent.welcomeFactory
-  get() = this as WelcomeDestinationComponent.Factory
+  get() = this as WelcomeComponent.Factory

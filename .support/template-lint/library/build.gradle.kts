@@ -1,7 +1,8 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SourcesJar
 
 plugins {
-  alias(libs.plugins.kotlinAndroid)
   alias(libs.plugins.conventionsAndroidLibrary)
   alias(libs.plugins.conventionsKotlin)
   alias(libs.plugins.dependencyAnalysis)
@@ -27,8 +28,8 @@ mavenPublishing {
   configure(
     AndroidSingleVariantLibrary(
       variant = "release",
-      sourcesJar = false,
-      publishJavadocJar = false,
+      javadocJar = JavadocJar.None(),
+      sourcesJar = SourcesJar.Empty(),
     ),
   )
 }

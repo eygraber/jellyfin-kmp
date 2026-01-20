@@ -17,12 +17,13 @@ kotlin {
     commonMain.dependencies {
       implementation(libs.compose.animation)
       implementation(libs.compose.foundation)
+      implementation(libs.compose.nav3.ui)
       api(libs.compose.runtime)
       implementation(libs.compose.ui)
 
       implementation(libs.kotlinx.coroutines.core)
 
-      implementation(libs.vice.nav)
+      implementation(libs.vice.nav3)
     }
   }
 }

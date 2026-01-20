@@ -1,5 +1,4 @@
 plugins {
-  alias(libs.plugins.kotlinAndroid)
   alias(libs.plugins.conventionsAndroidLibrary)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlin)

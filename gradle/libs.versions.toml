@@ -1,7 +1,7 @@
 [versions]# If the AGP version is X.Y.Z, then the Lint library version is X+23.Y.Z.
-android-lint = "31.13.2"
+android-lint = "32.0.0"
 
-android-plugin = "8.13.2"
+android-plugin = "9.0.0"
 
 android-sdk-compile = "36"
 android-sdk-target = "36"
@@ -10,15 +10,16 @@ android-sdk-min = "28"
 androidx-activity = "1.12.2"
 androidx-core = "1.17.0"
 androidx-lifecycle = "2.10.0"
-androidx-navigation = "2.9.1"
+androidx-nav3 = "1.0.0"
 
 atomicfu = "0.29.0"
 
-compose-bom = "2025.12.01"
-composeJetbrains = "1.10.0-rc02"
+compose-bom = "2026.01.00"
+composeJetbrains = "1.10.0"
 composeMaterial3Jetbrains = "1.9.0"
+composeNav3 = "1.0.0-alpha06"
 
-conventions = "0.0.94"
+conventions = "0.0.98"
 
 detekt = "2.0.0-alpha.1"
 detektCompose = "0.5.3"
@@ -28,7 +29,7 @@ ejson = "1.0.9"
 
 googleServices = "4.4.4"
 
-junit5 = "6.0.1"
+junit5 = "6.0.2"
 
 jvmTarget = "17"
 
@@ -37,7 +38,7 @@ khronicle = "0.5.2"
 kotest = "6.0.7"
 
 kotlin = "2.3.0"
-kotlinInject = "0.8.0"
+kotlinInject = "0.9.0"
 kotlinInjectAnvil = "0.1.6"
 
 kotlinx-coroutines = "1.10.2"
@@ -49,14 +50,14 @@ ktlint = "1.8.0"
 
 paparazzi = "2.0.0-alpha02"
 
-publish = "0.35.0"
+publish = "0.36.0"
 
 robolectric = "4.16"
 
 square-sqldelight = "2.2.1"
 
 vice = "1.0.8"
-uiToolingPreviewAndroid = "1.7.3"
+viceModuleGenerator = "0.1.1"
 
 [plugins]
 androidApp = { id = "com.android.application" }
@@ -82,7 +83,6 @@ detekt = { id = "dev.detekt", version.ref = "detekt" }
 firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.2.0" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 googleServices = { id = "com.google.gms.google-services" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
 ksp = { id = "com.google.devtools.ksp" }
@@ -110,10 +110,6 @@ androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
-androidx-navigation-common = { module = "org.jetbrains.androidx.navigation:navigation-common", version.ref = "androidx-navigation" }
-androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
-androidx-navigation-runtime = { module = "org.jetbrains.androidx.navigation:navigation-runtime", version.ref = "androidx-navigation" }
-
 androidx-splash = "androidx.core:core-splashscreen:1.2.0"
 
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
@@ -137,11 +133,9 @@ compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.7.1"
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeJetbrains" }
 compose-foundationLayout = { module = "org.jetbrains.compose.foundation:foundation-layout", version.ref = "composeJetbrains" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3Jetbrains" }
-compose-material3Navigation = "com.eygraber:compose-material3-navigation:0.0.8"
 compose-materialIcons = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.3" }
-compose-navigation = "org.jetbrains.androidx.navigation:navigation-compose:2.9.1"
-compose-navigationAndroid = "androidx.navigation:navigation-compose:2.9.6"
-compose-navigationMaterial3 = "com.eygraber:compose-material3-navigation:0.0.8"
+compose-nav3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-nav3" }
+compose-nav3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "composeNav3" }
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeJetbrains" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeJetbrains" }
 compose-runtimeSaveable = { module = "org.jetbrains.compose.runtime:runtime-saveable", version.ref = "composeJetbrains" }
@@ -154,7 +148,7 @@ detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", v
 detektEygraber-style = { module = "com.eygraber.detekt.rules:style", version.ref = "detektEygraber" }
 
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-bom = "com.google.firebase:firebase-bom:34.7.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.8.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
@@ -210,8 +204,10 @@ test-robolectric-shadows = { module = "org.robolectric:shadows-framework", versi
 test-square-turbine = "app.cash.turbine:turbine:1.2.1"
 
 vice-core = { module = "com.eygraber:vice-core", version.ref = "vice" }
-vice-nav = { module = "com.eygraber:vice-nav", version.ref = "vice" }
-vice-nav-material3 = { module = "com.eygraber:vice-nav-material3", version.ref = "vice" }
+# just here so renovate picks it up
+# noinspection UnusedVersionCatalogEntry
+vice-moduleGenerator = { module = "com.eygraber:vice-module-generator-cli", version.ref = "viceModuleGenerator" }
+vice-nav3 = { module = "com.eygraber:vice-nav3", version.ref = "vice" }
 vice-sources = { module = "com.eygraber:vice-sources", version.ref = "vice" }
 
 [bundles]

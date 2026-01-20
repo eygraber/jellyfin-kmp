@@ -1,5 +1,6 @@
 package template.ui.material.theme
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -14,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import com.eygraber.vice.nav.LocalAnimatedVisibilityScope
-import com.eygraber.vice.nav.LocalSharedTransitionScope
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.eygraber.vice.nav3.LocalSharedTransitionScope
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -28,11 +29,12 @@ fun TemplatePreviewTheme(
       CompositionLocalProvider(
         LocalSharedTransitionScope provides this,
       ) {
-        AnimatedVisibility(
-          visible = true,
+        @Suppress("UnusedContentLambdaTargetStateParameter")
+        AnimatedContent(
+          targetState = Unit,
         ) {
           CompositionLocalProvider(
-            LocalAnimatedVisibilityScope provides this,
+            LocalNavAnimatedContentScope provides this,
             content = content,
           )
         }

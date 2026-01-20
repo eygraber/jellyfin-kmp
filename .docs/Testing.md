@@ -7,25 +7,25 @@ We use [Paparazzi] for screenshot testing.
 To record screenshots for all screenshot tests in the project you can run:
 
 ```
-./gradlew recordPaparazziDevDebug
+./gradlew recordPaparazziDebug
 ```
 
 To only record screenshots for a specific module, append the module path to the task, e.g.:
 
 ```
-./gradlew :ui:welcome:recordPaparazziDevDebug
+./gradlew :ui:welcome:recordPaparazziDebug
 ```
 
 The same applies for verifying screenshot tests:
 
 ```
-./gradlew verifyPaparazziDevDebug
+./gradlew verifyPaparazziDebug
 ```
 
 or
 
 ```
-./gradlew :ui:welcome:verifyPaparazziDevDebug
+./gradlew :ui:welcome:verifyPaparazziDebug
 ```
 
 ### Cleaning
@@ -33,13 +33,13 @@ or
 To clean old screenshots you can run:
 
 ```
-./gradlew cleanPaparazziDevDebug
+./gradlew cleanPaparazziDebug
 ```
 
 If you made a lot of changes you can clean old screenshots and record new ones in the same task by running:
 
 ```
-./gradlew cleanRecordPaparazziDevDebug
+./gradlew cleanRecordPaparazziDebug
 ```
 
 [Paparazzi]: https://github.com/cashapp/paparazzi

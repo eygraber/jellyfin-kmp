@@ -1,0 +1,76 @@
+plugins {
+  alias(libs.plugins.conventionsAndroidKmpLibrary)
+  alias(libs.plugins.conventionsComposeMultiplatform)
+  alias(libs.plugins.conventionsDetekt)
+  alias(libs.plugins.conventionsKotlinMultiplatform)
+  alias(libs.plugins.conventionsProjectCommon)
+  alias(libs.plugins.dependencyAnalysis)
+  alias(libs.plugins.kotlinxSerialization)
+  alias(libs.plugins.ksp)
+  // alias(libs.plugins.paparazzi)
+}
+
+val pkg = "template.screens.welcome"
+
+compose {
+  resources {
+    packageOfResClass = pkg
+  }
+}
+
+kotlin {
+  defaultKmpTargets(
+    project = project,
+    androidNamespace = pkg,
+  )
+
+  androidLibrary {
+    androidResources.enable = true
+
+    withHostTest {
+      isIncludeAndroidResources = true
+    }
+  }
+
+  kspDependenciesForAllTargets {
+    ksp(libs.kotlinInject.anvilCompiler)
+  }
+
+  sourceSets {
+    // https://youtrack.jetbrains.com/issue/KT-83321/
+    named("androidHostTest").dependencies {
+      implementation(projects.testUtils)
+      implementation(libs.bundles.test.paparazzi)
+    }
+
+    commonMain.dependencies {
+      api(projects.composePreview)
+
+      api(projects.di)
+
+      api(projects.services.splashScreen.public)
+
+      implementation(projects.ui.compose)
+      implementation(projects.ui.icons)
+      implementation(projects.ui.material)
+
+      implementation(libs.compose.animation)
+      implementation(libs.compose.foundation)
+      implementation(libs.compose.material3)
+      implementation(libs.compose.resources)
+      implementation(libs.compose.runtime)
+      implementation(libs.compose.ui)
+      implementation(libs.compose.uiToolingPreview)
+
+      implementation(libs.kotlinInject.anvilRuntime)
+      implementation(libs.kotlinInject.anvilRuntimeOptional)
+      implementation(libs.kotlinInject.runtime)
+
+      api(libs.kotlinx.coroutines.core)
+      implementation(libs.kotlinx.serialization.core)
+
+      implementation(libs.vice.core)
+      implementation(libs.vice.nav3)
+    }
+  }
+}

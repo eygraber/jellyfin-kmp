@@ -79,9 +79,9 @@ dependencyResolutionManagement {
 rootProject.name = "cmp-app-template"
 
 plugins {
-  id("com.eygraber.conventions.settings") version "0.0.94"
+  id("com.eygraber.conventions.settings") version "0.0.98"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("com.gradle.develocity") version "4.3"
+  id("com.gradle.develocity") version "4.3.1"
 }
 
 include(":android")
@@ -92,9 +92,9 @@ include(":apps:shared")
 include(":apps:web")
 include(":common")
 include(":compose-preview")
-include(":destinations:dev-settings")
-include(":destinations:welcome")
-include(":destinations:root")
+include(":screens:dev-settings")
+include(":screens:welcome")
+include(":screens:root")
 include(":di")
 include(":domain:validators")
 include(":konsist")

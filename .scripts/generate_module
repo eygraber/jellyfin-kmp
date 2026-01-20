@@ -1,3 +1,53 @@
-#!/usr/bin/env sh
+#!/bin/bash
+set -euo pipefail
 
-./gradlew -p .support/module-generator run
+VERSION=$(sed -n 's/viceModuleGenerator = "\(.*\)"/\1/p' gradle/libs.versions.toml)
+CACHE_DIR="/tmp"
+JAR_NAME="vice-module-generator-cli-$VERSION.jar"
+JAR_PATH="$CACHE_DIR/$JAR_NAME"
+
+# Download JAR if not cached
+if [ ! -f "$JAR_PATH" ]; then
+    # Determine repository URL and JAR name
+    if [[ "$VERSION" =~ -SNAPSHOT$ ]]; then
+        REPO_URL="https://central.sonatype.com/repository/maven-snapshots/com/eygraber/vice-module-generator-cli/$VERSION"
+        METADATA_URL="$REPO_URL/maven-metadata.xml"
+
+        # Download maven-metadata.xml
+        if command -v curl >/dev/null 2>&1; then
+            METADATA=$(curl -s "$METADATA_URL")
+        elif command -v wget >/dev/null 2>&1; then
+            METADATA=$(wget -q -O - "$METADATA_URL")
+        else
+            echo "Error: curl or wget not found. Please install either curl or wget."
+            exit 1
+        fi
+
+        # Extract timestamp and buildNumber to construct the snapshot version
+        TIMESTAMP=$(echo "$METADATA" | sed -n 's/.*<timestamp>\([^<]*\)<\/timestamp>.*/\1/p' | head -1)
+        BUILD_NUMBER=$(echo "$METADATA" | sed -n 's/.*<buildNumber>\([^<]*\)<\/buildNumber>.*/\1/p' | head -1)
+        BASE_VERSION="${VERSION%-SNAPSHOT}"
+
+        if [ -z "$TIMESTAMP" ] || [ -z "$BUILD_NUMBER" ]; then
+            echo "Error: Could not parse snapshot metadata"
+            exit 1
+        fi
+
+        SNAPSHOT_VERSION="$BASE_VERSION-$TIMESTAMP-$BUILD_NUMBER"
+        JAR_URL="$REPO_URL/vice-module-generator-cli-$SNAPSHOT_VERSION.jar"
+    else
+        JAR_URL="https://repo1.maven.org/maven2/com/eygraber/vice-module-generator-cli/$VERSION/$JAR_NAME"
+    fi
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -fLo "$JAR_PATH" "$JAR_URL"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -O "$JAR_PATH" "$JAR_URL"
+    else
+        echo "Error: curl or wget not found. Please install either curl or wget."
+        exit 1
+    fi
+fi
+
+# Run the generator
+java -jar "$JAR_PATH" --project-name="Template" --project-package="template" "$@"

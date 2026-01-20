@@ -225,8 +225,8 @@ rm -rf kotlin-js-store
 $SED -i "s/template-/${PROJECT_NAME_KEBAB}-/g" .scripts/publish_included_builds
 .scripts/publish_included_builds
 
-./gradlew cleanPaparazziDevDebug
-./gradlew recordPaparazziDevDebug
+./gradlew cleanPaparazziDebug
+./gradlew recordPaparazziDebug
 
 ./format
 ./format --check-support

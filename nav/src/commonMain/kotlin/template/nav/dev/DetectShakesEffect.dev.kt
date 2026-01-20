@@ -2,26 +2,26 @@ package template.nav.dev
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.filter
+import template.screens.dev.settings.DevSettingsKey
 import template.services.device.sensors.ShakeDetector
 
 @Composable
 internal fun DetectShakesEffect(
   shakeDetector: ShakeDetector,
-  navController: NavController,
+  backStack: NavBackStack<NavKey>,
 ) {
   LaunchedEffect(Unit) {
     shakeDetector
       .detectShakes()
       .filter {
         // don't handle a shake if dev settings is already showing
-        runCatching {
-          navController.getBackStackEntry<TemplateRoutesDevSettings>()
-        }.getOrNull() == null
+        backStack.lastOrNull() !is DevSettingsKey
       }
       .collect {
-        navController.navigate(TemplateRoutesDevSettings)
+        backStack.add(DevSettingsKey)
       }
   }
 }
