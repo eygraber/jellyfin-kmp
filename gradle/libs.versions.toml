@@ -53,7 +53,7 @@ paparazzi = "2.0.0-alpha02"
 
 publish = "0.36.0"
 
-robolectric = "4.16"
+robolectric = "4.16.1"
 
 square-sqldelight = "2.2.1"
 
