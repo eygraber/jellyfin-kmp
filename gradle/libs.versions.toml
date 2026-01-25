@@ -12,7 +12,7 @@ androidx-core = "1.17.0"
 androidx-lifecycle = "2.10.0"
 androidx-nav3 = "1.0.0"
 
-atomicfu = "0.29.0"
+atomicfu = "0.31.0"
 
 compose-bom = "2026.01.00"
 composeJetbrains = "1.10.0"
