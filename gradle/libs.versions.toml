@@ -58,7 +58,7 @@ robolectric = "4.16.1"
 square-sqldelight = "2.2.1"
 
 vice = "1.0.8"
-viceModuleGenerator = "0.1.1"
+viceModuleGenerator = "0.1.2"
 
 [plugins]
 androidApp = { id = "com.android.application" }
