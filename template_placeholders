@@ -216,7 +216,7 @@ find . -type f -name "*.xml" -exec $SED -i "s/Theme\.TemplateSplash/Theme.${PROJ
 find . -type f -name "*.xml" -exec $SED -i "s/Theme\.Template/Theme.$PROJECT_NAME_PASCAL/g" {} +
 
 $SED -i "s/Template/$PROJECT_NAME_PASCAL/g" apps/android/src/main/res/values/strings.xml
-$SED -i "s/Welcome to the Template app/Welcome to the $PROJECT_NAME_PASCAL app/g" destinations/welcome/src/commonMain/composeResources/values/strings.xml
+$SED -i "s/Welcome to the Template app/Welcome to the $PROJECT_NAME_PASCAL app/g" screens/welcome/src/commonMain/composeResources/values/strings.xml
 
 rm -rf .support/.m2/template
 rm -rf .support/.m2/template-gradle
