@@ -90,7 +90,7 @@ ksp = { id = "com.google.devtools.ksp" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
 mavenPublish = { id = "com.vanniktech.maven.publish" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
-playStoreApi = { id = "com.github.triplet.play", version = "3.13.0" }
+playStoreApi = { id = "com.github.triplet.play", version = "4.0.0" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "square-sqldelight" }
 templateGradle = { id = "template-gradle", version = "0.0.1" }
 testBurst = { id = "app.cash.burst", version = "2.11.0" }
