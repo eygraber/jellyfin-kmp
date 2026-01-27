@@ -40,7 +40,7 @@ kotest = "6.1.2"
 
 kotlin = "2.3.0"
 kotlinInject = "0.9.0"
-kotlinInjectAnvil = "0.1.6"
+kotlinInjectAnvil = "0.1.7"
 
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.10.0"
