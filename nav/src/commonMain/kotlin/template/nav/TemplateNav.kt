@@ -29,10 +29,8 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.eygraber.vice.nav3.LocalSharedTransitionScope
 import com.eygraber.vice.nav3.viceEntry
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.serializer
 import template.nav.dev.DetectShakesEffect
 import template.nav.dev.templateDevNavGraph
 import template.screens.root.RootComponent

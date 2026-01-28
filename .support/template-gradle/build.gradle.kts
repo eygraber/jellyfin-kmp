@@ -64,8 +64,6 @@ dependencies {
   implementation(templateGradleLibs.kotlinx.serialization.json)
 
   detektPlugins(templateGradleLibs.detektCompose)
-  detektPlugins(templateGradleLibs.detektEygraber.formatting)
-  detektPlugins(templateGradleLibs.detektEygraber.style)
 }
 
 publishing {

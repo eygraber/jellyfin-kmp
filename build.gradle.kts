@@ -56,8 +56,6 @@ gradleConventionsDefaults {
     ignoreAndroidVariants("prodDebug")
 
     plugins(libs.detektCompose)
-    plugins(libs.detektEygraber.formatting)
-    plugins(libs.detektEygraber.style)
   }
 
   projectCommon {

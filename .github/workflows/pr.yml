@@ -66,7 +66,7 @@ jobs:
         uses: ./.github/actions/build-setup
 
       - name: Run detekt
-        run: ./detekt
+        run: ./gradlew detektAll
 
   ktlint:
     permissions:

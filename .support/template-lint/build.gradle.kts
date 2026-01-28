@@ -39,8 +39,6 @@ gradleConventionsDefaults {
 
   detekt {
     plugins(libs.detektCompose)
-    plugins(libs.detektEygraber.formatting)
-    plugins(libs.detektEygraber.style)
   }
 
   kotlin {

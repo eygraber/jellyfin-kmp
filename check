@@ -20,4 +20,4 @@ if [ "$CI" = "true" ]; then
   lint_task=":apps:android:lintDevRelease"
 fi
 
-./format && ./detekt $lint_task $additional_gradle_tasks ${args:+$args}
+./format && ./gradlew detektAll $lint_task $additional_gradle_tasks ${args:+$args}
