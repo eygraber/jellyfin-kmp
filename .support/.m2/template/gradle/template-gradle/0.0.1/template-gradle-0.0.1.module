@@ -81,7 +81,7 @@
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.3.4"
+            "requires": "2.3.5"
           }
         },
         {

@@ -37,7 +37,7 @@
     <dependency>
       <groupId>com.google.devtools.ksp</groupId>
       <artifactId>com.google.devtools.ksp.gradle.plugin</artifactId>
-      <version>2.3.4</version>
+      <version>2.3.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
