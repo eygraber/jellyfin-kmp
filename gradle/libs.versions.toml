@@ -7,7 +7,7 @@ android-sdk-compile = "36"
 android-sdk-target = "36"
 android-sdk-min = "28"
 
-androidx-activity = "1.12.2"
+androidx-activity = "1.12.3"
 androidx-core = "1.17.0"
 androidx-lifecycle = "2.10.0"
 androidx-nav3 = "1.0.0"
