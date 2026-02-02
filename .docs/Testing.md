@@ -1,44 +1,61 @@
 # Testing
 
+## Detailed Documentation
+
+See [testing/](testing/) for comprehensive testing documentation:
+- [testing/unit-tests.md](testing/unit-tests.md) - JUnit, fakes, basic testing
+- [testing/model-tests.md](testing/model-tests.md) - MVI Model testing patterns
+- [testing/flow-tests.md](testing/flow-tests.md) - Turbine, Flow testing
+- [testing/screenshot-tests.md](testing/screenshot-tests.md) - Paparazzi patterns
+- [testing/repository-tests.md](testing/repository-tests.md) - Data layer testing
+
+## Quick Reference
+
+```bash
+# Run all unit tests
+./gradlew testDebugUnitTest
+
+# Run module tests
+./gradlew :screens:welcome:testDebugUnitTest
+
+# Screenshot tests - record
+./gradlew recordPaparazziDebug
+
+# Screenshot tests - verify
+./gradlew verifyPaparazziDebug
+```
+
 ## Screenshot Tests
 
 We use [Paparazzi] for screenshot testing.
 
-To record screenshots for all screenshot tests in the project you can run:
+### Recording
 
-```
+```bash
+# Record all
 ./gradlew recordPaparazziDebug
+
+# Record specific module
+./gradlew :screens:welcome:recordPaparazziDebug
 ```
 
-To only record screenshots for a specific module, append the module path to the task, e.g.:
+### Verifying
 
-```
-./gradlew :ui:welcome:recordPaparazziDebug
-```
-
-The same applies for verifying screenshot tests:
-
-```
+```bash
+# Verify all
 ./gradlew verifyPaparazziDebug
-```
 
-or
-
-```
-./gradlew :ui:welcome:verifyPaparazziDebug
+# Verify specific module
+./gradlew :screens:welcome:verifyPaparazziDebug
 ```
 
 ### Cleaning
 
-To clean old screenshots you can run:
-
-```
+```bash
+# Clean old screenshots
 ./gradlew cleanPaparazziDebug
-```
 
-If you made a lot of changes you can clean old screenshots and record new ones in the same task by running:
-
-```
+# Clean and re-record
 ./gradlew cleanRecordPaparazziDebug
 ```
 

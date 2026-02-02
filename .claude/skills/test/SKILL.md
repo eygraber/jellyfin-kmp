@@ -1,0 +1,127 @@
+---
+name: test
+description: Generate tests for Kotlin code - unit tests, model tests, flow tests, intent tests, and more.
+argument-hint: "[type] [file] - e.g., 'model MyModel.kt', 'flow', 'unit'"
+context: fork
+allowed-tools: Read, Edit, Write, Glob, Grep, Bash(./gradlew *, ./check, grep)
+---
+
+# Test Writer
+
+Generate comprehensive tests following project patterns and conventions.
+
+## Usage
+
+```
+/test MyModel.kt                  # Auto-detect test type from file
+/test model MyModel.kt            # Generate Model tests (6 patterns)
+/test flow DataSource.kt          # Generate Flow/Turbine tests
+/test intent MyScreenView.kt      # Generate Intent emission tests
+/test onintent MyCompositor.kt    # Generate OnIntent handling tests
+/test repository MyRepository.kt  # Generate repository tests
+/test unit MyHelper.kt            # Generate basic unit tests
+```
+
+For screenshot tests, use `/screenshot-tests` skill.
+
+## Test Types
+
+| Type         | Focus                            | Pattern File                                     |
+|--------------|----------------------------------|--------------------------------------------------|
+| `model`      | MVI Model state, business logic  | [patterns/model.md](patterns/model.md)           |
+| `flow`       | Reactive streams with Turbine    | [patterns/flow.md](patterns/flow.md)             |
+| `intent`     | UI interaction -> Intent emission| [patterns/intent.md](patterns/intent.md)         |
+| `onintent`   | Compositor Intent handling       | [patterns/onintent.md](patterns/onintent.md)     |
+| `repository` | Data layer coordination          | [patterns/repository.md](patterns/repository.md) |
+| `unit`       | Simple utilities, helpers        | [patterns/unit.md](patterns/unit.md)             |
+
+## Auto-Detection
+
+When no type specified, detect from file:
+
+| File Pattern             | Test Type  |
+|--------------------------|------------|
+| `*Model.kt`              | model      |
+| `*Compositor.kt`         | onintent   |
+| `*View.kt`               | intent     |
+| `*Repository.kt`         | repository |
+| `*Source.kt`, `*Flow.kt` | flow       |
+| Other                    | unit       |
+
+## Process
+
+1. **Read** the source file to understand what needs testing
+2. **Identify** the appropriate test type and pattern
+3. **Find** existing tests and fakes in the module
+4. **Generate** tests following the pattern file
+5. **Run** tests to verify they pass
+6. **Fix** any compilation or test failures
+
+## Core Conventions
+
+### Test Structure (AAA)
+```kotlin
+@Test
+fun `descriptive name with backticks`() {
+  // Arrange - set up test state
+  val subject = createSubject()
+
+  // Act - perform the action
+  val result = subject.doSomething()
+
+  // Assert - verify outcome
+  result shouldBe expected
+}
+```
+
+### Naming
+- Use backticks for readable test names
+- Describe behavior: `when X happens, then Y`
+- Be specific about conditions and outcomes
+
+### Fakes Over Mocks
+```kotlin
+// GOOD: Fake with controllable behavior
+class FakeRepository : MyRepository {
+  var dataToReturn: Data? = null
+  var shouldFail = false
+
+  override suspend fun getData() = when {
+    shouldFail -> TemplateResult.Failure(Exception())
+    else -> TemplateResult.Success(dataToReturn!!)
+  }
+}
+
+// BAD: Avoid MockK unless absolutely necessary
+```
+
+### Assertions (Kotest)
+```kotlin
+result shouldBe expected
+result shouldNotBe null
+list shouldContain item
+list shouldHaveSize 3
+```
+
+## Test Location
+
+```
+src/test/kotlin/           # Unit, Model, Flow, OnIntent tests
+  com/template/...
+    RealMyModelTest.kt     # Test Real* implementations
+    FakeMyRepository.kt    # Fakes for testing
+```
+
+## Running Tests
+
+```bash
+./gradlew :module:testDebugUnitTest     # Run module tests
+./gradlew testDebugUnitTest             # Run all tests
+./check                                  # Full quality suite
+```
+
+## Documentation
+
+- [.docs/testing/](/.docs/testing) - Complete testing guide
+- [.docs/testing/model-tests.md](/.docs/testing/model-tests.md) - Model testing patterns
+- [.docs/testing/flow-tests.md](/.docs/testing/flow-tests.md) - Flow testing with Turbine

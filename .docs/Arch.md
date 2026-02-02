@@ -1,61 +1,59 @@
-# Android Arch @ Template
+# Architecture
 
-Template's Android architecture is inspired by the [Android App Architecture],
-consisting of a [UI layer], [Domain layer], and [Data layer].
+Template's architecture is inspired by [Android App Architecture], consisting of a [UI layer], [Domain layer], and [Data layer], adapted for Kotlin Multiplatform.
 
 ## Principles
 
-  - Immutability
-  - Well defined boundaries
+- Immutability
+- Well-defined boundaries
+- Unidirectional data flow (UDF)
 
-## Android Glue
+## Detailed Documentation
 
-These live in the `app` module.
+See [architecture/](architecture/) for comprehensive documentation:
+- [architecture/vice-pattern.md](architecture/vice-pattern.md) - VICE MVI framework
+- [architecture/layers.md](architecture/layers.md) - Layer responsibilities
+- [architecture/navigation.md](architecture/navigation.md) - Navigation patterns
 
-### Application
+## Platform Entry Points
 
-`TemplateApplication` is a custom `Application` that holds the [DI AppComponent] instance,
-and any needed system hooks. Any initialization needed should be delegated to `TemplateInitializer`.
+### Android
 
-### Activity
+Lives in `apps/android` module:
+- `TemplateApplication` - Holds DI AppGraph, initialization delegated to `TemplateInitializer`
+- `TemplateActivity` - Single Activity, Compose entry point, holds ActivityGraph
 
-`TemplateActivity` is the sole `Activity` in the project which exists to:
+### iOS
 
-> represent the contract between the Android OS and your app...To provide a satisfactory user experience
-> and a more manageable app maintenance experience, it's best to minimize your dependency on them.<sup>[1]</sup>
+Lives in `apps/ios` module with iOS-specific entry points.
 
-It also functions as the entrypoint into Compose UI, and holds the [DI ActivityComponent] instance.
+### Desktop
 
-## Template
+Lives in `apps/desktop` module with JVM desktop entry point.
 
-### Destinations
+### Web
 
-Screens in the app are built using [VICE], and define a `TemplateDestination` along with all of the required
-VICE components (`ViceView`, `Intent`, `ViceCompositor`, `ViceEffects`, and `ViewState`).
+Lives in `apps/web` module with WasmJs entry point.
 
-Each `TemplateDestination` defines and holds a [DI DestinationComponent].
+## Screens
 
-They live in modules nested under the `ui` directory.
+Screens are built using [VICE] and define:
+- `ViceNavEntryProvider` - Screen entry point
+- `ViewState` - Immutable UI state
+- `Intent` - User actions
+- `Compositor` - Routes intents, composites state
+- `View` - Composable UI
 
-See [UI Destinations] for more details.
+They live in modules under the `screens` directory.
 
-### Services
+See [UI documentation](./UI.md) and [architecture/vice-pattern.md](architecture/vice-pattern.md) for details.
 
-Lives in the `services` module.
+## Services
 
-#### Template Initializer
-
-[1]: https://developer.android.com/topic/architecture#separation-of-concerns
+External library integrations live in `services/` modules.
 
 [Android App Architecture]: https://developer.android.com/topic/architecture
 [Data layer]: https://developer.android.com/topic/architecture/data-layer
 [Domain layer]: https://developer.android.com/topic/architecture/domain-layer
 [UI layer]: https://developer.android.com/topic/architecture/ui-layer
-
-[DI ActivityComponent]: ./DI.md#architectural-components
-[DI AppComponent]: ./DI.md#architectural-components
-[DI DestinationComponent]: ./DI.md#destination-components
-
-[UI Destinations]: ./UI.md#destinations
-
 [VICE]: https://github.com/eygraber/vice

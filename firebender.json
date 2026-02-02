@@ -1,0 +1,20 @@
+{
+  "ignore": [
+    "**/build/**",
+    "**/.gradle/**",
+    "**/.idea/**",
+    "**/.kotlin/**",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.webp",
+    "**/*.gif",
+    "**/*.ejson",
+    "**/*.keystore",
+    "tmp/"
+  ],
+  "mcpServers": {},
+  "rules": [
+    "Load project context from .claude/CLAUDE.md. Load coding rules from .claude/rules/. Load agents from .claude/agents/. Load skills from .claude/skills/."
+  ]
+}

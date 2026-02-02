@@ -1,44 +1,61 @@
-# Template Android UI Layer
+# UI Layer
 
 > The role of the UI is to display the application data on the screen and also to
 > serve as the primary point of user interaction <sup>[1]</sup>
 
+## Detailed Documentation
+
+See [compose/](compose/) for Compose style guide and best practices:
+- [compose/naming-structure.md](compose/naming-structure.md) - Naming conventions
+- [compose/modifiers.md](compose/modifiers.md) - Modifier patterns
+- [compose/state-management.md](compose/state-management.md) - State handling
+- [compose/previews.md](compose/previews.md) - Preview configuration
+
+See [architecture/vice-pattern.md](architecture/vice-pattern.md) for VICE framework details.
+
 ## Module Generation
 
-Run `.scripts/generate_module` to generate the initial state of a `destination` module for a given feature.
+Run `.scripts/generate_module` to generate a new screen module:
 
-## Destinations
+```bash
+.scripts/generate_module --feature=<FeatureName>
+```
 
-`ViceDestination` is the entry point for each screen into the [VICE] framework.
+## Screens
 
-Each `ViceDestination` is encapsulated in its own module nested under the `destinations` directory.
+Each screen uses the [VICE] framework and is encapsulated in its own module under `screens/`.
 
-There should not be more than one top level `ViceDestination` per module.
-If the screen is broken into multiple children the child `ViceDestination` can live in the same module as the parent.
+**Components**:
+- `ViceNavEntryProvider` - Screen entry point
+- `ViewState` - Immutable UI state
+- `Intent` - User actions
+- `Compositor` - Routes intents, composites state
+- `Model` - Business logic (ViceSource)
+- `View` - Composable UI
 
-The [DI DestinationComponent] creates a subgraph in the app's [dependency graph]:
-
-It `@Provides` the route used to navigate to it, as well as a `Navigator` class that contains the
-"navigation events" for the destination (see [Navigation](#navigation) below).
+The [ScreenGraph] creates a subgraph providing the navigation key and navigator.
 
 ## Navigation
 
-[AndroidX Navigation Compose] is used together with `vice-nav` to provide navigation between `ViceDestinations`.
+[AndroidX Navigation3] is used together with `vice-nav3` to provide navigation.
 
-The `nav` module contains the top level `TemplateNav` composable,
-which contains a `NavHost` that acts as the root of the app's navigation graph.
+The `nav` module contains `TemplateNav` composable with a `NavDisplay` as the navigation root.
 
-It will add `ViceDestinations` to the nav graph by creating an instance of the destination's component, which
-exposes a `ViceDestination` instance.
+**Key principle**: `NavBackStack` is NOT exposed outside `nav`. Screens receive navigation as lambdas:
 
-The `NavController` is not exposed outside of `nav`. Instead, `ViceDestination` receives "navigation events"
-in the form of lambdas. This allows all navigation to happen centrally in `TemplateNav`, and doesn't leak
-navigation library implementation details into the destinations. See [Encapsulate your navigation code].
+```kotlin
+class MyScreenNavigator(
+  private val onBack: () -> Unit,
+  private val onNavigateToDetails: (id: String) -> Unit,
+)
+```
+
+This [encapsulates navigation] and prevents leaking library implementation details into screens.
+
+See [architecture/navigation.md](architecture/navigation.md) for complete navigation patterns.
 
 [1]: https://developer.android.com/topic/architecture/ui-layer
-
-[AndroidX Navigation Compose]: https://developer.android.com/develop/ui/compose/navigation
-[DI DestinationComponent]: ./DI.md#template-di
-[dependency graph]: ./DI.md
-[Encapsulate your navigation code]: https://developer.android.com/guide/navigation/design/encapsulate
+[AndroidX Navigation3]: https://developer.android.com/guide/navigation/navigation-3
+[encapsulates navigation]: https://developer.android.com/guide/navigation/design/encapsulate
+[ScreenGraph]: ./DI.md#template-di
 [VICE]: https://github.com/eygraber/vice
