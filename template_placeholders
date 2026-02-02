@@ -180,6 +180,7 @@ $SED -i "s/templateGradle =/${PROJECT_NAME_CAMEL}Gradle =/g" gradle/libs.version
 $SED -i "s/template-gradle/${PROJECT_NAME_KEBAB}-gradle/g" gradle/libs.versions.toml
 
 mv .support/template-gradle/src/main/kotlin/template-gradle.gradle.kts .support/template-gradle/src/main/kotlin/$PROJECT_NAME_KEBAB-gradle.gradle.kts
+mv .support/template-gradle/src/main/kotlin/template-screens-convention.gradle.kts .support/template-gradle/src/main/kotlin/$PROJECT_NAME_KEBAB-screens-convention.gradle.kts
 rm -rf .support/$PROJECT_NAME_KEBAB-gradle
 mv .support/template-gradle .support/$PROJECT_NAME_KEBAB-gradle
 find . -type f \( -name "*.kt" -o -name "*.kts" \) -exec $SED -i "s/template\.gradle/$PROJECT_PACKAGE.gradle/g" {} +
