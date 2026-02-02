@@ -64,10 +64,10 @@ import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import template.di.qualifiers.AppContext
-import template.di.scopes.AppScope
 
 @ContributesTo(AppScope::class)
 interface AndroidAppProviders {

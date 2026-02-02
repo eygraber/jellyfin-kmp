@@ -1,8 +1,8 @@
 package template.app.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import template.apps.shared.TemplateInitializer
-import template.di.scopes.AppScope
 
 @DependencyGraph(AppScope::class)
 interface TemplateIosAppGraph : TemplateIosViewControllerGraph.Factory {
