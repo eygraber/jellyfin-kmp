@@ -31,75 +31,93 @@ If you use Firebase App Distribution you'll need to add the following secrets:
 
 1. `FIREBASE_APP_DISTRIBUTION_DEV_KEY`
 
-## Building the app
+## Building the Android app
 
 There are two app flavors that are buildable in local environments;
 `devDebug` and `devRelease` (prod builds can only be made on CI).
 
-To install the `devDebug` flavor, you need to run `./gradlew :app:installDevDebug`,
-and to install the `devRelease` flavor you need to run `./gradlew :app:installDevRelease`.
+To install the `devDebug` flavor, you need to run `./gradlew :apps:android:installDevDebug`,
+and to install the `devRelease` flavor you need to run `./gradlew :apps:android:installDevRelease`.
 
 Note that it will be much faster to make a `devDebug` flavor, but some parts of the app may
 appear to not run smoothly. This will not happen on release builds.
 
-## Docs
+## Building the Desktop app
 
-[Arch](.docs/Arch.md)
+To run the desktop app locally:
 
-[Code Quality](.docs/CodeQuality.md)
-
-[Data](.docs/Data.md)
-
-[Design](.docs/Design.md)
-
-[Development](.docs/Development.md)
-
-[DI](.docs/DI.md)
-
-[Domain](.docs/Domain.md)
-
-[Project Layout](.docs/ProjectLayout.md)
-
-[Project Setup](.docs/ProjectSetup.md)
-
-[Publishing](.docs/Publishing.md)
-
-[Testing](.docs/Testing.md)
-
-[UI](.docs/UI.md)
-
-## Firebase
-
-If you want to use Firebase you'll need to add your google-services.json content to both:
-
-1. `app/src/dev/secrets.ejson`
-2. `app/src/prod/secrets.ejson`
-
-After doing so you'll need to run:
-
-```shell
-ejson encrypt app/src/dev/secrets.json
-ejson encrypt app/src/prod/secrets.json
+```bash
+./gradlew :apps:desktop:run
 ```
 
-In `app/build.gradle.kts` there are several lines related to Firebase that are commented out. They need to be uncommented:
+To build a distributable desktop app:
 
-```kotlin
-  // alias(libs.plugins.firebase.appDistribution)
-  // alias(libs.plugins.firebase.crashlytics)
-  // alias(libs.plugins.googleServices)
-
-  // (this as ExtensionAware).configure<CrashlyticsExtension> {
-  //   mappingFileUploadEnabled = false
-  // }
-
-  // firebaseAppDistribution {
-  //   serviceCredentialsFile = rootProject.file("tmp/firebase_app_distribution_dev_cred").absolutePath
-  //   artifactType = "APK"
-  // }
-
-  // decryptGoogleServicesJson(project)
+```bash
+./gradlew :apps:desktop:installDist
 ```
+
+To build and run a release distribution:
+
+```bash
+./gradlew :apps:desktop:runRelease
+```
+
+## Building the iOS app
+
+To build the shared framework for iOS:
+
+```bash
+./gradlew :apps:ios:assembleTemplateKtXCFramework
+```
+
+Note: The actual iOS app is built using Xcode. The above command builds the Kotlin framework that is used by the iOS project.
+
+## Building the Web app
+
+To build the web app for development:
+
+```bash
+./gradlew :apps:web:wasmJsBrowserDevelopmentWebpack
+```
+
+To build the web app for production:
+
+```bash
+./gradlew :apps:web:wasmJsBrowserProductionWebpack
+```
+
+To run the web app in development mode with a webpack dev server:
+
+```bash
+./gradlew :apps:web:wasmJsBrowserDevelopmentRun
+```
+
+## Documentation
+
+All technical documentation is in the [.docs](.docs) directory:
+
+| Topic                | Location                                         |
+|----------------------|--------------------------------------------------|
+| Architecture         | [.docs/architecture/](/.docs/architecture)       |
+| Compose              | [.docs/compose/](/.docs/compose)                 |
+| Testing              | [.docs/testing/](/.docs/testing)                 |
+| Dependency Injection | [.docs/di/](/.docs/di)                           |
+| Data Layer           | [.docs/data/](/.docs/data)                       |
+| Domain Layer         | [.docs/domain/](/.docs/domain)                   |
+| Domain Concepts      | [.docs/domain-concepts/](/.docs/domain-concepts) |
+| Development Workflow | [.docs/workflow/](/.docs/workflow)               |
+
+Additional standalone docs:
+- [Project Layout](/.docs/ProjectLayout.md) - Module dependency graph
+- [Publishing](/.docs/Publishing.md) - App publishing process (todo)
+
+## AI Agent Resources
+
+- [.claude/](/.claude) - AI rules, agents, and skills
+- [firebender.json](/firebender.json) - Project conventions and documentation for AI coding agents
+- [AGENTS.md](/AGENTS.md) - Generic entry point for AI coding agents
+- [.docs/](/.docs) - Technical documentation
+- [.gemini/styleguide.md](/.gemini/styleguide.md) - Styleguide for Gemini code reviews on GitHub
 
 ## Misc
 
