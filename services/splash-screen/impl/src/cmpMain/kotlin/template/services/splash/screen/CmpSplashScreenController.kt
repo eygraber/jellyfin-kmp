@@ -1,13 +1,11 @@
 package template.services.splash.screen
 
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.delay
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import template.di.scopes.SessionScope
 import kotlin.time.Duration.Companion.milliseconds
 
-@Inject
 @SingleIn(SessionScope::class)
 @ContributesBinding(SessionScope::class)
 class CmpSplashScreenController : SplashScreenController {

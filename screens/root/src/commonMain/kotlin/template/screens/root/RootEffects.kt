@@ -1,11 +1,11 @@
 package template.screens.root
 
 import com.eygraber.vice.ViceEffects
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.tatarka.inject.annotations.Inject
 import template.services.splash.screen.SplashScreenController
 
 @Inject

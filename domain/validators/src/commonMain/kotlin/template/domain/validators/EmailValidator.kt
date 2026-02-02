@@ -1,7 +1,7 @@
 package template.domain.validators
 
 import androidx.compose.runtime.Immutable
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 
 @Inject
 class EmailValidator {

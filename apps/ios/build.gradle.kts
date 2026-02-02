@@ -5,7 +5,7 @@ plugins {
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsComposeMultiplatform)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -14,11 +14,6 @@ kotlin {
     ignoreDefaultTargets = true,
     project = project,
   )
-
-  kspDependenciesForAllTargets {
-    ksp(libs.kotlinInject.anvilCompiler)
-    ksp(libs.kotlinInject.compiler)
-  }
 
   targets.withType<KotlinNativeTarget> {
     if(konanTarget.family.isAppleFamily) {

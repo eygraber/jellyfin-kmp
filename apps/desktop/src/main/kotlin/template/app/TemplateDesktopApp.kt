@@ -11,17 +11,17 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
-import template.app.di.TemplateDesktopAppComponent
-import template.app.di.create
+import dev.zacsweers.metro.createGraphFactory
+import template.app.di.TemplateDesktopAppGraph
 import template.apps.shared.TemplateAppSession
 import java.awt.Dimension
 
 fun main() {
-  val appComponent = TemplateDesktopAppComponent::class.create()
-  appComponent.initializer.initialize()
+  val appGraph = createGraphFactory<TemplateDesktopAppGraph.Factory>().create()
+  appGraph.initializer.initialize()
 
-  val sessionComponent = appComponent.createTemplateDesktopSessionComponent()
-  val navComponent = sessionComponent.createTemplateNavComponent()
+  val sessionGraph = appGraph.createTemplateDesktopSessionGraph()
+  val navGraph = sessionGraph.createTemplateNavGraph()
 
   singleWindowApplication(
     state = WindowState(
@@ -29,14 +29,14 @@ fun main() {
       height = 800.dp,
     ),
     onPreviewKeyEvent = { event ->
-      event.type == KeyEventType.KeyUp && navComponent.shortcutManager.handleKeyEvent(event)
+      event.type == KeyEventType.KeyUp && navGraph.shortcutManager.handleKeyEvent(event)
     },
   ) {
     WindowMinSizeEffect(window)
 
     TemplateAppSession(
       onDarkMode = {},
-      navComponent = navComponent,
+      navGraph = navGraph,
     )
   }
 }

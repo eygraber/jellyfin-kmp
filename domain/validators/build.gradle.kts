@@ -5,6 +5,7 @@ plugins {
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
+  alias(libs.plugins.metro)
   alias(libs.plugins.testBurst)
 }
 
@@ -17,8 +18,6 @@ kotlin {
   sourceSets {
     commonMain.dependencies {
       implementation(libs.compose.runtime)
-
-      implementation(libs.kotlinInject.runtime)
     }
 
     commonTest.dependencies {

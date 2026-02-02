@@ -8,7 +8,7 @@ plugins {
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.kotlinxSerialization)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
   // alias(libs.plugins.paparazzi)
 }
 
@@ -32,10 +32,6 @@ kotlin {
     withHostTest {
       isIncludeAndroidResources = true
     }
-  }
-
-  kspDependenciesForAllTargets {
-    ksp(libs.kotlinInject.anvilCompiler)
   }
 
   sourceSets {
@@ -62,10 +58,6 @@ kotlin {
       implementation(libs.compose.runtimeAnnotation)
       implementation(libs.compose.ui)
       implementation(libs.compose.uiToolingPreview)
-
-      implementation(libs.kotlinInject.anvilRuntime)
-      implementation(libs.kotlinInject.anvilRuntimeOptional)
-      implementation(libs.kotlinInject.runtime)
 
       api(libs.kotlinx.coroutines.core)
       implementation(libs.kotlinx.serialization.core)

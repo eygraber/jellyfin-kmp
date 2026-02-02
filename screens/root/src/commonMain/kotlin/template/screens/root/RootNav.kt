@@ -2,10 +2,12 @@ package template.screens.root
 
 import androidx.navigation3.runtime.NavKey
 import com.eygraber.vice.nav3.ViceNavEntryProvider
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.Serializable
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import template.di.scopes.NavScope
 import template.di.scopes.ScreenScope
 
@@ -21,17 +23,17 @@ class RootNavEntryProvider(
   override val view: View = { state, onIntent -> RootView(state, onIntent) }
 }
 
-@ContributesSubcomponent(ScreenScope::class)
-@SingleIn(ScreenScope::class)
-interface RootComponent {
+@GraphExtension(ScreenScope::class)
+interface RootGraph {
   val navEntryProvider: RootNavEntryProvider
 
-  @ContributesSubcomponent.Factory(NavScope::class)
+  @ContributesTo(NavScope::class)
+  @GraphExtension.Factory
   interface Factory {
-    fun createRootComponent(
-      navigator: RootNavigator,
-      key: RootKey,
-    ): RootComponent
+    fun createRootGraph(
+      @Provides navigator: RootNavigator,
+      @Provides key: RootKey,
+    ): RootGraph
   }
 }
 

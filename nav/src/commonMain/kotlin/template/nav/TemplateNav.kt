@@ -33,9 +33,9 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import template.nav.dev.DetectShakesEffect
 import template.nav.dev.templateDevNavGraph
-import template.screens.root.RootComponent
+import template.screens.root.RootGraph
 import template.screens.root.RootKey
-import template.screens.welcome.WelcomeComponent
+import template.screens.welcome.WelcomeGraph
 import template.screens.welcome.WelcomeKey
 
 private val screenTransitionSpec: FiniteAnimationSpec<IntOffset> = tween(400)
@@ -43,7 +43,7 @@ private val screenTransitionSpec: FiniteAnimationSpec<IntOffset> = tween(400)
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TemplateNav(
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   modifier: Modifier = Modifier,
 ) {
   val backStack = rememberNavBackStack(
@@ -58,12 +58,12 @@ fun TemplateNav(
   )
 
   DetectShakesEffect(
-    shakeDetector = navComponent.shakeDetector,
+    shakeDetector = navGraph.shakeDetector,
     backStack = backStack,
   )
 
   HandleNavShortcutsEffect(
-    navShortcutManager = navComponent.shortcutManager,
+    navShortcutManager = navGraph.shortcutManager,
     backStack = backStack,
   )
 
@@ -94,8 +94,8 @@ fun TemplateNav(
           )
         },
         onBack = { backStack.removeLastOrNull() },
-        entryProvider = remember(navComponent, backStack) {
-          templateNavEntryProvider(navComponent, backStack)
+        entryProvider = remember(navGraph, backStack) {
+          templateNavEntryProvider(navGraph, backStack)
         },
       )
     }
@@ -103,19 +103,19 @@ fun TemplateNav(
 }
 
 private fun templateNavEntryProvider(
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   backStack: NavBackStack<NavKey>,
 ) = entryProvider {
   viceEntry<RootKey>(
-    provideRoot(navComponent, backStack),
+    provideRoot(navGraph, backStack),
   )
 
   viceEntry<WelcomeKey>(
-    provideWelcome(navComponent, backStack),
+    provideWelcome(navGraph, backStack),
   )
 
   templateDevNavGraph(
-    navComponent = navComponent,
+    navGraph = navGraph,
     backStack = backStack,
   )
 
@@ -136,20 +136,20 @@ private fun templateNavEntryProvider(
 }
 
 private fun provideRoot(
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   backStack: NavBackStack<NavKey>,
 ) = { key: RootKey ->
-  navComponent.rootFactory.createRootComponent(
+  navGraph.rootFactory.createRootGraph(
     navigator = TemplateNavigators.root(backStack),
     key = key,
   ).navEntryProvider
 }
 
 private fun provideWelcome(
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   backStack: NavBackStack<NavKey>,
 ) = { key: WelcomeKey ->
-  navComponent.welcomeFactory.createWelcomeComponent(
+  navGraph.welcomeFactory.createWelcomeGraph(
     navigator = TemplateNavigators.welcome(backStack),
     key = key,
   ).navEntryProvider
@@ -161,8 +161,8 @@ sealed interface TemplateNavKeys : NavKey {
   data class ComingSoon(val feature: String) : TemplateNavKeys
 }
 
-private val TemplateNavComponent.rootFactory
-  get() = this as RootComponent.Factory
+private val TemplateNavGraph.rootFactory
+  get() = this as RootGraph.Factory
 
-private val TemplateNavComponent.welcomeFactory
-  get() = this as WelcomeComponent.Factory
+private val TemplateNavGraph.welcomeFactory
+  get() = this as WelcomeGraph.Factory

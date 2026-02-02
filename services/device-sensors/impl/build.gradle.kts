@@ -6,7 +6,7 @@ plugins {
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -17,10 +17,6 @@ kotlin {
 
   createCmpGroup()
 
-  kspDependenciesForAllTargets {
-    ksp(libs.kotlinInject.anvilCompiler)
-  }
-
   sourceSets {
     androidMain.dependencies {
       implementation(libs.square.seismic)
@@ -29,9 +25,6 @@ kotlin {
     commonMain.dependencies {
       api(projects.di)
       api(projects.services.deviceSensors.public)
-
-      implementation(libs.kotlinInject.runtime)
-      implementation(libs.kotlinInject.anvilRuntime)
 
       api(libs.kotlinx.coroutines.core)
     }

@@ -14,7 +14,7 @@ plugins {
   // alias(libs.plugins.firebase.appDistribution)
   // alias(libs.plugins.firebase.crashlytics)
   // alias(libs.plugins.googleServices)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
   // alias(libs.plugins.playStoreApi)
 }
 
@@ -151,9 +151,6 @@ dependencies {
 
   implementation(libs.kotlinx.coroutines.core)
   runtimeOnly(libs.kotlinx.coroutines.android)
-
-  ksp(libs.kotlinInject.anvilCompiler)
-  ksp(libs.kotlinInject.compiler)
 }
 
 // credentials are set with the ANDROID_PUBLISHER_CREDENTIALS env var in nightly.yml

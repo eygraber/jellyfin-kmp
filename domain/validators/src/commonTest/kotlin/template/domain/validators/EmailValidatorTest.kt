@@ -1,8 +1,8 @@
 package template.domain.validators
 
 import io.kotest.matchers.shouldBe
-import org.junit.Test
 import kotlin.test.Ignore
+import kotlin.test.Test
 
 // TODO: @Burst https://github.com/cashapp/burst/issues/72
 class EmailValidatorTest {
@@ -18,7 +18,8 @@ class EmailValidatorTest {
     validator.validate(" ") shouldBe EmailValidator.Result.Required
   }
 
-  @Ignore("https://github.com/cashapp/burst/issues/72")
+  // TODO: https://github.com/cashapp/burst/issues/72
+  @Ignore
   @Test
   fun `if an invalid email is validated, then the result is Invalid`(
     /*invalidEmail: String = burstValues(

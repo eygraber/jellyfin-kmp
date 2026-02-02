@@ -1,6 +1,6 @@
 package template.apps.shared
 
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 
 internal expect fun TemplateInitializer.initializeEnvironment()
 

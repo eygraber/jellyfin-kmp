@@ -4,7 +4,7 @@ plugins {
   alias(libs.plugins.conventionsComposeMultiplatform)
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -19,11 +19,6 @@ kotlin {
     ),
     ignoreDefaultTargets = true,
   )
-
-  kspDependenciesForAllTargets {
-    ksp(libs.kotlinInject.anvilCompiler)
-    ksp(libs.kotlinInject.compiler)
-  }
 
   @OptIn(ExperimentalWasmDsl::class)
   wasmJs {

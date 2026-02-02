@@ -7,6 +7,7 @@ plugins {
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.licensee)
+  alias(libs.plugins.metro)
 }
 
 buildkonfig {
@@ -50,10 +51,6 @@ kotlin {
       api(libs.compose.ui)
 
       api(libs.khronicle)
-
-      api(libs.kotlinInject.runtime)
-      api(libs.kotlinInject.anvilRuntime)
-      api(libs.kotlinInject.anvilRuntimeOptional)
 
       implementation(libs.kotlinx.coroutines.core)
 

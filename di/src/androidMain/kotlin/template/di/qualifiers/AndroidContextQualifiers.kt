@@ -1,6 +1,6 @@
 package template.di.qualifiers
 
-import me.tatarka.inject.annotations.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 @Qualifier
 @Target(

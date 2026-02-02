@@ -6,7 +6,7 @@ import template.app.TemplateApplication
 
 class TemplateAndroidXInitializer : Initializer<Unit> {
   override fun create(context: Context) {
-    (context as TemplateApplication).component.initializer.initialize()
+    (context as TemplateApplication).graph.initializer.initialize()
   }
 
   override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()

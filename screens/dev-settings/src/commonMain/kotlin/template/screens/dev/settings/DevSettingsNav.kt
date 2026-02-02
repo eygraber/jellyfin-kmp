@@ -3,10 +3,12 @@ package template.screens.dev.settings
 import androidx.navigation3.runtime.NavKey
 import com.eygraber.vice.ViceEffects
 import com.eygraber.vice.nav3.ViceNavEntryProvider
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.Serializable
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import template.di.scopes.NavScope
 import template.di.scopes.ScreenScope
 
@@ -22,17 +24,17 @@ class DevSettingsNavEntryProvider(
   override val effects: ViceEffects = ViceEffects.None
 }
 
-@ContributesSubcomponent(ScreenScope::class)
-@SingleIn(ScreenScope::class)
-interface DevSettingsComponent {
+@GraphExtension(ScreenScope::class)
+interface DevSettingsGraph {
   val navEntryProvider: DevSettingsNavEntryProvider
 
-  @ContributesSubcomponent.Factory(NavScope::class)
+  @ContributesTo(NavScope::class)
+  @GraphExtension.Factory
   interface Factory {
-    fun createDevSettingsComponent(
-      navigator: DevSettingsNavigator,
-      key: DevSettingsKey,
-    ): DevSettingsComponent
+    fun createDevSettingsGraph(
+      @Provides navigator: DevSettingsNavigator,
+      @Provides key: DevSettingsKey,
+    ): DevSettingsGraph
   }
 }
 

@@ -5,29 +5,29 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.eygraber.vice.nav3.viceEntry
 import template.nav.BottomSheetSceneStrategy
-import template.nav.TemplateNavComponent
-import template.screens.dev.settings.DevSettingsComponent
+import template.nav.TemplateNavGraph
+import template.screens.dev.settings.DevSettingsGraph
 import template.screens.dev.settings.DevSettingsKey
 
 internal fun EntryProviderScope<NavKey>.templateDevNavGraph(
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   backStack: NavBackStack<NavKey>,
 ) {
   viceEntry<DevSettingsKey>(
-    provideDevSettings(navComponent, backStack),
+    provideDevSettings(navGraph, backStack),
     metadata = BottomSheetSceneStrategy.bottomSheet(),
   )
 }
 
 private fun provideDevSettings(
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   backStack: NavBackStack<NavKey>,
 ) = { key: DevSettingsKey ->
-  navComponent.devSettingsFactory.createDevSettingsComponent(
+  navGraph.devSettingsFactory.createDevSettingsGraph(
     navigator = devSettings(backStack),
     key = key,
   ).navEntryProvider
 }
 
-private val TemplateNavComponent.devSettingsFactory
-  get() = this as DevSettingsComponent.Factory
+private val TemplateNavGraph.devSettingsFactory
+  get() = this as DevSettingsGraph.Factory

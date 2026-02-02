@@ -4,6 +4,7 @@ plugins {
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -11,10 +12,4 @@ kotlin {
     project = project,
     androidNamespace = "template.di",
   )
-
-  sourceSets {
-    androidMain.dependencies {
-      implementation(libs.kotlinInject.runtime)
-    }
-  }
 }

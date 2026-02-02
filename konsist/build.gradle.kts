@@ -2,13 +2,10 @@ plugins {
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlin)
   alias(libs.plugins.kotlinJvm)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
-  testImplementation(libs.kotlinInject.anvilRuntime)
-  testImplementation(libs.kotlinInject.anvilRuntimeOptional)
-  testImplementation(libs.kotlinInject.runtime)
-
   testImplementation(libs.test.junit5.api)
   testImplementation(platform(libs.test.junit5.bom))
   testRuntimeOnly(libs.test.junit5.engine)

@@ -6,22 +6,22 @@ import com.lemonappdev.konsist.api.declaration.KoClassDeclaration
 import com.lemonappdev.konsist.api.declaration.KoInterfaceDeclaration
 import com.lemonappdev.konsist.api.provider.KoAnnotationProvider
 import com.lemonappdev.konsist.api.provider.KoNameProvider
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.IntoMap
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import io.kotest.matchers.collections.shouldContainExactly
-import me.tatarka.inject.annotations.Inject
-import me.tatarka.inject.annotations.IntoMap
-import me.tatarka.inject.annotations.IntoSet
-import me.tatarka.inject.annotations.Provides
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
-import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import java.util.stream.Stream
 import kotlin.reflect.KClass
 
-class KotlinInjectAnnotationOrderKonsistTest {
+class MetroAnnotationOrderKonsistTest {
   @TestFactory
   fun `The Inject`(): Stream<DynamicTest> =
     Konsist
@@ -47,24 +47,24 @@ class KotlinInjectAnnotationOrderKonsistTest {
       )
 
   @TestFactory
-  fun `The MergeComponent`(): Stream<DynamicTest> =
+  fun `The DependencyGraph`(): Stream<DynamicTest> =
     Konsist
       .scopeFromProject()
       .classesAndInterfaces()
       .filter { it is KoInterfaceDeclaration || it is KoClassDeclaration && it.hasAbstractModifier }
-      .filter { it.hasAnnotationOf(MergeComponent::class) }
+      .filter { it.hasAnnotationOf(DependencyGraph::class) }
       .assertRelativeOrder(
-        desiredOrder = listOf(MergeComponent::class, SingleIn::class),
+        desiredOrder = listOf(DependencyGraph::class),
       )
 
   @TestFactory
-  fun `The ContributesSubcomponent`(): Stream<DynamicTest> =
+  fun `The GraphExtension`(): Stream<DynamicTest> =
     Konsist
       .scopeFromProject()
       .interfaces()
-      .filter { it.hasAnnotationOf(ContributesSubcomponent::class) }
+      .filter { it.hasAnnotationOf(GraphExtension::class) }
       .assertRelativeOrder(
-        desiredOrder = listOf(ContributesSubcomponent::class, SingleIn::class),
+        desiredOrder = listOf(GraphExtension::class),
       )
 
   private fun List<KoAnnotationProvider>.assertRelativeOrder(

@@ -3,7 +3,7 @@ plugins {
   alias(libs.plugins.conventionsDetekt)
   alias(libs.plugins.conventionsKotlin)
   alias(libs.plugins.kotlinJvm)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
@@ -12,9 +12,6 @@ dependencies {
   implementation(compose.desktop.currentOs)
 
   runtimeOnly(libs.kotlinx.coroutines.swing)
-
-  ksp(libs.kotlinInject.anvilCompiler)
-  ksp(libs.kotlinInject.compiler)
 }
 
 compose {

@@ -6,7 +6,7 @@ plugins {
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -20,10 +20,6 @@ kotlin {
   }
 
   createCmpGroup()
-
-  kspDependenciesForAllTargets {
-    ksp(libs.kotlinInject.anvilCompiler)
-  }
 
   sourceSets {
     androidMain.dependencies {
@@ -41,10 +37,6 @@ kotlin {
       implementation(projects.services.splashScreen.public)
 
       implementation(libs.kotlinx.coroutines.core)
-
-      implementation(libs.kotlinInject.anvilRuntime)
-      implementation(libs.kotlinInject.anvilRuntimeOptional)
-      implementation(libs.kotlinInject.runtime)
     }
   }
 }

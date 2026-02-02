@@ -5,11 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import template.di.scopes.NavScope
 import template.nav.dev.handleEnvironment
 import template.nav.dev.handleEnvironmentKeyEvent
@@ -24,7 +23,6 @@ enum class NavShortcuts {
   DevSettings,
 }
 
-@Inject
 @SingleIn(NavScope::class)
 @ContributesBinding(NavScope::class)
 class RealNavShortcutManager : NavShortcutManager {

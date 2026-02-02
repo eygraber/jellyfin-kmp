@@ -2,7 +2,7 @@ package template.screens.root
 
 import androidx.compose.runtime.Composable
 import com.eygraber.vice.ViceCompositor
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 
 @Inject
 class RootCompositor : ViceCompositor<RootIntent, RootViewState> {

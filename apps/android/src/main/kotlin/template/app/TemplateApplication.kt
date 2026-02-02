@@ -1,15 +1,15 @@
 package template.app
 
 import android.app.Application
-import template.app.di.TemplateApplicationComponent
-import template.app.di.create
+import dev.zacsweers.metro.createGraphFactory
+import template.app.di.TemplateApplicationGraph
 
 class TemplateApplication : Application() {
-  val component by lazy {
-    TemplateApplicationComponent::class.create(
-      applicationDelegate = this,
+  val graph by lazy {
+    createGraphFactory<TemplateApplicationGraph.Factory>().create(
+      application = this,
     )
   }
 }
 
-internal val Application.templateApplicationComponent get() = (this as TemplateApplication).component
+internal val Application.templateApplicationGraph get() = (this as TemplateApplication).graph

@@ -9,19 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.core.view.children
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import template.android.androidVersionIsAtLeast
 import template.di.scopes.SessionScope
 import java.lang.ref.WeakReference
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
 @SingleIn(SessionScope::class)
 @ContributesBinding(SessionScope::class)
 class AndroidSplashScreenController(

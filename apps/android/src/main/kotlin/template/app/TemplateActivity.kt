@@ -14,22 +14,22 @@ import template.apps.shared.TemplateAppSession
 import androidx.compose.ui.input.key.KeyEvent as ComposeKeyEvent
 
 class TemplateActivity : AppCompatActivity() {
-  private val activityComponent by lazy {
-    application.templateApplicationComponent.createTemplateActivityComponent(
+  private val activityGraph by lazy {
+    application.templateApplicationGraph.createTemplateActivityGraph(
       activity = this,
     )
   }
 
-  private val navComponent by lazy {
-    activityComponent.createTemplateNavComponent()
+  private val navGraph by lazy {
+    activityGraph.createTemplateNavGraph()
   }
 
   override fun onKeyShortcut(keyCode: Int, event: KeyEvent): Boolean =
-    navComponent.shortcutManager.handleKeyEvent(ComposeKeyEvent(event)) ||
+    navGraph.shortcutManager.handleKeyEvent(ComposeKeyEvent(event)) ||
       super.onKeyShortcut(keyCode, event)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    activityComponent.splashScreenController.init(
+    activityGraph.splashScreenController.init(
       isAppRestoring = savedInstanceState != null,
     )
 
@@ -41,7 +41,7 @@ class TemplateActivity : AppCompatActivity() {
         onDarkMode = { isDarkMode ->
           SystemUiController(isDarkMode)
         },
-        navComponent = navComponent,
+        navGraph = navGraph,
       )
     }
   }

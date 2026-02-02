@@ -7,14 +7,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import template.nav.TemplateNav
-import template.nav.TemplateNavComponent
+import template.nav.TemplateNavGraph
 import template.ui.material.theme.SystemDarkModeOverride
 import template.ui.material.theme.TemplateTheme
 
 @Composable
 fun TemplateAppSession(
   onDarkMode: @Composable (Boolean) -> Unit,
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   modifier: Modifier = Modifier,
 ) {
   val isDarkMode = when(SystemDarkModeOverride.rememberState()) {
@@ -27,7 +27,7 @@ fun TemplateAppSession(
 
   Content(
     isDarkMode = isDarkMode,
-    navComponent = navComponent,
+    navGraph = navGraph,
     modifier = modifier,
   )
 }
@@ -36,7 +36,7 @@ fun TemplateAppSession(
 @Composable
 private fun Content(
   isDarkMode: Boolean,
-  navComponent: TemplateNavComponent,
+  navGraph: TemplateNavGraph,
   modifier: Modifier = Modifier,
 ) {
   TemplateTheme(
@@ -47,7 +47,7 @@ private fun Content(
     ) {
       Box(modifier = modifier) {
         TemplateNav(
-          navComponent = navComponent,
+          navGraph = navGraph,
         )
       }
     }

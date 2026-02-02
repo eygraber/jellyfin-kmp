@@ -38,8 +38,6 @@ khronicle = "0.5.2"
 kotest = "6.1.2"
 
 kotlin = "2.3.0"
-kotlinInject = "0.9.0"
-kotlinInjectAnvil = "0.1.7"
 
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.10.0"
@@ -58,7 +56,7 @@ robolectric = "4.16.1"
 square-sqldelight = "2.2.1"
 
 vice = "1.0.8"
-viceModuleGenerator = "0.1.2"
+viceModuleGenerator = "0.1.5"
 
 [plugins]
 androidApp = { id = "com.android.application" }
@@ -88,6 +86,7 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
 ksp = { id = "com.google.devtools.ksp" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
+metro = { id = "dev.zacsweers.metro", version = "0.10.2" }
 mavenPublish = { id = "com.vanniktech.maven.publish" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 playStoreApi = { id = "com.github.triplet.play", version = "4.0.0" }
@@ -163,12 +162,6 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 khronicle = { module = "com.juul.khronicle:khronicle-core", version.ref = "khronicle" }
-
-kotlinInject-anvilCompiler = { module = "software.amazon.lastmile.kotlin.inject.anvil:compiler", version.ref = "kotlinInjectAnvil" }
-kotlinInject-anvilRuntime = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime", version.ref = "kotlinInjectAnvil" }
-kotlinInject-anvilRuntimeOptional = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional", version.ref = "kotlinInjectAnvil" }
-kotlinInject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlinInject" }
-kotlinInject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime-kmp", version.ref = "kotlinInject" }
 
 # not actually used; just here so renovate picks it up
 ktlint = { module = "com.pinterest.ktlint:ktlint-bom", version.ref = "ktlint" }

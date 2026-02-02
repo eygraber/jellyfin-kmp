@@ -6,7 +6,7 @@ plugins {
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.kotlinxSerialization)
-  alias(libs.plugins.ksp)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -14,10 +14,6 @@ kotlin {
     project = project,
     androidNamespace = "template.nav",
   )
-
-  kspDependenciesForAllTargets {
-    ksp(libs.kotlinInject.anvilCompiler)
-  }
 
   sourceSets {
     commonMain.dependencies {
@@ -36,10 +32,6 @@ kotlin {
       implementation(libs.compose.material3)
       implementation(libs.compose.runtime)
       implementation(libs.compose.ui)
-
-      implementation(libs.kotlinInject.runtime)
-      implementation(libs.kotlinInject.anvilRuntime)
-      implementation(libs.kotlinInject.anvilRuntimeOptional)
 
       implementation(libs.kotlinx.coroutines.core)
       implementation(libs.kotlinx.serialization.core)

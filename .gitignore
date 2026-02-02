@@ -42,3 +42,5 @@ tmp
 node_modules
 *.dmg
 
+.claude/settings.local.json
+
