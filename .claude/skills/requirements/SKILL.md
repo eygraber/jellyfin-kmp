@@ -5,7 +5,7 @@ allowed-tools: Read, Edit, Bash(git log *), Bash(git diff *)
 context: fork
 agent: general-purpose
 disable-model-invocation: true
-argument-hint: [validate|generate] <path-or-feature>
+argument-hint: [validate|generate [--new|--version|--patch]] <path-or-feature>
 ---
 
 # Requirements Documentation Skill
@@ -26,9 +26,16 @@ Based on the arguments provided, perform one of these tasks:
 Analyze a requirement file and the current code to find discrepancies. See [validation-workflow.md](validation-workflow.md)
 for the complete workflow and report format.
 
-### `/requirements generate <path-or-feature>`
+### `/requirements generate <path-or-feature> [--new|--version|--patch]`
 Analyze a feature's code to create or update its requirement file. See [generation-workflow.md](generation-workflow.md)
 for the complete workflow.
+
+**Generation Modes:**
+- `--new` (or no flag with no existing file): Create brand new requirement documentation
+- `--version`: Create a new major version of existing requirements (e.g., 1.0 → 2.0)
+- `--patch`: Make minor fixes/clarifications to existing requirements (e.g., 1.0 → 1.1)
+
+If no flag is provided and a requirement file exists, auto-detect the appropriate mode based on scope of changes.
 
 ## Quick Reference
 

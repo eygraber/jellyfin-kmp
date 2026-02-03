@@ -66,9 +66,12 @@ user perspective. NO code implementation details.]
 - Cover: empty states, error conditions, boundary conditions, concurrent operations
 
 ### Section 4: Version History
-- Track major changes only
-- Include date and brief description
-- Increment version appropriately (major.minor)
+- Track all changes with version, date, and brief description
+- Use semantic versioning (major.minor):
+  - **Major version** (1.0 → 2.0): Adding/removing requirements, changing core behavior, significant restructuring
+  - **Minor version** (1.0 → 1.1): Typo fixes, wording clarifications, minor edge case additions
+- New requirements always start at version 1.0
+- Include enough detail to understand what changed without reading the diff
 
 ### Section 5: Related Issues
 - Extract from git history of relevant modules

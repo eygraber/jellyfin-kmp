@@ -27,3 +27,22 @@ Before finalizing any requirements documentation, verify:
 - [ ] Status is accurate (Not Started | In Progress | Complete | Blocked | On Hold)
 - [ ] Version number is appropriate
 - [ ] Version history is accurate and up to date
+
+## Workflow-Specific Checks
+
+### New Requirement
+- [ ] Version is set to 1.0
+- [ ] Version history has initial entry with "Initial draft" or similar
+- [ ] All relevant issues from git history are included
+
+### New Version (Major Update)
+- [ ] Major version incremented (e.g., 1.x → 2.0)
+- [ ] Version history explains what was added/removed/changed
+- [ ] Removed requirements noted in version history
+- [ ] New issues since last version are added to Related Issues
+
+### Patch Fix (Minor Update)
+- [ ] Minor version incremented (e.g., 1.0 → 1.1)
+- [ ] No requirements were added or removed (only clarified/fixed)
+- [ ] Version history describes the specific fix
+- [ ] Changes are limited to corrections, not new functionality
