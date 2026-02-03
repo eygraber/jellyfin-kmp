@@ -2,41 +2,36 @@
 
 Use this workflow when asked to generate or update requirements from code.
 
-## Determine Generation Mode
+## Determine Workflow Type
 
-Before starting, determine which mode applies:
+Before starting, determine which scenario applies:
 
-### Mode Decision Tree
+| Scenario                | When to Use                                                           | Version Change |
+|-------------------------|-----------------------------------------------------------------------|----------------|
+| **New Requirement**     | No existing `.docs/requirements/[feature].md` file exists             | Start at 1.0   |
+| **New Version**         | Major feature changes, new capabilities, or significant restructuring | x.0 → (x+1).0  |
+| **Patch Fix**           | Corrections, clarifications, minor additions, or bug documentation    | x.y → x.(y+1)  |
 
-```
-Does a requirement file exist for this feature?
-├── NO → Use "New Requirement" workflow
-└── YES → What is the scope of changes?
-    ├── Significant behavior changes, new features, or structural overhaul → Use "New Version" workflow
-    ├── Clarifications, typo fixes, or minor wording improvements → Use "Patch Fix" workflow
-    └── Unsure → Compare git history since last version date to determine scope
-```
+### How to Identify the Scenario
 
-### Mode Indicators
-
-| Mode            | Version Change | When to Use                                                                |
-|-----------------|----------------|----------------------------------------------------------------------------|
-| **New**         | 1.0            | No existing requirement file; documenting feature for the first time       |
-| **New Version** | Major (2.0)    | Adding/removing requirements; changing core behavior; significant rewrites |
-| **Patch Fix**   | Minor (1.1)    | Fixing typos; clarifying ambiguous wording; minor edge case additions      |
+1. **Check for existing file**: `ls .docs/requirements/[feature].md`
+2. **If file exists**, analyze the scope of changes:
+   - **New Version**: Adding new user flows, major behavior changes, new integrations, or architectural changes
+   - **Patch Fix**: Fixing documentation errors, clarifying ambiguous requirements, adding missed edge cases,
+     documenting bug fixes
 
 ---
 
-## New Requirement Workflow
+## Workflow A: New Requirement
 
-Use when creating requirements documentation for a feature that has no existing requirement file.
+Use when creating requirements for a feature that has no existing documentation.
 
-### 1. Identify Feature Scope
+### A.1. Identify Feature Scope
 - Trace code from the starting point provided
 - List all relevant modules/files
 - Identify boundaries of the feature
 
-### 2. Analyze Git History
+### A.2. Analyze Git History
 - Examine `git log` for identified modules
 - Extract issue keys from commit messages
 - Group commits by issue key
@@ -47,12 +42,12 @@ Use when creating requirements documentation for a feature that has no existing 
 git log --all --oneline -- path/to/module
 ```
 
-### 3. Synthesize Overview
+### A.3. Synthesize Overview
 - Study UI elements and user interactions
 - Identify the problem being solved
 - Write concise, user-centric overview (1-2 paragraphs)
 
-### 4. Extract Requirements
+### A.4. Extract Requirements
 - Translate code behavior into product requirements
 - Focus on WHAT the system does, not HOW
 - Analyze "happy path" in conditional logic
@@ -80,7 +75,7 @@ fun validatePhoneNumber(input: String) {
 **Extracted requirement:**
 > The system must validate that the user has entered a phone number before proceeding with verification.
 
-### 5. Identify Edge Cases
+### A.5. Identify Edge Cases
 - Find error handling (`catch`, `else`, null checks)
 - Translate into product-focused edge case descriptions
 - Group logically
@@ -91,118 +86,90 @@ fun validatePhoneNumber(input: String) {
 2. **Invalid Phone Number Format**: If the user enters a phone number in an incorrect format, the system must
    display an error message explaining the correct format.
 
-### 6. Generate Markdown File
-- Assemble into complete `.docs/requirements/[feature].md`
+### A.6. Generate Markdown File
+- Create `.docs/requirements/[feature].md`
 - Follow template exactly (see [template.md](template.md))
-- Set version to **1.0**
-- Add initial version history entry
+- Set **Version: 1.0**
+- Add initial version history entry: `- **Version 1.0** - YYYY-MM-DD: Initial requirements documentation.`
 
 ---
 
-## New Version Workflow
+## Workflow B: New Version
 
-Use when significant changes require a new major version of existing requirements (e.g., 1.x → 2.0).
+Use when documenting major changes to an existing feature (e.g., v1.x → v2.0).
 
-### When to Use New Version
+### B.1. Read Existing Requirements
+- Load current `.docs/requirements/[feature].md`
+- Note current version number and structure
+- Understand existing requirements and edge cases
 
-- Adding or removing multiple requirements
-- Changing core feature behavior
-- Restructuring the requirements document
-- Feature has undergone significant redesign
-- Breaking changes from user perspective
-
-### 1. Read Existing Requirements
-- Read the current `.docs/requirements/[feature].md` file
-- Note the current version number
-- Understand existing requirements structure
-
-### 2. Analyze Changes Since Last Version
-```bash
-# Find commits since the last version date
-git log --since="YYYY-MM-DD" --all --oneline -- path/to/module
-```
+### B.2. Identify Changed Scope
 - Compare current code against documented requirements
-- Identify added, removed, and modified behaviors
-- Extract new issue keys from recent commits
+- Focus git history on changes **since the last version date**
 
-### 3. Categorize Changes
-
-| Change Type        | Action                                          |
-|--------------------|-------------------------------------------------|
-| New behavior       | Add new requirement(s)                          |
-| Removed behavior   | Remove requirement(s), note in version history  |
-| Modified behavior  | Update existing requirement wording             |
-| New edge case      | Add to edge cases section                       |
-| Removed edge case  | Remove from edge cases, note in version history |
-
-### 4. Update Requirements Document
-- Increment to next major version (e.g., 1.2 → 2.0)
-- Update all affected sections
-- Preserve requirement numbering where possible for traceability
-- Re-number if requirements were removed (note in version history)
-
-### 5. Document Version History
-Add a detailed version history entry:
-```markdown
-- **Version 2.0** - YYYY-MM-DD: Major update. Added support for [feature]. Removed deprecated [behavior].
-  Restructured requirements for clarity.
+```bash
+# Get changes since last version date
+git log --after="YYYY-MM-DD" --oneline -- path/to/module
 ```
 
-### 6. Update Related Issues
-- Add new issue keys from recent commits
-- Keep historical issues that remain relevant
-- Remove issues only if they are completely superseded
+### B.3. Categorize Changes
+For each code change, determine:
+- **New requirements**: Entirely new functionality to add
+- **Modified requirements**: Existing requirements that need updating
+- **Removed requirements**: Functionality that no longer exists
+- **New edge cases**: Error conditions or boundaries added
+
+### B.4. Update Document Structure
+- Increment major version (e.g., 1.2 → 2.0)
+- Update Overview if the feature's purpose has evolved
+- Add/modify/remove requirements while preserving requirement numbering where possible
+- Add new edge cases; update or remove obsolete ones
+- Add version history entry describing the major changes
+
+**Version history example:**
+```markdown
+- **Version 2.0** - YYYY-MM-DD: Added offline support, restructured user flow for multi-account handling.
+```
+
+### B.5. Reconcile Related Issues
+- Add new issue references from recent git history
+- Keep existing issue references that remain relevant
+- Remove or archive references to superseded work
 
 ---
 
-## Patch Fix Workflow
+## Workflow C: Patch Fix
 
-Use for minor corrections that don't change the fundamental requirements (e.g., 1.0 → 1.1).
+Use when making minor corrections to existing requirements (e.g., v1.1 → v1.2).
 
-### When to Use Patch Fix
+### C.1. Read Existing Requirements
+- Load current `.docs/requirements/[feature].md`
+- Note current version number
 
-- Fixing typos or grammatical errors
-- Clarifying ambiguous wording
-- Adding minor edge cases discovered during implementation
-- Correcting inaccurate descriptions
-- Improving formatting or organization
+### C.2. Identify Specific Changes
+Patch fixes typically address:
+- **Documentation errors**: Typos, incorrect descriptions, outdated information
+- **Missing details**: Edge cases that were overlooked, clarifications needed
+- **Bug documentation**: Recording behavior changes from bug fixes
+- **Consistency fixes**: Aligning with template or formatting standards
 
-### 1. Read Existing Requirements
-- Read the current `.docs/requirements/[feature].md` file
-- Note the current version number
-- Identify the specific issues to fix
+### C.3. Make Targeted Edits
+- Edit only the specific sections that need changes
+- Preserve existing requirement and edge case numbering
+- Do NOT restructure or rewrite sections unnecessarily
 
-### 2. Make Targeted Edits
-- Edit only what needs to change
-- Preserve existing structure and numbering
-- Do not add new requirements (use New Version workflow instead)
-- Do not remove requirements (use New Version workflow instead)
+### C.4. Update Metadata
+- Increment minor version (e.g., 1.1 → 1.2)
+- Add concise version history entry
 
-### 3. Allowed Patch Changes
-
-| Allowed                              | Not Allowed (Use New Version)         |
-|--------------------------------------|---------------------------------------|
-| Fix typos                            | Add new requirements                  |
-| Clarify wording                      | Remove existing requirements          |
-| Add minor edge case                  | Change core behavior descriptions     |
-| Fix incorrect descriptions           | Restructure document                  |
-| Improve formatting                   | Add significant new functionality     |
-
-### 4. Increment Minor Version
-- Increment minor version (e.g., 1.0 → 1.1, 2.3 → 2.4)
-- Never increment major version for patches
-
-### 5. Document Version History
-Add a concise version history entry:
+**Version history example:**
 ```markdown
-- **Version 1.1** - YYYY-MM-DD: Clarified requirement 3 wording. Added edge case for empty input.
+- **Version 1.2** - YYYY-MM-DD: Clarified error message behavior for network timeout edge case.
 ```
 
-### 6. Validate Changes
-Before finalizing:
-- Ensure no requirements were accidentally added or removed
-- Verify version was incremented correctly
-- Confirm version history accurately describes the patch
+### C.5. Update Related Issues (if applicable)
+- Add issue references only if the patch relates to tracked issues
+- Don't modify unrelated issue entries
 
 ---
 

@@ -28,21 +28,23 @@ Before finalizing any requirements documentation, verify:
 - [ ] Version number is appropriate
 - [ ] Version history is accurate and up to date
 
-## Workflow-Specific Checks
+## Version Type Validation
 
-### New Requirement
-- [ ] Version is set to 1.0
-- [ ] Version history has initial entry with "Initial draft" or similar
-- [ ] All relevant issues from git history are included
+### For New Requirements (v1.0)
+- [ ] Version is set to **1.0**
+- [ ] Version history has single entry: "Initial requirements documentation"
+- [ ] All related issues from git history are included
 
-### New Version (Major Update)
-- [ ] Major version incremented (e.g., 1.x → 2.0)
-- [ ] Version history explains what was added/removed/changed
-- [ ] Removed requirements noted in version history
-- [ ] New issues since last version are added to Related Issues
+### For New Versions (x.0 → (x+1).0)
+- [ ] Major version incremented (not minor)
+- [ ] Version history describes the major changes (new features, restructuring)
+- [ ] Overview updated if feature purpose evolved
+- [ ] New issue references added from recent git history
+- [ ] Removed requirements are actually deleted (not commented out)
 
-### Patch Fix (Minor Update)
-- [ ] Minor version incremented (e.g., 1.0 → 1.1)
-- [ ] No requirements were added or removed (only clarified/fixed)
-- [ ] Version history describes the specific fix
-- [ ] Changes are limited to corrections, not new functionality
+### For Patch Fixes (x.y → x.(y+1))
+- [ ] Minor version incremented (not major)
+- [ ] Version history describes the specific fix/clarification
+- [ ] Changes are minimal and targeted
+- [ ] Existing requirement/edge case numbering preserved
+- [ ] No unnecessary restructuring or rewrites

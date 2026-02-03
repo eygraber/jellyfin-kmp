@@ -20,17 +20,17 @@ Runs: formatting, detekt, lint, unit tests, screenshot tests, konsist.
 
 ### Individual Tools
 
-| Tool              | Command                                        | Purpose                            |
-|-------------------|------------------------------------------------|------------------------------------|
-| Format (auto-fix) | `./format`                                     | Auto-fix formatting (ktlint)       |
-| Format            | `./format --no-format`                         | Report formatting issues (ktlint)  |
-| Detekt            | `./detekt`                                     | Static analysis                    |
-| Lint              | `./gradlew :apps:android:lintDevDebug`         | Android-specific issues            |
-| Unit Tests        | `./gradlew testDebugUnitTest`                  | All unit tests                     |
-| Module Tests      | `./gradlew :module:testDebugUnitTest`          | Single module                      |
-| Screenshots       | `./gradlew verifyPaparazziDebug`               | Screenshot tests                   |
-| Konsist           | `./gradlew :konsist:test`                      | Structural and architectural tests |
-| Build Health      | `./gradlew buildHealth`                        | Dependency analysis                |
+| Tool              | Command                               | Purpose                            |
+|-------------------|---------------------------------------|------------------------------------|
+| Format (auto-fix) | `./format`                            | Auto-fix formatting (ktlint)       |
+| Format            | `./format --no-format`                | Report formatting issues (ktlint)  |
+| Detekt            | `./detekt`                            | Static analysis                    |
+| Lint              | `./gradlew :apps:android:lintDebug`   | Android-specific issues            |
+| Unit Tests        | `./gradlew testDebugUnitTest`         | All unit tests                     |
+| Module Tests      | `./gradlew :module:testDebugUnitTest` | Single module                      |
+| Screenshots       | `./gradlew verifyPaparazziDebug`      | Screenshot tests                   |
+| Konsist           | `./gradlew :konsist:test`             | Structural and architectural tests |
+| Build Health      | `./gradlew buildHealth`               | Dependency analysis                |
 
 #### Formatting
 
@@ -57,9 +57,10 @@ get reported by `./format` unless you specify the `--no-format` flag.
 | Issue                    | Fix                                                       |
 |--------------------------|-----------------------------------------------------------|
 | Formatting               | `./format` auto-fixes                                     |
+| Missing translations     | Use `/translate` skill                                    |
 | Unused resources         | Remove them                                               |
 | Hardcoded strings        | Extract to resources                                      |
-| Konsist annotation order | Reorder: `@Inject` -> `@SingleIn` -> `@ContributesBinding`|
+| Konsist annotation order | Reorder: `@Inject` → `@SingleIn` → `@ContributesBinding`  |
 | api vs implementation    | Change to correct configuration                           |
 | Screenshot diff          | `./gradlew recordPaparazziDebug` if change is intentional |
 

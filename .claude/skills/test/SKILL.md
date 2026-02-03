@@ -1,6 +1,6 @@
 ---
 name: test
-description: Generate tests for Kotlin code - unit tests, model tests, flow tests, intent tests, and more.
+description: Generate tests for Android code - unit tests, model tests, flow tests, intent tests, and more.
 argument-hint: "[type] [file] - e.g., 'model MyModel.kt', 'flow', 'unit'"
 context: fork
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash(./gradlew *, ./check, grep)
@@ -26,14 +26,14 @@ For screenshot tests, use `/screenshot-tests` skill.
 
 ## Test Types
 
-| Type         | Focus                            | Pattern File                                     |
-|--------------|----------------------------------|--------------------------------------------------|
-| `model`      | MVI Model state, business logic  | [patterns/model.md](patterns/model.md)           |
-| `flow`       | Reactive streams with Turbine    | [patterns/flow.md](patterns/flow.md)             |
-| `intent`     | UI interaction -> Intent emission| [patterns/intent.md](patterns/intent.md)         |
-| `onintent`   | Compositor Intent handling       | [patterns/onintent.md](patterns/onintent.md)     |
-| `repository` | Data layer coordination          | [patterns/repository.md](patterns/repository.md) |
-| `unit`       | Simple utilities, helpers        | [patterns/unit.md](patterns/unit.md)             |
+| Type         | Focus                            |
+|--------------|----------------------------------|
+| `model`      | MVI Model state, business logic  |
+| `flow`       | Reactive streams with Turbine    |
+| `intent`     | UI interaction → Intent emission |
+| `onintent`   | Compositor Intent handling       |
+| `repository` | Data layer coordination          |
+| `unit`       | Simple utilities, helpers        |
 
 ## Auto-Detection
 
@@ -53,7 +53,7 @@ When no type specified, detect from file:
 1. **Read** the source file to understand what needs testing
 2. **Identify** the appropriate test type and pattern
 3. **Find** existing tests and fakes in the module
-4. **Generate** tests following the pattern file
+4. **Generate** tests following the pattern
 5. **Run** tests to verify they pass
 6. **Fix** any compilation or test failures
 
@@ -106,7 +106,7 @@ list shouldHaveSize 3
 ## Test Location
 
 ```
-src/test/kotlin/           # Unit, Model, Flow, OnIntent tests
+src/commonTest/kotlin/           # Unit, Model, Flow, OnIntent tests
   com/template/...
     RealMyModelTest.kt     # Test Real* implementations
     FakeMyRepository.kt    # Fakes for testing
@@ -123,5 +123,3 @@ src/test/kotlin/           # Unit, Model, Flow, OnIntent tests
 ## Documentation
 
 - [.docs/testing/](/.docs/testing) - Complete testing guide
-- [.docs/testing/model-tests.md](/.docs/testing/model-tests.md) - Model testing patterns
-- [.docs/testing/flow-tests.md](/.docs/testing/flow-tests.md) - Flow testing with Turbine

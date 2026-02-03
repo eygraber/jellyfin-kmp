@@ -1,7 +1,7 @@
 ---
 name: repository
 description: Work with data repositories - create, modify, debug, or understand repository patterns, data sources, and data flow architecture.
-argument-hint: "[task] - e.g., 'create User', 'debug sync', 'explain data flow'"
+argument-hint: "[task] - e.g., 'create Payment', 'debug user sync', 'explain data flow'"
 context: fork
 allowed-tools: Read, Edit, Write, Bash(./format, ./gradlew *, grep, cat, mkdir, find), Glob, Grep
 ---
@@ -13,44 +13,43 @@ Work with data layer repositories - create new ones, modify existing ones, debug
 ## Common Tasks
 
 ```
-/repository create User            # Create new repository
-/repository debug user sync issues # Debug data synchronization
-/repository explain data flow      # Understand how data flows
-/repository add method to Repo     # Modify existing repository
-/repository fix retry logic        # Fix specific issues
+/repository create PaymentTransaction   # Create new repository
+/repository debug user sync issues      # Debug data synchronization
+/repository explain data flow           # Understand how data flows
+/repository add method to UserRepository # Modify existing repository
+/repository fix retry logic in messages # Fix specific issues
 ```
 
 ## Architecture Overview
 
 ```
 data/{module-name}/
-+-- public/   -> Repository interface, data classes
-+-- impl/     -> RealRepository, RemoteDataSource, LocalDataSource, API
-+-- fake/     -> FakeRepository for testing
+├── public/   → Repository interface, data classes
+├── impl/     → RealRepository, RemoteDataSource, LocalDataSource, API
+└── fake/     → FakeRepository for testing
 ```
 
-**Data flow:** Remote API -> Repository -> LocalDataSource -> Flow -> UI
+**Data flow:** Remote API → Repository → LocalDataSource → SQLDelight → Flow → UI
 
 ## Key Patterns
 
-- **Return types**: `Flow<T>` for observation, result types for operations
-- **Retry**: Use retry policies for remote calls
+- **Return types**: `Flow<T>` for observation, `TemplateResult<T>` for operations
+- **Retry**: Use `retryTemplateResult(retryPolicy)` for remote calls
 - **DI**: `@ContributesBinding(AppScope::class)` for Metro
-- **Sync pattern**: Fetch remote -> save local -> emit via Flow
+- **Sync pattern**: Fetch remote → save local → emit via Flow
 
 ## When Creating New Repositories
 
 1. Check if module exists at `data/{module-name}/`
-2. Create module structure if needed (see [module-structure.md](module-structure.md))
-3. Create Repository interface in public (see [repository-patterns.md](repository-patterns.md))
+2. Create module structure if needed
+3. Create Repository interface in public
 4. Create RealRepository in impl
-5. Create data sources in impl (see [data-sources.md](data-sources.md))
-6. Create FakeRepository in fake (see [fake-patterns.md](fake-patterns.md))
+5. Create data sources in impl
+6. Create FakeRepository in fake
 7. Run `./format` and verify build
 
-## Additional Resources
+## Related Skills
 
-- [module-structure.md](module-structure.md) - Build files and directory setup
-- [repository-patterns.md](repository-patterns.md) - Interface and implementation patterns
-- [data-sources.md](data-sources.md) - RemoteDataSource and LocalDataSource
-- [fake-patterns.md](fake-patterns.md) - Test double patterns
+- **[datastore](../datastore/SKILL.md)** - Working with the DataStore library
+- **[ktorfit](../ktorfit/SKILL.md)** - API communication, RemoteDataSource, JSON parsing
+- **[sqldelight](../sqldelight/SKILL.md)** - Database schema, LocalDataSource, queries

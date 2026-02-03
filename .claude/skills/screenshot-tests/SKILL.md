@@ -1,7 +1,7 @@
 ---
 name: screenshot-tests
 description: Write Paparazzi screenshot tests for Compose components.
-argument-hint: "[component] - e.g., 'UserAvatar', 'screens/welcome'"
+argument-hint: "[component] - e.g., 'UserAvatar', 'screens/case-list'"
 context: fork
 allowed-tools: Read, Edit, Write, Bash(./gradlew *, grep), Glob, Grep
 ---
@@ -14,7 +14,7 @@ Write Paparazzi screenshot tests for Compose components and screens.
 
 ```
 /screenshot-tests UserAvatar        # Test a UI component
-/screenshot-tests screens/Welcome   # Test a screen
+/screenshot-tests screens/Welcome  # Test a screen
 /screenshot-tests verify ui/common  # Verify existing tests
 /screenshot-tests record MyCard     # Record new golden images
 ```
@@ -38,11 +38,11 @@ Write Paparazzi screenshot tests for Compose components and screens.
 ## Test Location
 
 ```
-ui/<feature>/src/test/kotlin/com/template/ui/<feature>/components/
-    +-- MyComponentScreenshotTest.kt
+ui/<feature>/src/test/kotlin/template/ui/<feature>/components/
+    └── MyComponentScreenshotTest.kt
 
-screens/<feature>/src/test/kotlin/com/template/screens/<feature>/
-    +-- MyScreenScreenshotTest.kt
+screens/<feature>/src/test/kotlin/template/screens/<feature>/
+    └── MyScreenScreenshotTest.kt
 ```
 
 ## Quick Patterns

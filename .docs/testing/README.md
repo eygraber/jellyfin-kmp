@@ -52,4 +52,4 @@ Testing strategies for Template.
 
 ## Test Location
 
-All tests: `src/test/kotlin/` in their respective modules.
+All tests: `src/commonTest/kotlin/` in their respective modules.

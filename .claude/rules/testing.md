@@ -6,7 +6,7 @@ paths:
 # Testing Strategy
 Write comprehensive tests: unit tests, flow tests, Intent tests, OnIntent tests, screenshot tests
 Run tests before committing: ./gradlew testDebugUnitTest
-Unit tests should be in src/test/kotlin directory
+Unit tests should be in src/commonTest/kotlin directory
 Name test files with Test suffix (e.g., MyClassTest.kt)
 Intent tests = View UI interactions -> Intent emissions (ComposeTestRule)
 OnIntent tests = Compositor Intent handling -> Model/Effects coordination (runTest)
