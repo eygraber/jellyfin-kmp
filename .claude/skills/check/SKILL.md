@@ -25,7 +25,7 @@ Runs: formatting, detekt, lint, unit tests, screenshot tests, konsist.
 | Format (auto-fix) | `./format`                            | Auto-fix formatting (ktlint)       |
 | Format            | `./format --no-format`                | Report formatting issues (ktlint)  |
 | Detekt            | `./detekt`                            | Static analysis                    |
-| Lint              | `./gradlew :apps:android:lintDebug`   | Android-specific issues            |
+| Lint              | `./gradlew :app:lintDebug`            | Android-specific issues            |
 | Unit Tests        | `./gradlew testDebugUnitTest`         | All unit tests                     |
 | Module Tests      | `./gradlew :module:testDebugUnitTest` | Single module                      |
 | Screenshots       | `./gradlew verifyPaparazziDebug`      | Screenshot tests                   |

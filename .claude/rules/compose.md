@@ -7,12 +7,12 @@ paths:
 
 # Naming and Structure
 Use PascalCase naming for all composable functions
-Bad: fun userProfile() {}
-Good: fun UserProfile() {}
+❌ Bad: fun userProfile() {}
+✅ Good: fun UserProfile() {}
 
 CompositionLocals must be prefixed with Local (e.g., LocalUserSession)
-Bad: val UserSession = compositionLocalOf...
-Good: val LocalUserSession = compositionLocalOf...
+❌ Bad: val UserSession = compositionLocalOf...
+✅ Good: val LocalUserSession = compositionLocalOf...
 
 Break up composables into multiple functions for performance and clarity
 Pass only the parameters needed to child composables - don't pass entire ViewState or large objects
@@ -29,13 +29,13 @@ Every pubic composable that emits UI must accept a modifier: Modifier = Modifier
 `internal`/`private` composables can accept a modifier: Modifier = Modifier parameter if needed
 Position modifier as the first optional parameter (after required params, before other optional params)
 Never reuse the same modifier instance across multiple composables
-Bad: Column(modifier) { Text("A", modifier); Text("B", modifier) }
-Good: Column(modifier) { Text("A"); Text("B") }
+❌ Bad: Column(modifier) { Text("A", modifier); Text("B", modifier) }
+✅ Good: Column(modifier) { Text("A"); Text("B") }
 
 # State Management
 Never pass mutable state types (MutableState, MutableStateFlow) as parameters
-Bad: fun UserList(users: MutableState<List<User>>) {}
-Good: fun UserList(users: List<User>) {}
+❌ Bad: fun UserList(users: MutableState<List<User>>) {}
+✅ Good: fun UserList(users: List<User>) {}
 
 Content emitter composables must not return values
 Use remember for state that needs to survive recomposition
@@ -46,14 +46,19 @@ State survival: Prefer specialized types (TextFieldState, LazyListState) that ha
 For other state that must survive composition removal: use rememberSaveable (primitives) or rememberSerializable (data classes)
 Only save user-facing state, not derived values or transient UI state (animations, dialog visibility)
 
+LocalContext.current is OK in View composables for simple UI needs
+Never use LocalContext.current in Models or business logic - inject Context via DI with @AppContext instead
+❌ Bad: val context = LocalContext.current in Model
+✅ Good: @Inject class MyModel(private val context: @AppContext Context)
+
 # Architecture Integration (VICE Pattern)
-CRITICAL: Never pass onIntent to child composables - use specific callbacks instead
-Bad: FirmsLazyColumn(onIntent = onIntent)
-Good: FirmsLazyColumn(onSelectFirm = { onIntent(SelectFirm(it)) })
+🔴 CRITICAL: Never pass onIntent to child composables - use specific callbacks instead
+❌ Bad: FirmsLazyColumn(onIntent = onIntent)
+✅ Good: FirmsLazyColumn(onSelectFirm = { onIntent(SelectFirm(it)) })
 
 Top-level screen View composable should only accept state and onIntent parameters
-Bad: fun MyView(state: State, onIntent: (Intent) -> Unit, title: String)
-Good: fun MyView(state: State, onIntent: (Intent) -> Unit)
+❌ Bad: fun MyView(state: State, onIntent: (Intent) -> Unit, title: String)
+✅ Good: fun MyView(state: State, onIntent: (Intent) -> Unit)
 
 All screen configuration must be in the ViewState, not as separate parameters
 Child composables should use specific, descriptive callback names (onKeyboardAction, onItemClick)
@@ -61,23 +66,23 @@ Never inject ViewModels into composables - use VICE pattern instead
 
 # Layout and Composition
 Avoid multiple root emitters in a single composable - wrap in Column, Row, or Box
-Bad: @Composable fun MyScreen() { Text("A"); Button {} }
-Good: @Composable fun MyScreen() { Column { Text("A"); Button {} } }
+❌ Bad: @Composable fun MyScreen() { Text("A"); Button {} }
+✅ Good: @Composable fun MyScreen() { Column { Text("A"); Button {} } }
 
 # Material Design
 Use Material 3 components exclusively - Material 2 is forbidden
-Bad: import androidx.compose.material.Button
-Good: import androidx.compose.material3.Button
+❌ Bad: import androidx.compose.material.Button
+✅ Good: import androidx.compose.material3.Button
 
 # Parameters and Previews
 Follow parameter ordering: required lambda params, required params, modifier, optional lambda params, optional params, content slot (last)
 Use named arguments on separate lines when calling functions with more than 1 parameter
 Named arguments on separate lines may be used when calling a function with 1 parameter
-Preview composables should be private and use @Preview annotation
-Skew towards having one preview function with PreviewParameterProvider for multiple states
-Only use multiple preview functions when PreviewParameterProvider doesn't make sense
-Use PreviewParameterProvider for complex preview states
-Prefer to have a default instance of the state in the PreviewParameterProvider, and copy it for other variations
+Preview composables should be private and use @PreviewSuperDoScreen annotation
+Skew towards having one preview function with NamedPreviewParameterProvider for multiple states
+Only use multiple preview functions when NamedPreviewParameterProvider doesn't make sense
+Use NamedPreviewParameterProvider for complex preview states
+Prefer to have a default instance of the state in the NamedPreviewParameterProvider, and copy it for other variations
 
 # Screen-Specific Composables Package
 When composables are too large/numerous to be private in View file:
@@ -87,9 +92,9 @@ When composables are too large/numerous to be private in View file:
 - Group files in the `compose/` package by functionality
 
 # When to Move Code to UI Modules
-CRITICAL: Only move composables to `ui/` modules when ACTUALLY shared across multiple modules
-Bad: Moving to ui/ because it "might be reused later"
-Good: Moving to ui/ because 2+ screen modules are currently using it
+🔴 CRITICAL: Only move composables to `ui/` modules when ACTUALLY shared across multiple modules
+❌ Bad: Moving to ui/ because it "might be reused later"
+✅ Good: Moving to ui/ because 2+ screen modules are currently using it
 
 Exceptions for utilities:
 - Generic utilities belong in `:ui:compose` (e.g., layout helpers, state utilities)
@@ -100,3 +105,5 @@ See .claude/rules/examples/good-compose-view.kt for a complete View implementati
 
 ### Documentation Reference
 For complete patterns: .docs/compose/
+- .docs/compose/composable-organization.md - Breaking up composables, parameter passing, file organization
+- .docs/compose/screen-architecture.md - VICE integration and screen-specific patterns

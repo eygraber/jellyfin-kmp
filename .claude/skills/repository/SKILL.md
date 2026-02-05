@@ -33,8 +33,8 @@ data/{module-name}/
 
 ## Key Patterns
 
-- **Return types**: `Flow<T>` for observation, `JellyfinResult<T>` for operations
-- **Retry**: Use `retryJellyfinResult(retryPolicy)` for remote calls
+- **Return types**: `Flow<T>` for observation, `SuperDoResult<T>` for operations
+- **Retry**: Use `retrySuperDoResult(retryPolicy)` for remote calls
 - **DI**: `@ContributesBinding(AppScope::class)` for Metro
 - **Sync pattern**: Fetch remote → save local → emit via Flow
 

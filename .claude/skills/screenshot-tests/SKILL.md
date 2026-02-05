@@ -1,112 +1,98 @@
 ---
 name: screenshot-tests
-description: Write Paparazzi screenshot tests for Compose components.
-argument-hint: "[component] - e.g., 'UserAvatar', 'screens/case-list'"
+description: Generate Paparazzi screenshot tests for screens and UI components.
+argument-hint: "[file] - e.g., 'MyScreen.kt', 'MyComponent.kt'"
 context: fork
-allowed-tools: Read, Edit, Write, Bash(./gradlew *, grep), Glob, Grep
+allowed-tools: Read, Edit, Write, Glob, Grep, Bash(./gradlew *)
 ---
 
-# Screenshot Tests Skill
+# Screenshot Tests
 
-Write Paparazzi screenshot tests for Compose components and screens.
+Generate Paparazzi screenshot tests following project patterns.
 
-## Common Tasks
+## Usage
 
 ```
-/screenshot-tests UserAvatar        # Test a UI component
-/screenshot-tests screens/Welcome  # Test a screen
-/screenshot-tests verify ui/common  # Verify existing tests
-/screenshot-tests record MyCard     # Record new golden images
+/screenshot-tests MyScreenView.kt       # Generate screen tests
+/screenshot-tests MyComponent.kt        # Generate component tests
 ```
+
+## Two Modes
+
+### 1. Screen Tests (`:screens` modules)
+
+Test full screens with multiple ViewState variations:
+
+```kotlin
+class MyScreenViewScreenshotTest {
+  @get:Rule
+  val paparazzi = paparazziScreenshotRule()
+
+  @Test
+  fun screenshots() {
+    PaparazziDeviceConfig.entries.forEach { device ->
+      MyViewStatePreviewProvider().values.forEach { state ->
+        paparazzi.snapshotScreen(
+          name = "device=${device.name}_state=${state.name}",
+          deviceConfig = device,
+        ) {
+          SuperDoEdgeToEdgePreviewTheme {
+            MyView(state = state, onIntent = {})
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### 2. Component Tests (`:ui` modules)
+
+Test individual UI components with custom methods:
+
+```kotlin
+class MyComponentScreenshotTest {
+  @get:Rule
+  val paparazzi = paparazziScreenshotRule()
+
+  @Test
+  fun `default state`() {
+    paparazzi.snapshotComponent {
+      SuperDoPreviewTheme {
+        MyComponent(text = "Hello")
+      }
+    }
+  }
+
+  @Test
+  fun `loading state`() {
+    paparazzi.snapshotComponent {
+      SuperDoPreviewTheme {
+        MyComponent(isLoading = true)
+      }
+    }
+  }
+}
+```
+
+## Key Patterns
+
+- **Use ViewStatePreviewProvider** for screens with multiple states
+- **Test on multiple devices** using `PaparazziDeviceConfig.entries`
+- **Wrap content in proper theme** (`SuperDoEdgeToEdgePreviewTheme` for screens)
+- **Wrap Coil images** in `SuperDoPreviewAsyncImageProvider` if needed
 
 ## Commands
 
 ```bash
-# Generate golden images
-./gradlew :module:recordPaparazziDebug
-
-# Verify against golden images
-./gradlew :module:verifyPaparazziDebug
-
-# Clean golden images
-./gradlew :module:cleanPaparazziDebug
-
-# Clean and regenerate
-./gradlew :module:cleanRecordPaparazziDebug
+./gradlew verifyPaparazziDebug    # Verify against golden images
+./gradlew recordPaparazziDebug    # Record new golden images
 ```
 
-## Test Location
+## Process
 
-```
-ui/<feature>/src/test/kotlin/jellyfin/ui/<feature>/components/
-    └── MyComponentScreenshotTest.kt
-
-screens/<feature>/src/test/kotlin/jellyfin/screens/<feature>/
-    └── MyScreenScreenshotTest.kt
-```
-
-## Quick Patterns
-
-### Component Test (simple)
-
-```kotlin
-class UserAvatarScreenshotTest {
-  @get:Rule
-  val paparazzi = Paparazzi()
-
-  @Test
-  fun loading() {
-    paparazzi.snapshot {
-      JellyfinPreviewTheme {
-        UserAvatar(isLoading = true, ...)
-      }
-    }
-  }
-
-  @Test
-  fun success() {
-    paparazzi.snapshot {
-      JellyfinPreviewTheme {
-        UserAvatar(isLoading = false, ...)
-      }
-    }
-  }
-}
-```
-
-### Screen Test (with device configs)
-
-```kotlin
-@RunWith(TestParameterInjector::class)
-class MyScreenScreenshotTest(
-  @param:TestParameter
-  private val deviceConfig: PaparazziDeviceConfig,
-) {
-  @get:Rule
-  val paparazzi = Paparazzi(deviceConfig = deviceConfig.config)
-
-  @Test
-  fun screenshot() {
-    ViewStatePreviewProvider()
-      .values
-      .forEach { (name, state) ->
-        paparazzi.snapshot(name = name) {
-          JellyfinEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
-            MyScreenView(state = state, onIntent = {})
-          }
-        }
-      }
-  }
-}
-```
-
-## Key Rules
-
-- **Components**: Use `JellyfinPreviewTheme`, no device configs
-- **Screens**: Use `JellyfinEdgeToEdgePreviewTheme` with `PaparazziDeviceConfig`
-- **Images**: Wrap with `JellyfinPreviewAsyncImageProvider` if using Coil
-
-## Additional Resources
-
-- [patterns.md](patterns.md) - Detailed test patterns
-- [.docs/testing/screenshot-tests.md](/.docs/testing/screenshot-tests.md) - Complete guide
+1. **Read** the source file to understand component/screen structure
+2. **Check** for existing PreviewProvider or preview functions
+3. **Generate** test class following appropriate pattern
+4. **Run** `./gradlew :module:verifyPaparazziDebug` to verify
+5. **Record** if new: `./gradlew :module:recordPaparazziDebug`

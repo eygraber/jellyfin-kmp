@@ -15,7 +15,7 @@ Code review with automatic scope detection or explicit focus areas.
 
 ```
 /review                           # Auto-detect scope from staged changes
-/review src/commonMain/.../MyFile.kt    # Review specific file (auto-detect focus)
+/review src/main/.../MyFile.kt    # Review specific file (auto-detect focus)
 /review ui                        # Focus on UI checklist only
 /review data domain               # Focus on data and domain checklists
 /review architecture MyModel.kt   # Architecture review of specific file

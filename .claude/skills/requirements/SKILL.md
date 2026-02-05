@@ -1,11 +1,11 @@
 ---
 name: requirements
-description: Create, update, or validate feature requirements documentation in .docs/requirements/. Use when analyzing code to generate requirements, updating existing requirements, or validating implementation against specs.
-allowed-tools: Read, Edit, Bash(git log *), Bash(git diff *)
+description: Create, update, or validate feature requirements documentation in .docs/requirements/. Use when defining new feature requirements, analyzing code to generate requirements, or validating implementation against specs.
+allowed-tools: Read, Edit, Write, Bash(git log *), Bash(git diff *), AskUserQuestion
 context: fork
 agent: general-purpose
 disable-model-invocation: true
-argument-hint: [validate|generate] <path-or-feature>
+argument-hint: [define|validate|generate] <feature-or-path>
 ---
 
 # Requirements Documentation Skill
@@ -22,23 +22,31 @@ application's functionality and serves as a single source of truth for features.
 
 Based on the arguments provided, perform one of these tasks:
 
+### `/requirements define <feature>` (Recommended for new features)
+**Use BEFORE implementation.** Collaborate with the user to define well-thought-out product requirements. This is
+the preferred approach as it ensures product intent drives development.
+
+The workflow automatically handles three scenarios:
+- **New Requirement**: No existing document → Create from scratch (version 1.0)
+- **New Version**: Existing document + significant changes → Version bump (major/minor)
+- **Patch Fix**: Existing document + minor corrections → No version change
+
+See [definition-workflow.md](definition-workflow.md) for the complete workflow.
+
 ### `/requirements validate <feature>`
 Analyze a requirement file and the current code to find discrepancies. See [validation-workflow.md](validation-workflow.md)
 for the complete workflow and report format.
 
 ### `/requirements generate <path-or-feature>`
-Analyze a feature's code to create or update its requirement file. The workflow automatically determines which
-scenario applies:
+Analyze a feature's code to create or update its requirement file. Use when code exists but requirements don't.
+See [generation-workflow.md](generation-workflow.md) for the complete workflow.
 
-- **New Requirement**: Creates initial v1.0 documentation for features without existing requirements
-- **New Version**: Major update (x.0 → (x+1).0) for significant feature changes or new capabilities
-- **Patch Fix**: Minor update (x.y → x.(y+1)) for corrections, clarifications, or edge case additions
-
-See [generation-workflow.md](generation-workflow.md) for the complete workflow for each scenario.
+**Note:** `generate` creates requirements from existing code, which is acceptable but not ideal. Prefer `define`
+for new work to ensure requirements drive implementation rather than documenting what was built.
 
 ## Quick Reference
 
-- **Jellyfin**: See [com.eygraber.jellyfin.md](com.eygraber.jellyfin.md) for the exact structure all requirement documents must follow
+- **Template**: See [template.md](template.md) for the exact structure all requirement documents must follow
 - **Quality Checklist**: See [quality-checklist.md](quality-checklist.md) for pre-submission validation
 
 ## Core Principles

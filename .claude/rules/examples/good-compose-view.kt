@@ -1,7 +1,7 @@
 // Exemplar Compose View following all project conventions
 // See .claude/rules/compose.md for complete rules
 
-package com.com.eygraber.jellyfin.screens.example
+package com.com.superdo.screens.example
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +11,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.com.superdo.ui.preview.PreviewSuperDoScreen
 
-// Top-level View: Only accepts state and onIntent
+// ✅ Top-level View: Only accepts state and onIntent
 @Composable
 internal fun ExampleView(
   state: ExampleViewState,
@@ -24,8 +24,8 @@ internal fun ExampleView(
     modifier = Modifier.fillMaxSize(),
   ) { contentPadding ->
     ExampleContent(
-      onIncrementClick = { onIntent(ExampleIntent.IncrementClick) }, // Specific callback
-      onItemClick = { id -> onIntent(ExampleIntent.ItemClick(id)) }, // Specific callback
+      onIncrementClick = { onIntent(ExampleIntent.IncrementClick) }, // ✅ Specific callback
+      onItemClick = { id -> onIntent(ExampleIntent.ItemClick(id)) }, // ✅ Specific callback
       title = state.title,
       count = state.count,
       modifier = Modifier.padding(contentPadding),
@@ -33,17 +33,17 @@ internal fun ExampleView(
   }
 }
 
-// Child composable: private visibility, specific callbacks, accepts modifier
+// ✅ Child composable: private visibility, specific callbacks, accepts modifier
 @Composable
 private fun ExampleContent(
-  onIncrementClick: () -> Unit,  // Required lambda first
-  onItemClick: (String) -> Unit,  // Required lambda second
-  title: String,                   // Required params next
+  onIncrementClick: () -> Unit,  // ✅ Required lambda first
+  onItemClick: (String) -> Unit,  // ✅ Required lambda second
+  title: String,                   // ✅ Required params next
   count: Int,
-  modifier: Modifier = Modifier,   // Modifier last
+  modifier: Modifier = Modifier,   // ✅ Modifier last
 ) {
-  Column(modifier = modifier) { // Single root emitter
-    Text(text = title) // No modifier reuse
+  Column(modifier = modifier) { // ✅ Single root emitter
+    Text(text = title) // ✅ No modifier reuse
     Text(text = "Count: $count")
     Button(onClick = onIncrementClick) {
       Text("Increment")
@@ -51,8 +51,8 @@ private fun ExampleContent(
   }
 }
 
-// Preview: private, uses @Preview
-@Preview
+// ✅ Preview: private, uses @PreviewSuperDoScreen
+@PreviewSuperDoScreen
 @Composable
 private fun ExampleViewPreview(
   @PreviewParameter(ExamplePreviewProvider::class)
