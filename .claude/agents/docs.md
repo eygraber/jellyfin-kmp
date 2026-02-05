@@ -96,7 +96,7 @@ Follow this hierarchy (from [.docs/README.md](/.docs/README.md)):
 1. Code changes → Update `.docs/` primary documentation
 2. `.docs/` changes → Update `.claude/rules/` to enforce patterns
 3. Pattern changes → Update agent definitions if responsibilities shift
-4. Convention changes → Update skill superDos
+4. Convention changes → Update skill templates
 
 **Avoid:**
 - Duplicating full documentation in rules (link instead)

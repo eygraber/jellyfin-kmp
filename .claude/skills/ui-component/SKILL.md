@@ -55,13 +55,13 @@ fun LoadingButton(
   }
 }
 
-@PreviewSuperDoScreen
+@PreviewJellyfinScreen
 @Composable
 private fun LoadingButtonPreview(
   @PreviewParameter(LoadingButtonPreviewProvider::class)
   state: LoadingButtonState,
 ) {
-  SuperDoPreviewTheme {
+  JellyfinPreviewTheme {
     LoadingButton(
       onClick = {},
       text = state.text,
@@ -87,9 +87,9 @@ private data class LoadingButtonState(
 
 ```
 ui/<component-type>/
-├── src/main/kotlin/com/superDo/ui/<type>/
+├── src/main/kotlin/com/eygraber/jellyfin/ui/<type>/
 │   └── LoadingButton.kt
-└── src/test/kotlin/com/superDo/ui/<type>/
+└── src/test/kotlin/com/eygraber/jellyfin/ui/<type>/
     └── LoadingButtonScreenshotTest.kt
 ```
 

@@ -36,7 +36,7 @@ class MyScreenViewScreenshotTest {
           name = "device=${device.name}_state=${state.name}",
           deviceConfig = device,
         ) {
-          SuperDoEdgeToEdgePreviewTheme {
+          JellyfinEdgeToEdgePreviewTheme {
             MyView(state = state, onIntent = {})
           }
         }
@@ -58,7 +58,7 @@ class MyComponentScreenshotTest {
   @Test
   fun `default state`() {
     paparazzi.snapshotComponent {
-      SuperDoPreviewTheme {
+      JellyfinPreviewTheme {
         MyComponent(text = "Hello")
       }
     }
@@ -67,7 +67,7 @@ class MyComponentScreenshotTest {
   @Test
   fun `loading state`() {
     paparazzi.snapshotComponent {
-      SuperDoPreviewTheme {
+      JellyfinPreviewTheme {
         MyComponent(isLoading = true)
       }
     }
@@ -79,8 +79,8 @@ class MyComponentScreenshotTest {
 
 - **Use ViewStatePreviewProvider** for screens with multiple states
 - **Test on multiple devices** using `PaparazziDeviceConfig.entries`
-- **Wrap content in proper theme** (`SuperDoEdgeToEdgePreviewTheme` for screens)
-- **Wrap Coil images** in `SuperDoPreviewAsyncImageProvider` if needed
+- **Wrap content in proper theme** (`JellyfinEdgeToEdgePreviewTheme` for screens)
+- **Wrap Coil images** in `JellyfinPreviewAsyncImageProvider` if needed
 
 ## Commands
 

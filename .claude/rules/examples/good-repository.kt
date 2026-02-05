@@ -1,12 +1,12 @@
 // Exemplar Repository following all project conventions
 // See .claude/rules/architecture.md and data-persistence.md for complete rules
 
-package com.com.superdo.data.example
+package com.eygraber.jellyfin.data.example
 
-import com.com.superdo.common.SuperDoResult
-import com.com.superdo.common.andThen
-import com.com.superdo.common.fold
-import com.com.superdo.entity.Example
+import com.eygraber.jellyfin.common.JellyfinResult
+import com.eygraber.jellyfin.common.andThen
+import com.eygraber.jellyfin.common.fold
+import com.eygraber.jellyfin.entity.Example
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.map
 // ✅ Public interface in public module
 interface ExampleRepository {
   fun observeExamples(): Flow<List<Example>>
-  suspend fun loadExamples(): SuperDoResult<List<Example>>
-  suspend fun saveExample(example: Example): SuperDoResult<Unit>
+  suspend fun loadExamples(): JellyfinResult<List<Example>>
+  suspend fun saveExample(example: Example): JellyfinResult<Unit>
 }
 
 // ✅ Implementation in impl module
@@ -34,28 +34,28 @@ class RealExampleRepository(
     return localDataSource.observeExamples()
   }
 
-  // ✅ Use SuperDoResult for operation outcomes
-  override suspend fun loadExamples(): SuperDoResult<List<Example>> {
+  // ✅ Use JellyfinResult for operation outcomes
+  override suspend fun loadExamples(): JellyfinResult<List<Example>> {
     // ✅ Load from remote, save to local using andThen for side effects
     return remoteDataSource.fetchExamples()
       .andThen { examples ->
         localDataSource.saveExamples(examples)
       }
       .fold(
-        onSuccess = { examples -> SuperDoResult.Success(examples) },
+        onSuccess = { examples -> JellyfinResult.Success(examples) },
         onFailure = { error ->
           // ✅ Fall back to local cache on error
           val cached = localDataSource.getExamples()
           if (cached.isNotEmpty()) {
-            SuperDoResult.Success(cached)
+            JellyfinResult.Success(cached)
           } else {
-            SuperDoResult.Failure(error)
+            JellyfinResult.Failure(error)
           }
         },
       )
   }
 
-  override suspend fun saveExample(example: Example): SuperDoResult<Unit> {
+  override suspend fun saveExample(example: Example): JellyfinResult<Unit> {
     // ✅ Save to remote first, then local using andThen for side effects
     return remoteDataSource.saveExample(example)
       .andThen {
@@ -66,8 +66,8 @@ class RealExampleRepository(
 
 // ✅ Separate data source interfaces
 interface ExampleRemoteDataSource {
-  suspend fun fetchExamples(): SuperDoResult<List<Example>>
-  suspend fun saveExample(example: Example): SuperDoResult<Unit>
+  suspend fun fetchExamples(): JellyfinResult<List<Example>>
+  suspend fun saveExample(example: Example): JellyfinResult<Unit>
 }
 
 interface ExampleLocalDataSource {
@@ -84,14 +84,14 @@ class FakeExampleRepository : ExampleRepository {
 
   override fun observeExamples(): Flow<List<Example>> = _flow
 
-  override suspend fun loadExamples(): SuperDoResult<List<Example>> {
-    return SuperDoResult.Success(examples.toList())
+  override suspend fun loadExamples(): JellyfinResult<List<Example>> {
+    return JellyfinResult.Success(examples.toList())
   }
 
-  override suspend fun saveExample(example: Example): SuperDoResult<Unit> {
+  override suspend fun saveExample(example: Example): JellyfinResult<Unit> {
     examples.add(example)
     _flow.value = examples.toList()
-    return SuperDoResult.Success(Unit)
+    return JellyfinResult.Success(Unit)
   }
 
   // Test helper

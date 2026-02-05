@@ -1,13 +1,13 @@
 // Example: Well-structured Worker with DI integration
-package com.com.superdo.data.user
+package com.eygraber.jellyfin.data.user
 
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.com.superdo.common.SuperDoResult
-import com.com.superdo.data.auth.UserAuthRepository
-import com.com.superdo.di.scopes.WorkScope
-import com.com.superdo.services.work.graphFactory
+import com.eygraber.jellyfin.common.JellyfinResult
+import com.eygraber.jellyfin.data.auth.UserAuthRepository
+import com.eygraber.jellyfin.di.scopes.WorkScope
+import com.eygraber.jellyfin.services.work.graphFactory
 import com.juul.khronicle.Log
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
@@ -34,9 +34,9 @@ class SyncUsersWorker(
       return fail("the user is not logged in")
     }
 
-    // Map SuperDoResult to WorkManager Result types
+    // Map JellyfinResult to WorkManager Result types
     return when(val result = graph.userRepository.fetchUsers()) {
-      is SuperDoResult.Error -> when {
+      is JellyfinResult.Error -> when {
         // Ephemeral errors (network, timeout) should retry
         result.isEphemeral -> Result.retry().also {
           Log.debug { "Retrying syncing users because of an ephemeral error (${result.message.orEmpty()})" }
@@ -44,7 +44,7 @@ class SyncUsersWorker(
         // Non-ephemeral errors (4xx, business logic) should fail
         else -> fail("we received a non ephemeral error (${result.message.orEmpty()})")
       }
-      is SuperDoResult.Success<*> -> Result.success()
+      is JellyfinResult.Success<*> -> Result.success()
     }
   }
 
@@ -66,7 +66,7 @@ class SyncUsersWorker(
 
     /**
      * Factory contributed to WorkScope, not AppScope.
-     * This allows SuperDoWorkGraph to create worker graphs.
+     * This allows JellyfinWorkGraph to create worker graphs.
      */
     @ContributesTo(WorkScope::class)
     @GraphExtension.Factory

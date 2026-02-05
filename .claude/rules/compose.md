@@ -78,7 +78,7 @@ Use Material 3 components exclusively - Material 2 is forbidden
 Follow parameter ordering: required lambda params, required params, modifier, optional lambda params, optional params, content slot (last)
 Use named arguments on separate lines when calling functions with more than 1 parameter
 Named arguments on separate lines may be used when calling a function with 1 parameter
-Preview composables should be private and use @PreviewSuperDoScreen annotation
+Preview composables should be private and use @PreviewJellyfinScreen annotation
 Skew towards having one preview function with NamedPreviewParameterProvider for multiple states
 Only use multiple preview functions when NamedPreviewParameterProvider doesn't make sense
 Use NamedPreviewParameterProvider for complex preview states

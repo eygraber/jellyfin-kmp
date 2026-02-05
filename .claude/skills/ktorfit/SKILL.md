@@ -26,18 +26,18 @@ internal interface UserApi {
   @GET("users/{id}")
   suspend fun getUser(
     @Path("id") userId: String,
-  ): SuperDoResponse<JsonObject>
+  ): JellyfinResponse<JsonObject>
 
   @POST("users")
   suspend fun createUser(
     @Body request: CreateUserRequest,
-  ): SuperDoResponse<JsonObject>
+  ): JellyfinResponse<JsonObject>
 
   @GET("users")
   suspend fun getUsers(
     @Query("page") page: Int,
     @Query("limit") limit: Int = 20,
-  ): SuperDoResponse<JsonArray>
+  ): JellyfinResponse<JsonArray>
 }
 ```
 
@@ -56,7 +56,7 @@ result.mapSuccessTo { json ->
 }
 
 // Handle in repository
-override suspend fun fetchUser(id: String): SuperDoResult<User> {
+override suspend fun fetchUser(id: String): JellyfinResult<User> {
   return api.getUser(id)
     .toResult()
     .mapSuccessTo { json -> json.toUser() }
@@ -82,12 +82,12 @@ data class CreateUserRequest(
 @GET("users")
 suspend fun getUsers(
   @Header("Authorization") token: String,
-): SuperDoResponse<JsonArray>
+): JellyfinResponse<JsonArray>
 ```
 
 ### Retry Logic
 ```kotlin
-retrySuperDoResult(RetryPolicy.Default) {
+retryJellyfinResult(RetryPolicy.Default) {
   api.getUsers().toResult()
 }
 ```

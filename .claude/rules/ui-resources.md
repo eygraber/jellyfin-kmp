@@ -5,16 +5,16 @@ paths:
 ---
 
 # Icons
-🔴 CRITICAL: Never use androidx.compose.material.icons - use SuperDoIcons only
+🔴 CRITICAL: Never use androidx.compose.material.icons - use JellyfinIcons only
 ❌ Bad: import androidx.compose.material.icons.Icons
-✅ Good: import com.com.superdo.ui.icons.SuperDoIcons
+✅ Good: import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 
-Add new icons to ui/icons module as ImageVector extensions on SuperDoIcons
+Add new icons to ui/icons module as ImageVector extensions on JellyfinIcons
 Use Valkyrie IDE plugin to convert SVG to Compose ImageVector
 
 # Images
 Use Coil for image loading and display in Jetpack Compose
-Previews of composables that use Coil should wrap content in SuperDoPreviewAsyncImageProvider
+Previews of composables that use Coil should wrap content in JellyfinPreviewAsyncImageProvider
 Images should be optimized for mobile display
 Use vectors (using materialIcon preferably, or XML) when possible for scalability
 
