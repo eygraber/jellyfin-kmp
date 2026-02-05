@@ -1,4 +1,4 @@
-# Requirements Document Jellyfin
+# Requirements Document Template
 
 All requirement documents MUST follow this exact structure:
 
@@ -66,12 +66,9 @@ user perspective. NO code implementation details.]
 - Cover: empty states, error conditions, boundary conditions, concurrent operations
 
 ### Section 4: Version History
-- Track all version changes (major and minor)
+- Track major changes only
 - Include date and brief description
-- Version numbering follows semantic conventions:
-  - **Major version (x.0)**: New features, significant restructuring, breaking changes to requirements
-  - **Minor version (x.y)**: Clarifications, corrections, edge case additions, bug documentation
-- First version is always **1.0**
+- Increment version appropriately (major.minor)
 
 ### Section 5: Related Issues
 - Extract from git history of relevant modules

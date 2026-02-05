@@ -35,7 +35,7 @@ Work with DataStore for simple key-value persistence.
 ```kotlin
 @SingleIn(AppScope::class)
 class SettingsDataStore @Inject constructor(
-  @param:AppContext private val context: Context,
+  @AppContext private val context: Context,
 ) {
   private val Context.dataStore by preferencesDataStore(name = "settings")
 

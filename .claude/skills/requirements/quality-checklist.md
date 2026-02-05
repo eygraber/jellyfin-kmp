@@ -3,7 +3,7 @@
 Before finalizing any requirements documentation, verify:
 
 ## Structure
-- [ ] Follows exact jellyfin structure from [com.eygraber.jellyfin.md](com.eygraber.jellyfin.md)
+- [ ] Follows exact template structure from [template.md](template.md)
 - [ ] Maximum 120 character line length
 - [ ] All sections present and in correct order
 
@@ -27,24 +27,3 @@ Before finalizing any requirements documentation, verify:
 - [ ] Status is accurate (Not Started | In Progress | Complete | Blocked | On Hold)
 - [ ] Version number is appropriate
 - [ ] Version history is accurate and up to date
-
-## Version Type Validation
-
-### For New Requirements (v1.0)
-- [ ] Version is set to **1.0**
-- [ ] Version history has single entry: "Initial requirements documentation"
-- [ ] All related issues from git history are included
-
-### For New Versions (x.0 → (x+1).0)
-- [ ] Major version incremented (not minor)
-- [ ] Version history describes the major changes (new features, restructuring)
-- [ ] Overview updated if feature purpose evolved
-- [ ] New issue references added from recent git history
-- [ ] Removed requirements are actually deleted (not commented out)
-
-### For Patch Fixes (x.y → x.(y+1))
-- [ ] Minor version incremented (not major)
-- [ ] Version history describes the specific fix/clarification
-- [ ] Changes are minimal and targeted
-- [ ] Existing requirement/edge case numbering preserved
-- [ ] No unnecessary restructuring or rewrites

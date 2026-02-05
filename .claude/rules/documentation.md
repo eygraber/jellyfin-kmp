@@ -14,7 +14,7 @@ follow these principles:
 
 ### What NOT to Create
 
-**Do NOT** create these files unless explicitly requested:
+❌ **Do NOT** create these files unless explicitly requested:
 - `README.md` files in documentation directories
 - `index.md` or `INDEX.md` summary files
 - `SUMMARY.md` or table-of-contents files
@@ -29,7 +29,7 @@ follow these principles:
 
 ### When Summaries ARE Allowed
 
-**DO** create summary/index files when:
+✅ **DO** create summary/index files when:
 - Developer explicitly requests: "Create a README summarizing..."
 - Project convention already established (e.g., existing READMEs in all doc folders)
 - Building public-facing documentation (external docs, published guides)
@@ -46,9 +46,9 @@ When updating documentation:
 
 **BAD** (Unsolicited summary):
 1. Create `feature-x.md` with details
-2. Create `README.md` listing all features <- Don't do this
+2. Create `README.md` listing all features ← ❌ Don't do this
 
 **GOOD** (Direct documentation):
 1. Create `feature-x.md` with details
 2. Update existing relevant docs with cross-references
-3. Stop there unless asked for more <- Do this
+3. Stop there unless asked for more ← ✅ Do this

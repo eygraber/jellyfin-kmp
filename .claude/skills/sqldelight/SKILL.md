@@ -22,8 +22,8 @@ Work with SQLDelight database schemas, queries, and migrations.
 ## File Structure
 
 ```
-services/sqldelight/src/commonMain/sqldelight/
-├── com/jellyfin/db/
+services/sqldelight/src/main/sqldelight/
+├── com/superDo/db/
 │   ├── User.sq           # Table definition + queries
 │   └── migrations/
 │       └── 1.sqm         # Migration files
