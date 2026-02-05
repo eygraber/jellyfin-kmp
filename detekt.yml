@@ -4,22 +4,17 @@ config:
   checkExhaustiveness: true
 
 processors:
-  active: true
-  exclude:
-  # - 'FunctionCountProcessor'
-  # - 'PropertyCountProcessor'
-  # - 'ClassCountProcessor'
-  # - 'PackageCountProcessor'
-  # - 'KtFileCountProcessor'
+  active: false
 
 console-reports:
   active: true
   exclude:
-    - 'ProjectStatisticsReport'
     - 'ComplexityReport'
+    # - 'IssuesReport'
+    - 'FileBasedIssuesReport'
+    - 'LiteIssuesReport'
     - 'NotificationReport'
-    #  - 'FindingsReport'
-    - 'FileBasedFindingsReport'
+    - 'ProjectStatisticsReport'
 
 comments:
   active: false
