@@ -1,35 +1,4 @@
-# Jellyfin CMP
-
-## Replacing the jellyfin values
-
-Run `./jellyfin_placeholders --project-name <PROJECT_NAME> --project-package <PROJECT_PACKAGE>` to replace
-all the jellyfin values with your project's values.
-
-You will get prompted to create a password for the prod keystore.
-Pick a strong password and save it in your GitHub Actions secrets.
-
-After it succeeds it will print your internal and prod ejson public keys. You'll probably want to
-lookup the corresponding private key under `/opt/ejson/keys/<public key>` and save it in your GitHub Actions secrets.
-After doing this it is a good idea to delete the prod key from your local machine, so that only CI can create prod builds.
-
-After this you can delete `jellyfin_placeholders`.
-
-## GitHub Actions Secrets
-
-GitHub Actions needs the following secrets:
-
-1. `EJSON_DEV_BUILD_PRIVATE_KEY`
-2. `EJSON_PROD_BUILD_PRIVATE_KEY`
-
-If you make use of the `nightly` workflow (it is disabled by default)
-you'll also need to set the following secrets to the value of the prod keystore password:
-
-1. `PROD_KEY_PASSWORD`
-2. `PROD_KEYSTORE_PASSWORD`
-
-If you use Firebase App Distribution you'll need to add the following secrets:
-
-1. `FIREBASE_APP_DISTRIBUTION_DEV_KEY`
+# Jellyfin KMP
 
 ## Building the Android app
 
