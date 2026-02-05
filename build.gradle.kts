@@ -1,10 +1,9 @@
 import com.eygraber.conventions.Env
-import com.eygraber.conventions.android.ProductFlavor
 import com.eygraber.conventions.kotlin.KotlinFreeCompilerArg
 import com.eygraber.conventions.tasks.deleteRootBuildDirWhenCleaning
+import com.eygraber.jellyfin.gradle.findToolchainIfNeeded
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import com.eygraber.jellyfin.gradle.findToolchainIfNeeded
 
 buildscript {
   dependencies {
