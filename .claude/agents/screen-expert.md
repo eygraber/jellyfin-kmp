@@ -152,4 +152,4 @@ Before completing:
 4. Moving composables to `ui/` modules speculatively
 5. Skipping tests for screen changes
 6. Hardcoding user-facing strings
-7. Using Material Icons library instead of SuperDoIcons
+7. Using Material Icons library instead of JellyfinIcons

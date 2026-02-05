@@ -1,16 +1,16 @@
 // Exemplar Model Tests following all project conventions
 // See .claude/rules/testing.md for complete rules
 
-package com.com.superdo.screens.example.models
+package com.eygraber.jellyfin.screens.example.models
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.com.superdo.common.SuperDoResult
-import com.com.superdo.data.example.FakeExampleRepository
-import com.com.superdo.test.utils.BaseRobolectricTest
+import com.eygraber.jellyfin.common.JellyfinResult
+import com.eygraber.jellyfin.data.example.FakeExampleRepository
+import com.eygraber.jellyfin.test.utils.BaseRobolectricTest
 import com.eygraber.vice.loadable.isLoaded
 import com.eygraber.vice.loadable.isLoading
 import io.kotest.matchers.shouldBe
@@ -74,7 +74,7 @@ class ExampleVerificationModelTest {
   @Test
   fun `when verification fails, returns false`() =
     runTestWithSubject(
-      verifyResult = SuperDoResult.Error(),
+      verifyResult = JellyfinResult.Error(),
     ) {
       verify("123456") shouldBe false
     }
@@ -82,7 +82,7 @@ class ExampleVerificationModelTest {
   // ✅ Helper function with configurable fakes
   private inline fun runTestWithSubject(
     noinline onSideEffect: () -> Unit = {},
-    verifyResult: SuperDoResult<String> = SuperDoResult.Success(""),
+    verifyResult: JellyfinResult<String> = JellyfinResult.Success(""),
     crossinline block: suspend ExampleVerificationModel.(TestScope) -> Unit,
   ): TestResult = runTest {
     val repository = FakeExampleRepository(
@@ -143,27 +143,27 @@ class ExamplePersistModelTest : BaseRobolectricTest() {
   @Test
   fun `persist returns success and updates repository`() =
     runTestWithSubject(
-      updateResult = SuperDoResult.Success(Unit),
+      updateResult = JellyfinResult.Success(Unit),
     ) { subject, repository ->
       val result = subject.persist(testData)
 
-      result shouldBe SuperDoResult.Success()
+      result shouldBe JellyfinResult.Success()
       repository.persistedData shouldBe testData
     }
 
   @Test
   fun `persist returns failure and does not update repository`() =
     runTestWithSubject(
-      updateResult = SuperDoResult.Error(),
+      updateResult = JellyfinResult.Error(),
     ) { subject, repository ->
       val result = subject.persist(testData)
 
-      result shouldBe SuperDoResult.Error()
+      result shouldBe JellyfinResult.Error()
       repository.persistedData shouldBe null
     }
 
   private fun runTestWithSubject(
-    updateResult: SuperDoResult<Unit>,
+    updateResult: JellyfinResult<Unit>,
     testBody: suspend (subject: ExamplePersistModel, repository: FakeExampleRepository) -> Unit,
   ): TestResult = runTest {
     val repository = FakeExampleRepository(updateResult = updateResult)

@@ -23,7 +23,7 @@ Work with SQLDelight database schemas, queries, and migrations.
 
 ```
 services/sqldelight/src/main/sqldelight/
-├── com/superDo/db/
+├── com/eygraber/jellyfin/db/
 │   ├── User.sq           # Table definition + queries
 │   └── migrations/
 │       └── 1.sqm         # Migration files

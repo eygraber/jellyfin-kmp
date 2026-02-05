@@ -1,7 +1,7 @@
 // Exemplar Compose View following all project conventions
 // See .claude/rules/compose.md for complete rules
 
-package com.com.superdo.screens.example
+package com.eygraber.jellyfin.screens.example
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.com.superdo.ui.preview.PreviewSuperDoScreen
+import com.eygraber.jellyfin.ui.preview.PreviewJellyfinScreen
 
 // ✅ Top-level View: Only accepts state and onIntent
 @Composable
@@ -51,8 +51,8 @@ private fun ExampleContent(
   }
 }
 
-// ✅ Preview: private, uses @PreviewSuperDoScreen
-@PreviewSuperDoScreen
+// ✅ Preview: private, uses @PreviewJellyfinScreen
+@PreviewJellyfinScreen
 @Composable
 private fun ExampleViewPreview(
   @PreviewParameter(ExamplePreviewProvider::class)

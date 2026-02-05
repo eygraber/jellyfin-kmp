@@ -20,7 +20,7 @@ class MyWorker(
   }
 
   override suspend fun doWork(): Result {
-    // Map SuperDoResult to Result.success/retry/failure
+    // Map JellyfinResult to Result.success/retry/failure
   }
 
   @GraphExtension(MyWorker::class)
@@ -50,9 +50,9 @@ class MyWorker(
 4. **Result mapping**:
    ```kotlin
    when(result) {
-     is SuperDoResult.Error ->
+     is JellyfinResult.Error ->
        if (result.isEphemeral) Result.retry() else Result.failure()
-     is SuperDoResult.Success -> Result.success()
+     is JellyfinResult.Success -> Result.success()
    }
    ```
 
@@ -64,7 +64,7 @@ class MyWorker(
 
 ```kotlin
 private fun workerContext(...) = createWorkerContext(
-  object : SuperDoWorkGraph, MyWorker.WorkerGraph.Factory {
+  object : JellyfinWorkGraph, MyWorker.WorkerGraph.Factory {
     override fun createMyWorkerGraph() = object : MyWorker.WorkerGraph {
       override val dependency = fakeDependency
     }
@@ -77,7 +77,7 @@ worker.doWork() shouldBe Result.success()
 
 ## Scheduling
 
-Use extensions from `com.com.superdo.services.work`:
+Use extensions from `com.eygraber.jellyfin.services.work`:
 - `requiresNetworkConnection()`
 - `isExpeditedFallingBackToNonExpedited()`
 - `tagAsAuthenticated()`
@@ -85,8 +85,8 @@ Use extensions from `com.com.superdo.services.work`:
 ## Import Requirements
 
 ```kotlin
-import com.com.superdo.di.scopes.WorkScope
-import com.com.superdo.services.work.graphFactory
+import com.eygraber.jellyfin.di.scopes.WorkScope
+import com.eygraber.jellyfin.services.work.graphFactory
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
 import dev.zacsweers.metro.SingleIn

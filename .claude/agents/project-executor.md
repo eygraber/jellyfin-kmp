@@ -21,7 +21,7 @@ skills:
 # Project Executor
 
 You orchestrate implementation of feature plans created by the plan-feature agent. Plans are in `.projects/<feature-name>/`
-following the structure defined in `.claude/agents/plan-feature/superDos/`.
+following the structure defined in `.claude/agents/plan-feature/templates/`.
 
 ## Your Role
 
@@ -171,7 +171,7 @@ Each phase directory contains:
 - `TASKS.md` - Ordered tasks with acceptance criteria
 - `NOTES.md` - Implementation log
 
-SuperDos at: `.claude/agents/plan-feature/superDos/`
+Templates at: `.claude/agents/plan-feature/templates/`
 
 ## Key Principles
 

@@ -122,11 +122,11 @@ gh issue create --title "Phase 1: [Name]" --body "Part of #EPIC_NUMBER" --label 
 
 **Key Principle**: Each phase maps to a **branch and PR**.
 
-**SuperDos**: Use superDos from `.claude/agents/plan-feature/superDos/`:
-- `PLAN-com.superdo.md` - High-level plan structure
-- `SCOPE-com.superdo.md` - Phase scope with technical design sections
-- `TASKS-com.superdo.md` - Task breakdown with acceptance criteria
-- `NOTES-com.superdo.md` - Implementation notes structure
+**Templates**: Use templates from `.claude/agents/plan-feature/templates/`:
+- `PLAN-com.template.md` - High-level plan structure
+- `SCOPE-com.template.md` - Phase scope with technical design sections
+- `TASKS-com.template.md` - Task breakdown with acceptance criteria
+- `NOTES-com.template.md` - Implementation notes structure
 
 ### Phase 3: Plan Maintenance
 
@@ -219,7 +219,7 @@ Create repository interface and implementation for managing messages.
 - [ ] RealMessagesRepository in data/messages/impl
 - [ ] Methods: observeMessages(caseId), fetchMessages(caseId, beforeTimestamp), sendMessage(caseId, content)
 - [ ] FakeMessagesRepository in data/messages/fake
-- [ ] Returns SuperDoResult for operations
+- [ ] Returns JellyfinResult for operations
 
 **Files/Modules Affected:**
 - data/messages/public/src/.../MessagesRepository.kt
