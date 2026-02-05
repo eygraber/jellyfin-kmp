@@ -652,7 +652,7 @@ style:
   UnusedPrivateFunction:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID)'
-    ignoreAnnotated: ['Preview', 'PreviewLightDark', 'PreviewTemplateScreen']
+    ignoreAnnotated: ['Preview', 'PreviewLightDark', 'PreviewJellyfinScreen']
   UnusedPrivateProperty:
     active: true
   UnusedVariable:
