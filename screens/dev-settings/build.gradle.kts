@@ -10,7 +10,7 @@ plugins {
   // alias(libs.plugins.paparazzi)
 }
 
-val pkg = "template.screens.dev.settings"
+val pkg = "com.eygraber.jellyfin.screens.dev.settings"
 
 compose {
   resources {

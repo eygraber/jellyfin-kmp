@@ -9,7 +9,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.services.splash.screen",
+    androidNamespace = "com.eygraber.jellyfin.services.splash.screen",
   )
 
   sourceSets {

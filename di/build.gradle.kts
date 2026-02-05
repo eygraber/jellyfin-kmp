@@ -10,6 +10,6 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.di",
+    androidNamespace = "com.eygraber.jellyfin.di",
   )
 }

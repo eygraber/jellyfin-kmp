@@ -1,7 +1,7 @@
 // Exemplar Model Tests following all project conventions
 // See .claude/rules/testing.md for complete rules
 
-package com.template.screens.example.models
+package com.com.eygraber.jellyfin.screens.example.models
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -56,14 +56,14 @@ class ExampleVerificationModelTest {
   @Test
   fun `when verification fails, returns false`() =
     runTestWithSubject(
-      verifyResult = TemplateResult.Failure(Exception()),
+      verifyResult = JellyfinResult.Failure(Exception()),
     ) {
       verify("123456") shouldBe false
     }
 
   // Helper function with configurable fakes
   private inline fun runTestWithSubject(
-    verifyResult: TemplateResult<String> = TemplateResult.Success(""),
+    verifyResult: JellyfinResult<String> = JellyfinResult.Success(""),
     crossinline block: suspend ExampleVerificationModel.(TestScope) -> Unit,
   ): TestResult = runTest {
     val repository = FakeExampleRepository(
@@ -123,18 +123,18 @@ class ExamplePersistModelTest {
   @Test
   fun `persist returns success and updates repository`() =
     runTestWithSubject(
-      updateResult = TemplateResult.Success(Unit),
+      updateResult = JellyfinResult.Success(Unit),
     ) { subject, repository ->
       val result = subject.persist(testData)
 
-      result shouldBe TemplateResult.Success(Unit)
+      result shouldBe JellyfinResult.Success(Unit)
       repository.persistedData shouldBe testData
     }
 
   @Test
   fun `persist returns failure and does not update repository`() =
     runTestWithSubject(
-      updateResult = TemplateResult.Failure(Exception()),
+      updateResult = JellyfinResult.Failure(Exception()),
     ) { subject, repository ->
       val result = subject.persist(testData)
 
@@ -143,7 +143,7 @@ class ExamplePersistModelTest {
     }
 
   private fun runTestWithSubject(
-    updateResult: TemplateResult<Unit>,
+    updateResult: JellyfinResult<Unit>,
     testBody: suspend (subject: ExamplePersistModel, repository: FakeExampleRepository) -> Unit,
   ): TestResult = runTest {
     val repository = FakeExampleRepository(updateResult = updateResult)

@@ -1,7 +1,7 @@
 // Exemplar Repository following all project conventions
 // See .claude/rules/architecture.md and data-persistence.md for complete rules
 
-package com.template.data.example
+package com.com.eygraber.jellyfin.data.example
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 // Public interface in public module
 interface ExampleRepository {
   fun observeExamples(): Flow<List<Example>>
-  suspend fun loadExamples(): TemplateResult<List<Example>>
-  suspend fun saveExample(example: Example): TemplateResult<Unit>
+  suspend fun loadExamples(): JellyfinResult<List<Example>>
+  suspend fun saveExample(example: Example): JellyfinResult<Unit>
 }
 
 // Implementation in impl module
@@ -31,27 +31,27 @@ class RealExampleRepository(
   }
 
   // Use result type for operation outcomes
-  override suspend fun loadExamples(): TemplateResult<List<Example>> {
+  override suspend fun loadExamples(): JellyfinResult<List<Example>> {
     // Load from remote, save to local using andThen for side effects
     return remoteDataSource.fetchExamples()
       .andThen { examples ->
         localDataSource.saveExamples(examples)
       }
       .fold(
-        onSuccess = { examples -> TemplateResult.Success(examples) },
+        onSuccess = { examples -> JellyfinResult.Success(examples) },
         onFailure = { error ->
           // Fall back to local cache on error
           val cached = localDataSource.getExamples()
           if (cached.isNotEmpty()) {
-            TemplateResult.Success(cached)
+            JellyfinResult.Success(cached)
           } else {
-            TemplateResult.Failure(error)
+            JellyfinResult.Failure(error)
           }
         },
       )
   }
 
-  override suspend fun saveExample(example: Example): TemplateResult<Unit> {
+  override suspend fun saveExample(example: Example): JellyfinResult<Unit> {
     // Save to remote first, then local using andThen for side effects
     return remoteDataSource.saveExample(example)
       .andThen {
@@ -62,8 +62,8 @@ class RealExampleRepository(
 
 // Separate data source interfaces
 interface ExampleRemoteDataSource {
-  suspend fun fetchExamples(): TemplateResult<List<Example>>
-  suspend fun saveExample(example: Example): TemplateResult<Unit>
+  suspend fun fetchExamples(): JellyfinResult<List<Example>>
+  suspend fun saveExample(example: Example): JellyfinResult<Unit>
 }
 
 interface ExampleLocalDataSource {
@@ -80,14 +80,14 @@ class FakeExampleRepository : ExampleRepository {
 
   override fun observeExamples(): Flow<List<Example>> = _flow
 
-  override suspend fun loadExamples(): TemplateResult<List<Example>> {
-    return TemplateResult.Success(examples.toList())
+  override suspend fun loadExamples(): JellyfinResult<List<Example>> {
+    return JellyfinResult.Success(examples.toList())
   }
 
-  override suspend fun saveExample(example: Example): TemplateResult<Unit> {
+  override suspend fun saveExample(example: Example): JellyfinResult<Unit> {
     examples.add(example)
     _flow.value = examples.toList()
-    return TemplateResult.Success(Unit)
+    return JellyfinResult.Success(Unit)
   }
 
   // Test helper
@@ -102,7 +102,7 @@ class FakeExampleRepository : ExampleRepository {
 data class Example(val id: String, val name: String)
 
 // Result type placeholder
-sealed interface TemplateResult<out T> {
-  data class Success<T>(val value: T) : TemplateResult<T>
-  data class Failure(val error: Throwable) : TemplateResult<Nothing>
+sealed interface JellyfinResult<out T> {
+  data class Success<T>(val value: T) : JellyfinResult<T>
+  data class Failure(val error: Throwable) : JellyfinResult<Nothing>
 }

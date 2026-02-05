@@ -1,4 +1,4 @@
-# Template - AI Agent Guide
+# Jellyfin - AI Agent Guide
 
 ## Quick Start
 

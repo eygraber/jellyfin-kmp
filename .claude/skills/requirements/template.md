@@ -1,4 +1,4 @@
-# Requirements Document Template
+# Requirements Document Jellyfin
 
 All requirement documents MUST follow this exact structure:
 

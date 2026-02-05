@@ -78,9 +78,9 @@ See [data/repositories.md](/.docs/data/repositories.md) for patterns.
 
 Lives in `apps/android` module:
 
-- `TemplateApplication` - Holds DI AppGraph
-- `TemplateActivity` - Single Activity, Compose entry point
-- `TemplateInitializer` - App initialization
+- `JellyfinApplication` - Holds DI AppGraph
+- `JellyfinActivity` - Single Activity, Compose entry point
+- `JellyfinInitializer` - App initialization
 
 ### iOS
 

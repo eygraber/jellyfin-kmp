@@ -1,6 +1,6 @@
 ---
 name: ui-icons
-description: Work with icons - add new icons, understand icon patterns, use TemplateIcons.
+description: Work with icons - add new icons, understand icon patterns, use JellyfinIcons.
 user-invocable: false
 ---
 
@@ -10,14 +10,14 @@ Quick reference for icon patterns.
 
 ## Using Icons
 
-🔴 **Always use TemplateIcons, never Material Icons library**
+🔴 **Always use JellyfinIcons, never Material Icons library**
 
 ```kotlin
 // GOOD
-import com.template.ui.icons.TemplateIcons
+import com.com.eygraber.jellyfin.ui.icons.JellyfinIcons
 
 Icon(
-  imageVector = TemplateIcons.Settings,
+  imageVector = JellyfinIcons.Settings,
   contentDescription = stringResource(R.string.settings),
 )
 
@@ -30,14 +30,14 @@ Icon(imageVector = Icons.Default.Settings, ...)
 
 1. Get SVG from design or Material Icons
 2. Use Valkyrie IDE plugin to convert SVG → ImageVector
-3. Add to `ui/icons` module as extension on `TemplateIcons`
+3. Add to `ui/icons` module as extension on `JellyfinIcons`
 
 ```kotlin
-// ui/icons/src/commonMain/kotlin/.../TemplateIcons.kt
-object TemplateIcons
+// ui/icons/src/commonMain/kotlin/.../JellyfinIcons.kt
+object JellyfinIcons
 
 // ui/icons/src/commonMain/kotlin/.../Settings.kt
-val TemplateIcons.Settings: ImageVector
+val JellyfinIcons.Settings: ImageVector
   get() = materialIcon(name = "Settings") {
     // ... vector path data
   }

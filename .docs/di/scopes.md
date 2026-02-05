@@ -1,13 +1,13 @@
 # DI Scopes
 
-Scope hierarchy for Template:
+Scope hierarchy for Jellyfin:
 
 ```
-TemplateApplicationGraph
+JellyfinApplicationGraph
          |
-         +---> TemplateActivityGraph
+         +---> JellyfinActivityGraph
          |          |
-         |   TemplateNavGraph
+         |   JellyfinNavGraph
          |          |
          |   ScreenGraph
          |
@@ -18,7 +18,7 @@ TemplateApplicationGraph
 
 Root scope. Lives as long as the application.
 
-**Graph**: `TemplateApplicationGraph`
+**Graph**: `JellyfinApplicationGraph`
 
 **Use for**:
 - Repositories
@@ -35,7 +35,7 @@ class UserRepository(...)
 
 Lives as long as the Activity.
 
-**Graph**: `TemplateActivityGraph` (child of App)
+**Graph**: `JellyfinActivityGraph` (child of App)
 
 **Use for**:
 - Activity-scoped resources
@@ -45,9 +45,9 @@ Lives as long as the Activity.
 
 Lives as long as the navigation graph.
 
-**Graph**: `TemplateNavGraph` (child of Activity)
+**Graph**: `JellyfinNavGraph` (child of Activity)
 
-**Exists because**: `TemplateActivityGraph` needs to stay in `apps/android` module while `nav` needs to access it.
+**Exists because**: `JellyfinActivityGraph` needs to stay in `apps/android` module while `nav` needs to access it.
 
 ## ScreenScope
 

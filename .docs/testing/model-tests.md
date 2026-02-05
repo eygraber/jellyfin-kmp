@@ -54,13 +54,13 @@ class MyVerificationModelTest {
   @Test
   fun `when verification fails, returns false`() =
     runTestWithSubject(
-      verifyResult = TemplateResult.Error(),
+      verifyResult = JellyfinResult.Error(),
     ) {
       verify("123456") shouldBe false
     }
 
   private inline fun runTestWithSubject(
-    verifyResult: TemplateResult<String> = TemplateResult.Success(""),
+    verifyResult: JellyfinResult<String> = JellyfinResult.Success(""),
     crossinline block: suspend MyVerificationModel.() -> Unit,
   ): TestResult = runTest {
     val repository = FakeRepository(
@@ -118,27 +118,27 @@ class MyPersistModelTest {
   @Test
   fun `persist returns success and updates repository`() =
     runTestWithSubject(
-      updateResult = TemplateResult.Success(Unit),
+      updateResult = JellyfinResult.Success(Unit),
     ) { subject, repository ->
       val result = subject.persist(data)
 
-      result shouldBe TemplateResult.Success()
+      result shouldBe JellyfinResult.Success()
       repository.persistedData shouldBe data
     }
 
   @Test
   fun `persist returns failure and does not update repository`() =
     runTestWithSubject(
-      updateResult = TemplateResult.Error(),
+      updateResult = JellyfinResult.Error(),
     ) { subject, repository ->
       val result = subject.persist(data)
 
-      result shouldBe TemplateResult.Error()
+      result shouldBe JellyfinResult.Error()
       repository.persistedData shouldBe null
     }
 
   private fun runTestWithSubject(
-    updateResult: TemplateResult<Unit>,
+    updateResult: JellyfinResult<Unit>,
     testBody: suspend (subject: MyModel, repository: FakeRepository) -> Unit,
   ): TestResult = runTest {
     val repository = FakeRepository(updateResult = updateResult)

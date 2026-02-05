@@ -55,13 +55,13 @@ fun LoadingButton(
   }
 }
 
-@PreviewTemplateScreen
+@PreviewJellyfinScreen
 @Composable
 private fun LoadingButtonPreview(
   @PreviewParameter(LoadingButtonPreviewProvider::class)
   state: LoadingButtonState,
 ) {
-  TemplatePreviewTheme {
+  JellyfinPreviewTheme {
     LoadingButton(
       onClick = {},
       text = state.text,
@@ -87,9 +87,9 @@ private data class LoadingButtonState(
 
 ```
 ui/<component-type>/
-├── src/commonMain/kotlin/com/template/ui/<type>/
+├── src/commonMain/kotlin/com/jellyfin/ui/<type>/
 │   └── LoadingButton.kt
-└── src/commonTest/kotlin/com/template/ui/<type>/
+└── src/commonTest/kotlin/com/jellyfin/ui/<type>/
     └── LoadingButtonScreenshotTest.kt
 ```
 

@@ -1,6 +1,6 @@
 # Git Workflow
 
-Git workflow and conventions for Template.
+Git workflow and conventions for Jellyfin.
 
 ## Branching
 

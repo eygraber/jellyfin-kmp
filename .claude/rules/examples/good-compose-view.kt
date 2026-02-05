@@ -1,7 +1,7 @@
 // Exemplar Compose View following all project conventions
 // See .claude/rules/compose.md for complete rules
 
-package com.template.screens.example
+package com.com.eygraber.jellyfin.screens.example
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

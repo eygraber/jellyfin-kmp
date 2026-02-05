@@ -1,9 +1,9 @@
-# Template CMP
+# Jellyfin CMP
 
-## Replacing the template values
+## Replacing the jellyfin values
 
-Run `./template_placeholders --project-name <PROJECT_NAME> --project-package <PROJECT_PACKAGE>` to replace
-all the template values with your project's values.
+Run `./jellyfin_placeholders --project-name <PROJECT_NAME> --project-package <PROJECT_PACKAGE>` to replace
+all the jellyfin values with your project's values.
 
 You will get prompted to create a password for the prod keystore.
 Pick a strong password and save it in your GitHub Actions secrets.
@@ -12,7 +12,7 @@ After it succeeds it will print your internal and prod ejson public keys. You'll
 lookup the corresponding private key under `/opt/ejson/keys/<public key>` and save it in your GitHub Actions secrets.
 After doing this it is a good idea to delete the prod key from your local machine, so that only CI can create prod builds.
 
-After this you can delete `template_placeholders`.
+After this you can delete `jellyfin_placeholders`.
 
 ## GitHub Actions Secrets
 
@@ -67,7 +67,7 @@ To build and run a release distribution:
 To build the shared framework for iOS:
 
 ```bash
-./gradlew :apps:ios:assembleTemplateKtXCFramework
+./gradlew :apps:ios:assembleJellyfinKtXCFramework
 ```
 
 Note: The actual iOS app is built using Xcode. The above command builds the Kotlin framework that is used by the iOS project.

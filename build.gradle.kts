@@ -4,7 +4,7 @@ import com.eygraber.conventions.kotlin.KotlinFreeCompilerArg
 import com.eygraber.conventions.tasks.deleteRootBuildDirWhenCleaning
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import template.gradle.findToolchainIfNeeded
+import com.eygraber.jellyfin.gradle.findToolchainIfNeeded
 
 buildscript {
   dependencies {
@@ -26,7 +26,7 @@ plugins {
   alias(libs.plugins.compose.compiler) apply false
   alias(libs.plugins.conventionsBase)
   alias(libs.plugins.dependencyAnalysisRoot)
-  alias(libs.plugins.templateGradle) apply false
+  alias(libs.plugins.jellyfinGradle) apply false
 }
 
 deleteRootBuildDirWhenCleaning()
@@ -78,7 +78,7 @@ gradleConventionsDefaults {
       implementation(platform(libs.firebase.bom))
       implementation(platform(libs.compose.bom))
 
-      runtimeOnly(libs.templateLint)
+      runtimeOnly(libs.jellyfinLint)
     }
   }
 
@@ -135,7 +135,7 @@ dependencyAnalysis {
 
         // this is a weird dependency because of lint
         // so just ignore any issues with it
-        exclude("template.lint:library")
+        exclude("com.eygraber.jellyfin.lint:library")
 
         // this is coming from paparazzi
         exclude("com.android.tools.layoutlib:layoutlib")

@@ -1,0 +1,55 @@
+name: jellyfin-lint-pr
+
+on:
+  pull_request
+
+concurrency:
+  group: jellyfin-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: read
+  contents: read
+
+jobs:
+  jellyfin-lint-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            jellyfin-lint:
+              - '.support/jellyfin-lint/**'
+
+      - name: Ensure jellyfin-lint binary is regenerated
+        if: steps.changes.outputs.jellyfin-lint == 'true'
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+          if ! git diff --name-only HEAD^ HEAD | grep -q ".support/.m2/com/eygraber/jellyfin/lint/library/maven-metadata.xml"; then
+            echo 'Run .scripts/publish_included_builds to regenerate the jellyfin-lint binary'
+            exit 1
+          fi
+
+      - name: Setup for building
+        if: steps.changes.outputs.jellyfin-lint == 'true'
+        uses: ./.github/actions/build-setup
+
+      - name: Run ktlint
+        if: steps.changes.outputs.jellyfin-lint == 'true'
+        run: ./format --no-format --check-support
+
+      - name: Run detekt
+        if: steps.changes.outputs.jellyfin-lint == 'true'
+        run: ./gradlew -p .support/jellyfin-lint :checks:detektMain
+
+      - name: Run jellyfin-lint tests
+        if: steps.changes.outputs.jellyfin-lint == 'true'
+        run: ./gradlew -p .support/jellyfin-lint :checks:test
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -XX:MaxMetaspaceSize=1024m"

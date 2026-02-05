@@ -44,7 +44,7 @@ class MyScreenScreenshotTest(
       .values
       .forEach { (name, state) ->
         paparazzi.snapshot(name = name) {
-          TemplateEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
+          JellyfinEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
             MyScreenView(
               state = state,
               onIntent = {},
@@ -72,7 +72,7 @@ class MyComponentScreenshotTest {
   @Test
   fun loading() {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         MyComponent(
           isLoading = true,
           // ... component props
@@ -84,7 +84,7 @@ class MyComponentScreenshotTest {
   @Test
   fun success() {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         MyComponent(
           isLoading = false,
           // ... component props
@@ -98,7 +98,7 @@ class MyComponentScreenshotTest {
   fun sizes() {
     listOf(24.dp, 48.dp, 96.dp).forEach { size ->
       paparazzi.snapshot(name = "${size}") {
-        TemplatePreviewTheme {
+        JellyfinPreviewTheme {
           MyComponent(
             modifier = Modifier.size(size),
           )
@@ -111,7 +111,7 @@ class MyComponentScreenshotTest {
 
 **Key differences from Screen tests:**
 - No `PaparazziDeviceConfig` parameter (components don't need device configs)
-- Uses `TemplatePreviewTheme` instead of `TemplateEdgeToEdgePreviewTheme`
+- Uses `JellyfinPreviewTheme` instead of `JellyfinEdgeToEdgePreviewTheme`
 - Multiple `@Test` methods for different component states
 - Can use `@TestParameter` for parameterized variations
 - Focus on testing component edge cases and states

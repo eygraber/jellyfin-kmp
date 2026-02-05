@@ -4,7 +4,7 @@ Uses [AndroidX Navigation3](https://developer.android.com/guide/navigation/navig
 
 ## Structure
 
-The `nav` module contains `TemplateNav` composable with a `NavDisplay` as the navigation root.
+The `nav` module contains `JellyfinNav` composable with a `NavDisplay` as the navigation root.
 
 ## NavEntry Pattern
 
@@ -63,7 +63,7 @@ This [encapsulates navigation](https://developer.android.com/guide/navigation/de
 
 ## Navigating
 
-From `TemplateNav`, navigation happens centrally:
+From `JellyfinNav`, navigation happens centrally:
 
 ```kotlin
 val navigator = MyScreenNavigator(

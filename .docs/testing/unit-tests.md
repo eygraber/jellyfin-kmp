@@ -43,12 +43,12 @@ class FakeUserRepository : UserRepository {
   var shouldFail = false
   var callCount = 0
 
-  override suspend fun getUser(): TemplateResult<User> {
+  override suspend fun getUser(): JellyfinResult<User> {
     callCount++
     return when {
-      shouldFail -> TemplateResult.Failure(Exception("Test"))
-      dataToReturn != null -> TemplateResult.Success(dataToReturn!!)
-      else -> TemplateResult.Failure(Exception("No data"))
+      shouldFail -> JellyfinResult.Failure(Exception("Test"))
+      dataToReturn != null -> JellyfinResult.Success(dataToReturn!!)
+      else -> JellyfinResult.Failure(Exception("No data"))
     }
   }
 }

@@ -1,4 +1,4 @@
-import template.gradle.createCmpGroup
+import com.eygraber.jellyfin.gradle.createCmpGroup
 
 plugins {
   alias(libs.plugins.conventionsAndroidKmpLibrary)
@@ -12,7 +12,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.services.device.sensors.impl",
+    androidNamespace = "com.eygraber.jellyfin.services.device.sensors.impl",
   )
 
   createCmpGroup()

@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Testing strategies for Template.
+Testing strategies for Jellyfin.
 
 ## Contents
 

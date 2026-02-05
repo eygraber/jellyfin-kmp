@@ -38,10 +38,10 @@ Write Paparazzi screenshot tests for Compose components and screens.
 ## Test Location
 
 ```
-ui/<feature>/src/test/kotlin/template/ui/<feature>/components/
+ui/<feature>/src/test/kotlin/jellyfin/ui/<feature>/components/
     └── MyComponentScreenshotTest.kt
 
-screens/<feature>/src/test/kotlin/template/screens/<feature>/
+screens/<feature>/src/test/kotlin/jellyfin/screens/<feature>/
     └── MyScreenScreenshotTest.kt
 ```
 
@@ -57,7 +57,7 @@ class UserAvatarScreenshotTest {
   @Test
   fun loading() {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         UserAvatar(isLoading = true, ...)
       }
     }
@@ -66,7 +66,7 @@ class UserAvatarScreenshotTest {
   @Test
   fun success() {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         UserAvatar(isLoading = false, ...)
       }
     }
@@ -91,7 +91,7 @@ class MyScreenScreenshotTest(
       .values
       .forEach { (name, state) ->
         paparazzi.snapshot(name = name) {
-          TemplateEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
+          JellyfinEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
             MyScreenView(state = state, onIntent = {})
           }
         }
@@ -102,9 +102,9 @@ class MyScreenScreenshotTest(
 
 ## Key Rules
 
-- **Components**: Use `TemplatePreviewTheme`, no device configs
-- **Screens**: Use `TemplateEdgeToEdgePreviewTheme` with `PaparazziDeviceConfig`
-- **Images**: Wrap with `TemplatePreviewAsyncImageProvider` if using Coil
+- **Components**: Use `JellyfinPreviewTheme`, no device configs
+- **Screens**: Use `JellyfinEdgeToEdgePreviewTheme` with `PaparazziDeviceConfig`
+- **Images**: Wrap with `JellyfinPreviewAsyncImageProvider` if using Coil
 
 ## Additional Resources
 

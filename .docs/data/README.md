@@ -30,7 +30,7 @@ data/<feature>/
 // public/
 interface UserRepository {
   val usersFlow: Flow<List<User>>
-  suspend fun fetchUsers(): TemplateResult<Unit>
+  suspend fun fetchUsers(): JellyfinResult<Unit>
 }
 
 // impl/
@@ -54,7 +54,7 @@ class RealUserRepository(
 Use result types for operations that can fail:
 
 ```kotlin
-suspend fun getData(): TemplateResult<Data>
+suspend fun getData(): JellyfinResult<Data>
 
 // Extensions
 result.doOnSuccess { /* side effect */ }

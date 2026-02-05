@@ -10,7 +10,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.ui.material",
+    androidNamespace = "com.eygraber.jellyfin.ui.material",
   )
 
   sourceSets {

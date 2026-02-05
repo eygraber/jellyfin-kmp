@@ -13,13 +13,13 @@ Quick reference for accessibility patterns in Compose.
 ```kotlin
 // Icons that convey meaning
 Icon(
-  imageVector = TemplateIcons.Delete,
+  imageVector = JellyfinIcons.Delete,
   contentDescription = stringResource(R.string.delete_item),
 )
 
 // Decorative icons (no description needed)
 Icon(
-  imageVector = TemplateIcons.ChevronRight,
+  imageVector = JellyfinIcons.ChevronRight,
   contentDescription = null,
 )
 ```
@@ -34,7 +34,7 @@ IconButton(
   modifier = Modifier.size(48.dp),
 ) {
   Icon(
-    imageVector = TemplateIcons.Close,
+    imageVector = JellyfinIcons.Close,
     contentDescription = stringResource(R.string.close),
     modifier = Modifier.size(24.dp),
   )

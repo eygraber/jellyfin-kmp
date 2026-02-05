@@ -54,8 +54,8 @@ Two modes of screenshot tests:
 1. Screen tests (:screens modules) - test full screens with ViewStatePreviewProvider + PaparazziDeviceConfig
 2. Component tests (:ui modules) - test individual UI components with custom test methods
 
-Screen tests use TemplateEdgeToEdgePreviewTheme and device configs for multiple variations
-Component tests use TemplatePreviewTheme and test specific component states/behaviors
+Screen tests use JellyfinEdgeToEdgePreviewTheme and device configs for multiple variations
+Component tests use JellyfinPreviewTheme and test specific component states/behaviors
 
 # Model Testing Patterns
 Model tests verify business logic in Model implementations using fake repositories

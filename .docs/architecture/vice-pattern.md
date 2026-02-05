@@ -56,7 +56,7 @@ Models receive dependencies through constructor injection:
 @SingleIn(ScreenScope::class)
 class MyScreenModel(
   private val repository: MyRepository,
-  private val dispatchers: TemplateDispatchers,
+  private val dispatchers: JellyfinDispatchers,
 ) : ViceSource<MyViewState>() {
 
   @Composable

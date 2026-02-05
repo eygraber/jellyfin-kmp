@@ -12,7 +12,7 @@ plugins {
   // alias(libs.plugins.paparazzi)
 }
 
-val pkg = "template.screens.welcome"
+val pkg = "com.eygraber.jellyfin.screens.welcome"
 
 compose {
   resources {

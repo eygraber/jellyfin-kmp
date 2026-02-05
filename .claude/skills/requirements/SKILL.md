@@ -38,7 +38,7 @@ See [generation-workflow.md](generation-workflow.md) for the complete workflow f
 
 ## Quick Reference
 
-- **Template**: See [template.md](template.md) for the exact structure all requirement documents must follow
+- **Jellyfin**: See [com.eygraber.jellyfin.md](com.eygraber.jellyfin.md) for the exact structure all requirement documents must follow
 - **Quality Checklist**: See [quality-checklist.md](quality-checklist.md) for pre-submission validation
 
 ## Core Principles

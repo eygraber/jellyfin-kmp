@@ -12,12 +12,12 @@ class UserAvatarScreenshotTest {
   @Test
   fun loading() {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         UserAvatar(
           isLoading = true,
-          url = TemplatePreviewImages.AvatarMichael,
+          url = JellyfinPreviewImages.AvatarMichael,
           name = "Michael Scott",
-          palette = BrandPalette.Template,
+          palette = BrandPalette.Jellyfin,
           modifier = Modifier.size(48.dp),
         )
       }
@@ -27,13 +27,13 @@ class UserAvatarScreenshotTest {
   @Test
   fun successWithImage() {
     paparazzi.snapshot {
-      TemplatePreviewAsyncImageProvider {
-        TemplatePreviewTheme {
+      JellyfinPreviewAsyncImageProvider {
+        JellyfinPreviewTheme {
           UserAvatar(
             isLoading = false,
-            url = TemplatePreviewImages.AvatarMichael,
+            url = JellyfinPreviewImages.AvatarMichael,
             name = "Michael Scott",
-            palette = BrandPalette.Template,
+            palette = BrandPalette.Jellyfin,
             modifier = Modifier.size(48.dp),
           )
         }
@@ -44,12 +44,12 @@ class UserAvatarScreenshotTest {
   @Test
   fun noUrl_showsInitial() {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         UserAvatar(
           isLoading = false,
           url = null,
           name = "Jim Halpert",
-          palette = BrandPalette.Template,
+          palette = BrandPalette.Jellyfin,
           modifier = Modifier.size(48.dp),
         )
       }
@@ -64,17 +64,17 @@ For components with many variations, reuse preview providers:
 
 ```kotlin
 @RunWith(TestParameterInjector::class)
-class TemplateCardScreenshotTest {
+class JellyfinCardScreenshotTest {
   @get:Rule
   val paparazzi = Paparazzi()
 
   @Test
   fun screenshot() {
-    TemplateCardPreviewParamProvider()
+    JellyfinCardPreviewParamProvider()
       .values
       .forEach { param ->
         paparazzi.snapshot(name = param.name) {
-          TemplateCardPreview(param)
+          JellyfinCardPreview(param)
         }
       }
   }
@@ -125,11 +125,11 @@ class SemanticIconScreenshotTest {
     colors: SemanticColorsValues,
   ) {
     paparazzi.snapshot {
-      TemplatePreviewTheme {
+      JellyfinPreviewTheme {
         Surface {
           Box(modifier = Modifier.padding(16.dp)) {
             SemanticIcon(
-              imageVector = TemplateIcons.Close,
+              imageVector = JellyfinIcons.Close,
               contentDescription = null,
               colors = colors.value,
               modifier = Modifier.size(48.dp),
@@ -170,8 +170,8 @@ class CaseListScreenshotTest(
       .values
       .forEach { (name, state) ->
         paparazzi.snapshot(name = name) {
-          TemplateEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
-            TemplatePreviewAsyncImageProvider {
+          JellyfinEdgeToEdgePreviewTheme(isDarkMode = deviceConfig.isDarkMode) {
+            JellyfinPreviewAsyncImageProvider {
               CaseListView(
                 state = state,
                 onIntent = {},
@@ -191,13 +191,13 @@ Define named view states in the screen's module:
 ```kotlin
 internal class CaseListViewStatePreviewProvider : NamedPreviewParameterProvider<CaseListViewState>() {
   private val loadingState = CaseListViewState(
-    palette = BrandPalette.Template,
+    palette = BrandPalette.Jellyfin,
     cases = ViceLoadable.Loading(),
     // ... other properties
   )
 
   private val successState = CaseListViewState(
-    palette = BrandPalette.Template,
+    palette = BrandPalette.Jellyfin,
     cases = ViceLoadable.Loaded(/* data */),
     // ... other properties
   )
@@ -212,16 +212,16 @@ internal class CaseListViewStatePreviewProvider : NamedPreviewParameterProvider<
 
 ## Image Loading with Coil
 
-Always wrap with `TemplatePreviewAsyncImageProvider` when using Coil:
+Always wrap with `JellyfinPreviewAsyncImageProvider` when using Coil:
 
 ```kotlin
 @Test
 fun successWithImage() {
   paparazzi.snapshot {
-    TemplatePreviewAsyncImageProvider {
-      TemplatePreviewTheme {
+    JellyfinPreviewAsyncImageProvider {
+      JellyfinPreviewTheme {
         MyComponent(
-          imageUrl = TemplatePreviewImages.AvatarMichael,
+          imageUrl = JellyfinPreviewImages.AvatarMichael,
         )
       }
     }
@@ -233,7 +233,7 @@ fun successWithImage() {
 
 | Type              | Theme                            | Device Config | Use Case           |
 |-------------------|----------------------------------|---------------|--------------------|
-| Simple component  | `TemplatePreviewTheme`           | No            | Few states         |
-| Complex component | `TemplatePreviewTheme`           | Optional      | Many variations    |
-| Screen            | `TemplateEdgeToEdgePreviewTheme` | Yes           | Full screen views  |
+| Simple component  | `JellyfinPreviewTheme`           | No            | Few states         |
+| Complex component | `JellyfinPreviewTheme`           | Optional      | Many variations    |
+| Screen            | `JellyfinEdgeToEdgePreviewTheme` | Yes           | Full screen views  |
 | Parameterized     | Either                           | Optional      | Enum/value testing |

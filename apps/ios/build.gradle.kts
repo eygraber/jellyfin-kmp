@@ -18,14 +18,14 @@ kotlin {
   targets.withType<KotlinNativeTarget> {
     if(konanTarget.family.isAppleFamily) {
       binaries.framework {
-        baseName = "TemplateKt"
+        baseName = "JellyfinKt"
         export(projects.apps.shared)
       }
     }
   }
 
   project.registerAssembleXCFrameworkTasksFromFrameworks(
-    frameworkName = "TemplateKt",
+    frameworkName = "JellyfinKt",
   )
 
   sourceSets {

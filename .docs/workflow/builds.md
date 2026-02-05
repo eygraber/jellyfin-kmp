@@ -1,6 +1,6 @@
 # Build Commands
 
-Gradle commands for Template.
+Gradle commands for Jellyfin.
 
 ## Build Variants
 

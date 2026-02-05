@@ -1,7 +1,7 @@
 if(config.devServer) {
   config.devServer.historyApiFallback = {
     rewrites: [
-      { from: /.*template-wasm.wasm/, to: '/template-wasm.wasm' },
+      { from: /.*jellyfin-wasm.wasm/, to: '/jellyfin-wasm.wasm' },
     ]
   }
 }

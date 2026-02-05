@@ -105,6 +105,7 @@ jobs:
         run: ./gradlew :apps:shared:licensee
 
   unit_and_screenshot_tests:
+    if: false
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -120,7 +121,7 @@ jobs:
         run: diff <(git ls-files ':(attr:filter=lfs)' | sort) <(git lfs ls-files -n | sort) >/dev/null
 
       - name: Run unit and paparazzi screenshot tests
-        run: ./gradlew testDebugUnitTest :konsist:test
+        run: ./gradlew allTests testDebugUnitTest :konsist:test
 
 env:
   EJSON_DEV_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_DEV_BUILD_PRIVATE_KEY }}

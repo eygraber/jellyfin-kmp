@@ -4,7 +4,7 @@ paths:
 ---
 
 Use Kotlin Coroutines and Flow for asynchronous operations
-Always use injectable dispatchers (TemplateDispatchers), never hardcoded Dispatchers
+Always use injectable dispatchers (JellyfinDispatchers), never hardcoded Dispatchers
 UI scopes should come from Compose
 For non-UI work, inject AppCoroutineScope
 Properly manage coroutine lifecycles to avoid memory leaks

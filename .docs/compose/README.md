@@ -1,6 +1,6 @@
 # Compose Multiplatform
 
-Compose style guide and best practices for Template.
+Compose style guide and best practices for Jellyfin.
 
 ## Contents
 

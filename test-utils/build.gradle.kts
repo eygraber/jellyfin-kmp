@@ -14,7 +14,7 @@ dependencies {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.test.utils",
+    androidNamespace = "com.eygraber.jellyfin.test.utils",
   )
 
   sourceSets {

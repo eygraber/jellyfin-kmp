@@ -12,7 +12,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.nav",
+    androidNamespace = "com.eygraber.jellyfin.nav",
   )
 
   sourceSets {

@@ -3,7 +3,7 @@
 Before finalizing any requirements documentation, verify:
 
 ## Structure
-- [ ] Follows exact template structure from [template.md](template.md)
+- [ ] Follows exact jellyfin structure from [com.eygraber.jellyfin.md](com.eygraber.jellyfin.md)
 - [ ] Maximum 120 character line length
 - [ ] All sections present and in correct order
 

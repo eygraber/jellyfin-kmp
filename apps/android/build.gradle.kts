@@ -1,7 +1,7 @@
 import com.eygraber.conventions.Env
-import template.gradle.configureVersionCode
-import template.gradle.disableProdLocally
-import template.gradle.getInternalKeystorePassword
+import com.eygraber.jellyfin.gradle.configureVersionCode
+import com.eygraber.jellyfin.gradle.disableProdLocally
+import com.eygraber.jellyfin.gradle.getInternalKeystorePassword
 
 plugins {
   alias(libs.plugins.androidApp)
@@ -21,12 +21,12 @@ plugins {
 val internalKeystorePassword = getInternalKeystorePassword()
 
 android {
-  namespace = "template.app"
+  namespace = "com.eygraber.jellyfin.app"
 
   compileSdk = libs.versions.android.sdk.compile.get().toInt()
 
   defaultConfig {
-    applicationId = "template.app"
+    applicationId = "com.eygraber.jellyfin.jellyfin"
     targetSdk = libs.versions.android.sdk.target.get().toInt()
     minSdk = libs.versions.android.sdk.min.get().toInt()
 
@@ -43,16 +43,16 @@ android {
     }
 
     register("internal") {
-      keyAlias = "template-internal"
+      keyAlias = "jellyfin-internal"
       keyPassword = internalKeystorePassword
-      storeFile = file("template-internal.keystore")
+      storeFile = file("jellyfin-internal.keystore")
       storePassword = internalKeystorePassword
     }
 
     register("prod") {
-      keyAlias = "template-prod"
+      keyAlias = "jellyfin-prod"
       keyPassword = System.getenv("PROD_KEY_PASSWORD")
-      storeFile = file("template.keystore")
+      storeFile = file("jellyfin.keystore")
       storePassword = System.getenv("PROD_KEYSTORE_PASSWORD")
     }
   }

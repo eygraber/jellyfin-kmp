@@ -65,7 +65,7 @@ class RealAuthRepository(
 }
 
 class AuthRemoteDataSource(private val api: AuthApi) {
-  suspend fun fetchCurrentUser(): TemplateResult<User> = api.getCurrentUser().toResult()
+  suspend fun fetchCurrentUser(): JellyfinResult<User> = api.getCurrentUser().toResult()
 }
 ```
 
@@ -93,18 +93,18 @@ Only use copy-drop-rename pattern when ALTER TABLE cannot accomplish the change:
 4. ALTER TABLE new_table RENAME TO old_table
 5. Recreate indexes, triggers, views
 
-Where dispatchers is an instance of TemplateDbDispatchers
+Where dispatchers is an instance of JellyfinDbDispatchers
 withDbReadContext(dispatchers) { query.executeAsOneOrNull() }  # Read
 db.withTransaction(dispatchers) { queries.upsert(...) }        # Write
 queries.selectAll().asFlow().mapToList(dispatchers)            # Observe
 
 # Ktorfit
 API interfaces are internal to impl module
-Use TemplateResponse<T> return type, convert with .toResult()
-TemplateResponse will SHOULD be parameterized with either kotlinx.serialization JsonArray or JsonObject
+Use JellyfinResponse<T> return type, convert with .toResult()
+JellyfinResponse will SHOULD be parameterized with either kotlinx.serialization JsonArray or JsonObject
 
 # Error Handling
-Use TemplateResult<T> for fallible operations. See [error-handling](error-handling.md) for more information.
+Use JellyfinResult<T> for fallible operations. See [error-handling](error-handling.md) for more information.
 
 # DataStore
 Use DataStore for simple key-value persistence needs

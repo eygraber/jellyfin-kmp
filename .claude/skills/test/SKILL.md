@@ -87,8 +87,8 @@ class FakeRepository : MyRepository {
   var shouldFail = false
 
   override suspend fun getData() = when {
-    shouldFail -> TemplateResult.Failure(Exception())
-    else -> TemplateResult.Success(dataToReturn!!)
+    shouldFail -> JellyfinResult.Failure(Exception())
+    else -> JellyfinResult.Success(dataToReturn!!)
   }
 }
 
@@ -107,7 +107,7 @@ list shouldHaveSize 3
 
 ```
 src/commonTest/kotlin/           # Unit, Model, Flow, OnIntent tests
-  com/template/...
+  com/jellyfin/...
     RealMyModelTest.kt     # Test Real* implementations
     FakeMyRepository.kt    # Fakes for testing
 ```

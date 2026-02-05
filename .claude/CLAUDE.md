@@ -1,6 +1,6 @@
-# Template
+# Jellyfin
 
-Kotlin Multiplatform (KMP) / Compose Multiplatform (CMP) app template.
+Kotlin Multiplatform (KMP) / Compose Multiplatform (CMP) app com.eygraber.jellyfin.
 
 ## Quick Reference
 

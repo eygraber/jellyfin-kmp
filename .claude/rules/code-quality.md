@@ -6,7 +6,7 @@ Never modify detekt.yml files without permission
 detekt.yml files can be read to provide context on why a violation may be occurring
 Use Dependency Analysis Plugin to verify correct dependency configurations
 Use Konsist tests to enforce architectural rules
-Custom lint checks are in template-lint included build
+Custom lint checks are in jellyfin-lint included build
 Format violations should be fixed automatically with ./format script
 Detekt runs in two modes: no type resolution and with type resolution
 Pass --continue to detekt to report all issues instead of stopping early

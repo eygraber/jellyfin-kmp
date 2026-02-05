@@ -7,8 +7,8 @@ pluginManagement {
       url = uri(".support/.m2")
 
       content {
-        includeGroup("template.gradle")
-        includeGroup("template-gradle")
+        includeGroup("com.eygraber.jellyfin.gradle")
+        includeGroup("jellyfin-gradle")
       }
     }
 
@@ -63,7 +63,7 @@ dependencyResolutionManagement {
       url = uri(".support/.m2")
 
       content {
-        includeModule("template.lint", "library")
+        includeModule("com.eygraber.jellyfin.lint", "library")
       }
     }
 
@@ -76,7 +76,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "cmp-app-template"
+rootProject.name = "jellyfin-kmp"
 
 plugins {
   id("com.eygraber.conventions.settings") version "0.0.98"

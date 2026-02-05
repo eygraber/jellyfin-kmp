@@ -15,7 +15,7 @@ kotlin {
     webOptions = KmpTarget.WebOptions(
       isNodeEnabled = false,
       isBrowserEnabled = true,
-      moduleName = "template-wasm",
+      moduleName = "jellyfin-wasm",
     ),
     ignoreDefaultTargets = true,
   )
@@ -24,7 +24,7 @@ kotlin {
   wasmJs {
     browser {
       commonWebpackConfig {
-        outputFileName = "template-wasm.js"
+        outputFileName = "jellyfin-wasm.js"
         experiments += "topLevelAwait"
       }
     }

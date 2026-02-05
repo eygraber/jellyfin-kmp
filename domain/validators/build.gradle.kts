@@ -12,7 +12,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.domain.validators",
+    androidNamespace = "com.eygraber.jellyfin.domain.validators",
   )
 
   sourceSets {

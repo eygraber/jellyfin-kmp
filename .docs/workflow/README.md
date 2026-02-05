@@ -1,6 +1,6 @@
 # Development Workflow
 
-Workflow documentation for Template development.
+Workflow documentation for Jellyfin development.
 
 ## Contents
 

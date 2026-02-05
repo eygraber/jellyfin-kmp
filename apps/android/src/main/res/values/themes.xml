@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="Theme.Template" parent="Theme.AppCompat.DayNight.NoActionBar" />
+  <style name="Theme.Jellyfin" parent="Theme.AppCompat.DayNight.NoActionBar" />
 
-  <style name="Theme.TemplateSplash" parent="Theme.Template">
+  <style name="Theme.JellyfinSplash" parent="Theme.Jellyfin">
     <item name="android:windowTranslucentStatus">true</item>
     <item name="android:windowLightStatusBar">false</item>
     <item name="android:windowBackground">#000000</item>
-    <item name="postSplashScreenTheme">@style/Theme.Template</item>
+    <item name="postSplashScreenTheme">@style/Theme.Jellyfin</item>
     <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
   </style>
 </resources>

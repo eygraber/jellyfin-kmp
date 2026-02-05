@@ -9,7 +9,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.services.device.sensors",
+    androidNamespace = "com.eygraber.jellyfin.services.device.sensors",
   )
 
   sourceSets {

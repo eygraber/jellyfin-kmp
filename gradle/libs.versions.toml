@@ -91,7 +91,7 @@ mavenPublish = { id = "com.vanniktech.maven.publish" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 playStoreApi = { id = "com.github.triplet.play", version = "4.0.0" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "square-sqldelight" }
-templateGradle = { id = "template-gradle", version = "0.0.1" }
+jellyfinGradle = { id = "jellyfin-gradle", version = "0.0.1" }
 testBurst = { id = "app.cash.burst", version = "2.11.0" }
 
 [libraries]
@@ -178,7 +178,7 @@ square-sqldelight-android = { module = "app.cash.sqldelight:android-driver", ver
 square-sqldelight-dialect = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "square-sqldelight" }
 square-sqldelight-flow = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "square-sqldelight" }
 
-templateLint = "template.lint:library:0.0.1"
+jellyfinLint = "com.eygraber.jellyfin.lint:library:0.0.1"
 
 test-androidx-junit = "androidx.test.ext:junit:1.3.0"
 test-compose-ui = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeJetbrains" }

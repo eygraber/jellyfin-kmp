@@ -15,5 +15,5 @@ dependencies {
 }
 
 compose {
-  desktop.application.mainClass = "template.app.TemplateDesktopAppKt"
+  desktop.application.mainClass = "com.eygraber.jellyfin.app.JellyfinDesktopAppKt"
 }

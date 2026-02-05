@@ -4,13 +4,13 @@ To achieve that, we should aim to use `public` and `impl` modules for each `data
 
 It doesn't currently make sense to do this for `screen` modules since no one depends on them aside for `nav` and `app`.
 
-Because of how the scoping is set up in [Template DI] all of the graphs are created in the `app` module, so that is the only
+Because of how the scoping is set up in [Jellyfin DI] all of the graphs are created in the `app` module, so that is the only
 module that implementation details are exposed (technically `screen` implementation details are exposed in `nav`, but
 that is OK since `nav` is really just an extension of `app`).
 
 ```mermaid
 graph TD;
-    app{{<span style='text-decoration:underline'>app</span><br/>TemplateApplication<br/>TemplateActivity<br/>TemplateAppSession<br/>TemplateDesktopApp<br/>TemplateIosApplication<br/>TemplateWebApp}};
+    app{{<span style='text-decoration:underline'>app</span><br/>JellyfinApplication<br/>JellyfinActivity<br/>JellyfinAppSession<br/>JellyfinDesktopApp<br/>JellyfinIosApplication<br/>JellyfinWebApp}};
     common{{<span style='text-decoration:underline'>common</span><br/>strings<br/>drawables}};
     data-impl{{<span style='text-decoration:underline'>data-impl</span><br/>RealRepositories<br/>RealDataSources}};
     data-public{{<span style='text-decoration:underline'>data-public</span><br/>Repositories}};
@@ -38,4 +38,4 @@ graph TD;
 ```
 
 [Android At Scale]: https://www.droidcon.com/2019/11/15/android-at-scale-square/
-[Template DI]: ./di/README.md
+[Jellyfin DI]: ./di/README.md

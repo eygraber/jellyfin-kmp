@@ -18,7 +18,7 @@ class MyRepositoryTest {
 
     val result = repo.getData()
 
-    result shouldBe TemplateResult.Success(sampleData)
+    result shouldBe JellyfinResult.Success(sampleData)
     fakeRemote.callCount shouldBe 0
   }
 
@@ -30,7 +30,7 @@ class MyRepositoryTest {
 
     val result = repo.getData()
 
-    result shouldBe TemplateResult.Success(sampleData)
+    result shouldBe JellyfinResult.Success(sampleData)
     fakeLocal.savedData shouldBe sampleData
   }
 }
@@ -60,7 +60,7 @@ fun `when remote fails, returns cached data`() = runTest {
 
   val result = repo.getData()
 
-  result shouldBe TemplateResult.Success(oldData)
+  result shouldBe JellyfinResult.Success(oldData)
 }
 
 @Test
@@ -107,12 +107,12 @@ class FakeRemoteDataSource : RemoteDataSource {
   var shouldFail = false
   var callCount = 0
 
-  override suspend fun fetchData(): TemplateResult<Data> {
+  override suspend fun fetchData(): JellyfinResult<Data> {
     callCount++
     return when {
-      shouldFail -> TemplateResult.Failure(Exception("Remote error"))
-      remoteData != null -> TemplateResult.Success(remoteData!!)
-      else -> TemplateResult.Failure(Exception("No data"))
+      shouldFail -> JellyfinResult.Failure(Exception("Remote error"))
+      remoteData != null -> JellyfinResult.Success(remoteData!!)
+      else -> JellyfinResult.Failure(Exception("No data"))
     }
   }
 }

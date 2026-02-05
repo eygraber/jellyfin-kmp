@@ -3,8 +3,8 @@ paths:
   - "**/*.kt"
 ---
 
-Use TemplateResult for operation success/failure states
-TemplateResult extensions: mapSuccessTo/flatMapSuccessTo (transform success), mapToUnit (discard value), flatMap (general mapping), successOrNull/errorDetailOrNull (extractors), isSuccess/isError (type checks)
+Use JellyfinResult for operation success/failure states
+JellyfinResult extensions: mapSuccessTo/flatMapSuccessTo (transform success), mapToUnit (discard value), flatMap (general mapping), successOrNull/errorDetailOrNull (extractors), isSuccess/isError (type checks)
 Use specialized sealed classes for representing API call states
 Handle errors gracefully at appropriate layers
 Validate user inputs on both client-side and server-side
@@ -14,7 +14,7 @@ Log errors with sufficient context for debugging
 ## doOnSuccess vs andThen
 
 Use andThen when the callback can fail and you care about propagating that failure:
-- andThen wraps the callback in runResult, propagating errors as TemplateResult.Error
+- andThen wraps the callback in runResult, propagating errors as JellyfinResult.Error
 - Use for side effects that can throw (database writes, network calls, file I/O)
 - Preferred in most cases for robustness
 

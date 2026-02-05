@@ -1,6 +1,6 @@
 # Environment Setup
 
-Setup for Template development.
+Setup for Jellyfin development.
 
 ## Git LFS
 

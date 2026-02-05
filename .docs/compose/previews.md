@@ -2,16 +2,16 @@
 
 ## Preview Annotation
 
-**Use `@PreviewTemplateScreen` for screen previews** (if available):
+**Use `@PreviewJellyfinScreen` for screen previews** (if available):
 
 ```kotlin
-@PreviewTemplateScreen
+@PreviewJellyfinScreen
 @Composable
 private fun MyScreenPreview(
   @PreviewParameter(MyPreviewProvider::class)
   state: MyState,
 ) {
-  TemplateEdgeToEdgePreviewTheme {
+  JellyfinEdgeToEdgePreviewTheme {
     MyScreen(
       onDismissError = {},
       onNavigateBack = {},
@@ -107,7 +107,7 @@ private fun ProductListItemPreview(
   @PreviewParameter(ProductListItemPreviewProvider::class)
   params: ProductListItemParams,
 ) {
-  TemplatePreviewTheme {
+  JellyfinPreviewTheme {
     ProductListItem(
       onAddToCart = {},
       name = params.name,
@@ -161,7 +161,7 @@ This creates separate preview variants for each state, making it easy to visuali
 @Preview
 @Composable
 private fun EmptyProductListPreview() {
-  TemplatePreviewTheme {
+  JellyfinPreviewTheme {
     ProductList(
       products = emptyList(),
       onRefresh = {},
@@ -172,7 +172,7 @@ private fun EmptyProductListPreview() {
 @Preview
 @Composable
 private fun LoadedProductListPreview() {
-  TemplatePreviewTheme {
+  JellyfinPreviewTheme {
     ProductList(
       products = sampleProducts,
       onRefresh = {},

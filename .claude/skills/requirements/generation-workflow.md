@@ -88,7 +88,7 @@ fun validatePhoneNumber(input: String) {
 
 ### A.6. Generate Markdown File
 - Create `.docs/requirements/[feature].md`
-- Follow template exactly (see [template.md](template.md))
+- Follow jellyfin exactly (see [com.eygraber.jellyfin.md](com.eygraber.jellyfin.md))
 - Set **Version: 1.0**
 - Add initial version history entry: `- **Version 1.0** - YYYY-MM-DD: Initial requirements documentation.`
 
@@ -151,7 +151,7 @@ Patch fixes typically address:
 - **Documentation errors**: Typos, incorrect descriptions, outdated information
 - **Missing details**: Edge cases that were overlooked, clarifications needed
 - **Bug documentation**: Recording behavior changes from bug fixes
-- **Consistency fixes**: Aligning with template or formatting standards
+- **Consistency fixes**: Aligning with jellyfin or formatting standards
 
 ### C.3. Make Targeted Edits
 - Edit only the specific sections that need changes

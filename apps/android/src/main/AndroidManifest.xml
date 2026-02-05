@@ -3,20 +3,20 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <application
-    android:theme="@style/Theme.TemplateSplash"
+    android:theme="@style/Theme.JellyfinSplash"
     android:allowBackup="true"
     android:dataExtractionRules="@xml/backup_rules_v_twelve"
     android:enableOnBackInvokedCallback="true"
     android:fullBackupContent="@xml/backup_rules_v_eleven"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:name="template.app.TemplateApplication"
+    android:name="com.eygraber.jellyfin.app.JellyfinApplication"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     tools:targetApi="33">
     <activity
-      android:theme="@style/Theme.TemplateSplash"
-      android:name="template.app.TemplateActivity"
+      android:theme="@style/Theme.JellyfinSplash"
+      android:name="com.eygraber.jellyfin.app.JellyfinActivity"
       android:configChanges="assetsPaths|colorMode|density|fontScale
         |fontWeightAdjustment|grammaticalGender|keyboard|keyboardHidden
         |layoutDirection|locale|mcc|mnc|navigation|orientation|screenLayout
@@ -38,7 +38,7 @@
       android:exported="false"
       tools:node="merge">
       <meta-data
-        android:name="template.app.init.TemplateAndroidXInitializer"
+        android:name="com.eygraber.jellyfin.app.init.JellyfinAndroidXInitializer"
         android:value="androidx.startup" />
     </provider>
   </application>

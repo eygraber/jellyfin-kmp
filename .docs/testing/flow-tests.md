@@ -45,14 +45,14 @@ For complex async operations with precise timing:
 ```kotlin
 @Test
 fun `state transitions correctly`() = withTestSubjectCoordinator {
-  val resultChannel = Channel<TemplateResult<String>>()
+  val resultChannel = Channel<JellyfinResult<String>>()
 
   runTest(
     driver = { model ->
       wait() // Wait for validation's first check
       model.triggerOperation()
       wait() // Wait for loading check
-      resultChannel.send(TemplateResult.Success("data"))
+      resultChannel.send(JellyfinResult.Success("data"))
       wait() // Wait for success check
     },
     validation = {

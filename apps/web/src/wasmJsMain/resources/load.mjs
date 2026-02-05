@@ -1,4 +1,4 @@
-import { instantiate } from 'template-wasm.uninstantiated.mjs';
+import { instantiate } from 'jellyfin-wasm.uninstantiated.mjs';
 
 await wasmSetup;
 

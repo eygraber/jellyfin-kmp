@@ -1,6 +1,6 @@
 # Architecture
 
-Template follows [Android App Architecture](https://developer.android.com/topic/architecture) with UI, Domain, and Data layers, adapted for Kotlin Multiplatform.
+Jellyfin follows [Android App Architecture](https://developer.android.com/topic/architecture) with UI, Domain, and Data layers, adapted for Kotlin Multiplatform.
 
 ## Core Principles
 

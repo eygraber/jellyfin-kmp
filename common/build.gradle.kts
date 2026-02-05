@@ -10,7 +10,7 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.common",
+    androidNamespace = "com.eygraber.jellyfin.common",
   )
 
   sourceSets {
@@ -23,6 +23,6 @@ kotlin {
 
 compose.resources {
   publicResClass = true
-  packageOfResClass = "template.common"
+  packageOfResClass = "com.eygraber.jellyfin.common"
   generateResClass = always
 }

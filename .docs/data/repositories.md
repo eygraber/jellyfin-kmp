@@ -10,7 +10,7 @@ interface MyFeatureRepository {
 
   suspend fun fetchData(
     retryPolicy: RetryPolicy = RetryPolicy.MaxAttempts(5),
-  ): TemplateResult<Unit>
+  ): JellyfinResult<Unit>
 
   suspend fun getData(id: String): MyEntity?
 }
@@ -30,7 +30,7 @@ class RealMyFeatureRepository(
 
   override suspend fun fetchData(
     retryPolicy: RetryPolicy,
-  ) = retryTemplateResult(retryPolicy) {
+  ) = retryJellyfinResult(retryPolicy) {
     remoteDataSource
       .fetchData()
       .andThen { data ->
@@ -59,7 +59,7 @@ override val dataFlow get() = localDataSource.dataFlow
 
 ### Retry Logic
 ```kotlin
-retryTemplateResult(RetryPolicy.MaxAttempts(5)) {
+retryJellyfinResult(RetryPolicy.MaxAttempts(5)) {
   remoteDataSource.fetchData()
 }
 ```
@@ -70,7 +70,7 @@ retryTemplateResult(RetryPolicy.MaxAttempts(5)) {
 class FakeMyFeatureRepository(
   var onFetchData: suspend () -> Unit = {},
   override val myDataFlow: Flow<List<MyEntity>> = flowOf(emptyList()),
-  var fetchDataResult: TemplateResult<Unit> = TemplateResult.Success(),
+  var fetchDataResult: JellyfinResult<Unit> = JellyfinResult.Success(),
 ) : MyFeatureRepository {
 
   private val _data = mutableMapOf<String, MyEntity>()

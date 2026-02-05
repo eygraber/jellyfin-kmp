@@ -21,7 +21,7 @@ Run on app module (transitively runs on all modules):
 
 ### Custom Lint Rules
 
-Located in `template-lint` included build.
+Located in `jellyfin-lint` included build.
 
 ## Detekt
 

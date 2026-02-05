@@ -1,6 +1,6 @@
-# Template Documentation
+# Jellyfin Documentation
 
-Technical documentation for the Template KMP/CMP application.
+Technical documentation for the Jellyfin KMP/CMP application.
 
 ## Directory Index
 

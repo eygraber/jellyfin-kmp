@@ -11,7 +11,7 @@ plugins {
 }
 
 buildkonfig {
-  packageName = "template.apps.shared"
+  packageName = "com.eygraber.jellyfin.apps.shared"
 
   defaultConfigs {
     buildConfigField(BOOLEAN, "isDev", "false")
@@ -25,7 +25,7 @@ buildkonfig {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "template.apps.shared",
+    androidNamespace = "com.eygraber.jellyfin.apps.shared",
   )
 
   sourceSets {
@@ -69,5 +69,5 @@ licensee {
   // de.drick.compose:edge-to-edge-preview
   allow("Unlicense")
 
-  allowDependency(libs.templateLint)
+  allowDependency(libs.jellyfinLint)
 }

@@ -9,7 +9,7 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-val pkg = "template.screens.root"
+val pkg = "com.eygraber.jellyfin.screens.root"
 
 compose {
   resources {
