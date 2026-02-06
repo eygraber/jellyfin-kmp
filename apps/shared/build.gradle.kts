@@ -32,12 +32,17 @@ kotlin {
     commonMain.dependencies {
       api(projects.di)
 
+      api(projects.data.server.impl)
+      api(projects.data.server.public)
+
       api(projects.nav)
 
       api(projects.screens.devSettings)
       api(projects.screens.root)
       api(projects.screens.welcome)
 
+      api(projects.services.database.impl)
+      api(projects.services.database.public)
       api(projects.services.deviceSensors.impl)
       api(projects.services.deviceSensors.public)
       api(projects.services.logging.impl)
