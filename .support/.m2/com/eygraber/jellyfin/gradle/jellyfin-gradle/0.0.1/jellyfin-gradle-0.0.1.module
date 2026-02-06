@@ -74,7 +74,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-gradle-plugin",
           "version": {
-            "requires": "2.3.0"
+            "requires": "2.3.10"
           }
         },
         {
