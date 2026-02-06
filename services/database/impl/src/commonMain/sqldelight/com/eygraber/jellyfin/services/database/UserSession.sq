@@ -1,0 +1,50 @@
+selectAll:
+SELECT *
+FROM user_session
+ORDER BY last_used_at DESC;
+
+selectById:
+SELECT *
+FROM user_session
+WHERE id = ?;
+
+selectByServerId:
+SELECT *
+FROM user_session
+WHERE server_id = ?
+ORDER BY last_used_at DESC;
+
+selectActive:
+SELECT *
+FROM user_session
+WHERE is_active = 1
+LIMIT 1;
+
+insert:
+INSERT OR REPLACE INTO user_session(id, server_id, user_id, username, access_token, is_active, created_at, last_used_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+setActive:
+UPDATE user_session
+SET is_active = 1, last_used_at = ?
+WHERE id = ?;
+
+clearActive:
+UPDATE user_session
+SET is_active = 0;
+
+updateLastUsed:
+UPDATE user_session
+SET last_used_at = ?
+WHERE id = ?;
+
+delete:
+DELETE FROM user_session
+WHERE id = ?;
+
+deleteByServerId:
+DELETE FROM user_session
+WHERE server_id = ?;
+
+deleteAll:
+DELETE FROM user_session;

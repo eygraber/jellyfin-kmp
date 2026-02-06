@@ -57,6 +57,10 @@ publish = "0.36.0"
 
 robolectric = "4.16.1"
 
+androidx-sqlite = "2.6.2"
+
+sqldelight-androidx-driver = "0.0.17"
+
 square-sqldelight = "2.2.1"
 
 vice = "1.0.8"
@@ -116,6 +120,8 @@ androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", ve
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 androidx-splash = "androidx.core:core-splashscreen:1.2.0"
+
+androidx-sqliteBundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
 
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 
@@ -192,9 +198,13 @@ libphonenumber = "io.github.luca992.libphonenumber-kotlin:libphonenumber:0.1.9"
 
 square-molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 square-seismic = "com.squareup:seismic:1.0.3"
+sqldelight-androidx-driver = { module = "com.eygraber:sqldelight-androidx-driver", version.ref = "sqldelight-androidx-driver" }
+
 square-sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "square-sqldelight" }
 square-sqldelight-dialect = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "square-sqldelight" }
 square-sqldelight-flow = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "square-sqldelight" }
+square-sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "square-sqldelight" }
+square-sqldelight-wasmJs = { module = "app.cash.sqldelight:web-worker-driver-wasm-js", version.ref = "square-sqldelight" }
 
 jellyfinLint = "com.eygraber.jellyfin.lint:library:0.0.1"
 
