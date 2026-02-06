@@ -6,12 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.domain.session.SessionManager
 import com.eygraber.jellyfin.domain.session.SessionState
+import com.eygraber.jellyfin.screens.home.model.ContinueWatchingModel
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
 
 @Inject
 class HomeCompositor(
   private val sessionManager: SessionManager,
+  private val navigator: HomeNavigator,
+  private val continueWatchingModel: ContinueWatchingModel,
 ) : ViceCompositor<HomeIntent, HomeViewState> {
   private var isLoading by mutableStateOf(true)
   private var isRefreshing by mutableStateOf(false)
@@ -28,11 +31,14 @@ class HomeCompositor(
       -> ""
     }
 
+    val continueWatchingState = continueWatchingModel.currentState()
+
     return HomeViewState(
       userName = userName,
       isLoading = isLoading,
       error = error,
       isRefreshing = isRefreshing,
+      continueWatchingState = continueWatchingState,
     )
   }
 
@@ -40,6 +46,7 @@ class HomeCompositor(
     when(intent) {
       HomeIntent.Refresh -> refresh()
       HomeIntent.RetryLoad -> retryLoad()
+      is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(intent.itemId)
     }
   }
 
@@ -51,6 +58,8 @@ class HomeCompositor(
     if(!isValid) {
       error = HomeError.Network()
     }
+
+    continueWatchingModel.refresh()
 
     isRefreshing = false
   }
