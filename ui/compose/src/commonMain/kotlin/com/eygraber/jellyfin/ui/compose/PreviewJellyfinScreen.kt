@@ -26,4 +26,18 @@ import androidx.compose.ui.tooling.preview.Preview
   group = "fontScale",
   uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
 )
+@Preview(
+  name = "SizeTablet",
+  fontScale = 1F,
+  device = "id:pixel_tablet",
+  group = "largeSize",
+  uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
+@Preview(
+  name = "SizeDesktop",
+  fontScale = 1F,
+  device = "id:desktop_medium",
+  group = "largeSize",
+  uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 annotation class PreviewJellyfinScreen

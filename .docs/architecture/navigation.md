@@ -2,6 +2,22 @@
 
 Uses [AndroidX Navigation3](https://developer.android.com/guide/navigation/navigation-3) with `vice-nav3`.
 
+## Adaptive Navigation
+
+The app uses `material3-adaptive-navigation3` for form factor-aware navigation:
+
+```kotlin
+implementation(libs.compose.nav3.adaptive)
+```
+
+| Window Size | Navigation Style        |
+|-------------|------------------------|
+| Compact     | Bottom navigation bar  |
+| Medium      | Navigation rail        |
+| Expanded    | Permanent nav drawer   |
+
+See [Adaptive Design](/.docs/compose/adaptive-design.md) for complete details.
+
 ## Structure
 
 The `nav` module contains `JellyfinNav` composable with a `NavDisplay` as the navigation root.

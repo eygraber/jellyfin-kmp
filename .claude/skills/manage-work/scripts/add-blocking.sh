@@ -11,7 +11,7 @@
 set -e
 
 OWNER="eygraber"
-REPO="super-do"
+REPO="jellyfin-kmp"
 
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
   echo "Usage: $0 BLOCKED_ISSUE BLOCKING_ISSUE" >&2

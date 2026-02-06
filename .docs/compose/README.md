@@ -8,6 +8,7 @@ Compose style guide and best practices for Jellyfin.
 - [modifiers.md](modifiers.md) - Modifier patterns and rules
 - [state-management.md](state-management.md) - State handling, remember, hoisting
 - [previews.md](previews.md) - Preview annotations and parameters
+- [adaptive-design.md](adaptive-design.md) - Form factor adaptation, responsive layouts
 
 ## Essential Rules
 
