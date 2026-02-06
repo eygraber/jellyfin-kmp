@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.domain.session.SessionManager
 import com.eygraber.jellyfin.domain.session.SessionState
 import com.eygraber.jellyfin.screens.home.model.ContinueWatchingModel
+import com.eygraber.jellyfin.screens.home.model.LibrariesModel
 import com.eygraber.jellyfin.screens.home.model.NextUpModel
 import com.eygraber.jellyfin.screens.home.model.RecentlyAddedModel
 import com.eygraber.vice.ViceCompositor
@@ -19,6 +20,7 @@ class HomeCompositor(
   private val continueWatchingModel: ContinueWatchingModel,
   private val nextUpModel: NextUpModel,
   private val recentlyAddedModel: RecentlyAddedModel,
+  private val librariesModel: LibrariesModel,
 ) : ViceCompositor<HomeIntent, HomeViewState> {
   private var isLoading by mutableStateOf(true)
   private var isRefreshing by mutableStateOf(false)
@@ -38,6 +40,7 @@ class HomeCompositor(
     val continueWatchingState = continueWatchingModel.currentState()
     val nextUpState = nextUpModel.currentState()
     val recentlyAddedState = recentlyAddedModel.currentState()
+    val librariesState = librariesModel.currentState()
 
     return HomeViewState(
       userName = userName,
@@ -47,6 +50,7 @@ class HomeCompositor(
       continueWatchingState = continueWatchingState,
       nextUpState = nextUpState,
       recentlyAddedState = recentlyAddedState,
+      librariesState = librariesState,
     )
   }
 
@@ -57,6 +61,7 @@ class HomeCompositor(
       is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(intent.itemId)
       is HomeIntent.NextUpItemClicked -> navigator.navigateToItemDetail(intent.itemId)
       is HomeIntent.RecentlyAddedItemClicked -> navigator.navigateToItemDetail(intent.itemId)
+      is HomeIntent.LibraryClicked -> navigator.navigateToLibrary(intent.libraryId)
     }
   }
 
@@ -72,6 +77,7 @@ class HomeCompositor(
     continueWatchingModel.refresh()
     nextUpModel.refresh()
     recentlyAddedModel.refresh()
+    librariesModel.refresh()
 
     isRefreshing = false
   }

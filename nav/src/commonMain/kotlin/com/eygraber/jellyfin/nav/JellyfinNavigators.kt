@@ -30,5 +30,8 @@ internal object JellyfinNavigators {
     onNavigateToItemDetail = { itemId ->
       backStack.add(JellyfinNavKeys.ComingSoon("Item Detail ($itemId)"))
     },
+    onNavigateToLibrary = { libraryId ->
+      backStack.add(JellyfinNavKeys.ComingSoon("Library ($libraryId)"))
+    },
   )
 }
