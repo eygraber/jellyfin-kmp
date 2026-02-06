@@ -10,22 +10,24 @@ plugins {
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "com.eygraber.jellyfin.services.logging.impl",
+    androidNamespace = "com.eygraber.jellyfin.services.sdk.impl",
   )
 
   sourceSets {
     commonMain.dependencies {
-      api(projects.services.logging.public)
+      api(projects.services.sdk.public)
 
       implementation(projects.di)
+      implementation(projects.services.logging.public)
 
-      implementation(libs.khronicle)
+      implementation(libs.kotlinx.coroutines.core)
     }
 
     commonTest.dependencies {
       implementation(kotlin("test"))
 
       implementation(libs.test.kotest.assertions.core)
+      implementation(libs.test.kotlinx.coroutines)
     }
   }
 }
