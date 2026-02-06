@@ -35,10 +35,18 @@ kotlin {
       implementation(libs.bundles.test.paparazzi)
     }
 
+    commonTest.dependencies {
+      implementation(kotlin("test"))
+
+      implementation(libs.test.kotest.assertions.core)
+      implementation(libs.test.kotlinx.coroutines)
+    }
+
     commonMain.dependencies {
       api(projects.di)
 
       implementation(projects.domain.session.public)
+      implementation(projects.services.sdk.public)
 
       implementation(projects.ui.compose)
       implementation(projects.ui.material)

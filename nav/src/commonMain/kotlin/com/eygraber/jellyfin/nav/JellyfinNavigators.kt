@@ -27,5 +27,8 @@ internal object JellyfinNavigators {
     backStack: NavBackStack<NavKey>,
   ) = HomeNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToItemDetail = { itemId ->
+      backStack.add(JellyfinNavKeys.ComingSoon("Item Detail ($itemId)"))
+    },
   )
 }
