@@ -1,0 +1,30 @@
+selectAll:
+SELECT *
+FROM server
+ORDER BY last_used_at DESC;
+
+selectById:
+SELECT *
+FROM server
+WHERE id = ?;
+
+selectByUrl:
+SELECT *
+FROM server
+WHERE url = ?;
+
+insert:
+INSERT OR REPLACE INTO server(id, name, url, version, created_at, last_used_at)
+VALUES (?, ?, ?, ?, ?, ?);
+
+updateLastUsed:
+UPDATE server
+SET last_used_at = ?
+WHERE id = ?;
+
+delete:
+DELETE FROM server
+WHERE id = ?;
+
+deleteAll:
+DELETE FROM server;
