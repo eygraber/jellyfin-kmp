@@ -10,7 +10,7 @@
 set -e
 
 OWNER="eygraber"
-REPO="super-do"
+REPO="jellyfin-kmp"
 
 if [[ -z "$1" ]]; then
   echo "Usage: $0 EPIC_NUMBER" >&2

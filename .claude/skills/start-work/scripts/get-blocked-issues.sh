@@ -10,7 +10,7 @@
 set -e
 
 OWNER="eygraber"
-REPO="super-do"
+REPO="jellyfin-kmp"
 DETAILS=false
 
 while [[ $# -gt 0 ]]; do

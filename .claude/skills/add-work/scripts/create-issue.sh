@@ -98,7 +98,7 @@ fi
 
 # Create the issue
 if [[ -n "$ALL_LABELS" ]]; then
-  gh issue create --title "$TITLE" --body "$BODY" --label "$ALL_LABELS" --json number,url
+  gh issue create --title "$TITLE" --body "$BODY" --label "$ALL_LABELS"
 else
-  gh issue create --title "$TITLE" --body "$BODY" --json number,url
+  gh issue create --title "$TITLE" --body "$BODY"
 fi

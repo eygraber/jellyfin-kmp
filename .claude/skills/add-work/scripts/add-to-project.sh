@@ -13,16 +13,16 @@
 set -e
 
 OWNER="eygraber"
-REPO="super-do"
-PROJECT_NUMBER=5
-PROJECT_ID="PVT_kwHOABDKXc4BOFIP"
-STATUS_FIELD_ID="PVTSSF_lAHOABDKXc4BOFIPzg84wPs"
+REPO="jellyfin-kmp"
+PROJECT_NUMBER=6
+PROJECT_ID="PVT_kwHOABDKXc4BOYQM"
+STATUS_FIELD_ID="PVTSSF_lAHOABDKXc4BOYQMzg9GUow"
 
 # Status option IDs
 declare -A STATUS_IDS
-STATUS_IDS["backlog"]="64300155"
-STATUS_IDS["ready"]="8a7cfffc"
-STATUS_IDS["in-progress"]="a81dc5a2"
+STATUS_IDS["backlog"]="506dc4ca"
+STATUS_IDS["ready"]="01d0843d"
+STATUS_IDS["in-progress"]="2b058326"
 
 ISSUE_NUMBER=""
 STATUS="backlog"

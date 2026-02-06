@@ -8,6 +8,12 @@ pluginManagement {
       }
     }
 
+    maven("https://central.sonatype.com/repository/maven-snapshots/") {
+      mavenContent {
+        snapshotsOnly()
+      }
+    }
+
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots") {
       mavenContent {
         snapshotsOnly()
