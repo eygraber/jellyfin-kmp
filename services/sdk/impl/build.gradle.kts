@@ -18,6 +18,7 @@ kotlin {
       api(projects.services.sdk.public)
 
       implementation(projects.di)
+      implementation(projects.domain.validators)
       implementation(projects.services.logging.public)
 
       implementation(libs.kotlinx.coroutines.core)
