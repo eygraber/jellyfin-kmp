@@ -57,6 +57,13 @@ interface JellyfinLibraryService {
   ): JellyfinResult<ItemsResult>
 
   /**
+   * Gets the user's library views (e.g., Movies, TV Shows, Music).
+   *
+   * @return A [JellyfinResult] containing the [ItemsResult] of library views.
+   */
+  suspend fun getUserViews(): JellyfinResult<ItemsResult>
+
+  /**
    * Generates the URL for an item image.
    *
    * @param itemId The item ID.

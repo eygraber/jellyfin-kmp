@@ -126,6 +126,32 @@ class DefaultJellyfinLibraryService(
     }
   }
 
+  override suspend fun getUserViews(): JellyfinResult<ItemsResult> {
+    val serverInfo = sessionManager.currentServer.value
+      ?: return JellyfinResult.Error(
+        message = "Not connected to a server",
+        isEphemeral = false,
+      )
+
+    val userId = serverInfo.userId
+      ?: return JellyfinResult.Error(
+        message = "Not authenticated",
+        isEphemeral = false,
+      )
+
+    logger.debug(tag = TAG, message = "Fetching user views for user: $userId")
+
+    val apiClient = sdk.createApiClient(serverInfo = serverInfo)
+    return try {
+      apiClient.libraryApi.getUserViews(
+        userId = userId,
+      ).toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
   override fun getImageUrl(
     itemId: String,
     imageType: ImageType,
