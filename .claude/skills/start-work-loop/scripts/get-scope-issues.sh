@@ -11,7 +11,7 @@ set -e
 
 OWNER="eygraber"
 REPO="jellyfin-kmp"
-PROJECT_NUMBER=<fill in>
+PROJECT_NUMBER=6
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 START_WORK_SCRIPTS="$SCRIPT_DIR/../../start-work/scripts"
 
