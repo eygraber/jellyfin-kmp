@@ -64,6 +64,57 @@ interface JellyfinLibraryService {
   suspend fun getUserViews(): JellyfinResult<ItemsResult>
 
   /**
+   * Gets items from the library with optional filters and pagination.
+   *
+   * @param parentId Filter by parent item ID (e.g., library ID).
+   * @param includeItemTypes Filter by item types (e.g., "Movie", "Series").
+   * @param sortBy Sort criteria (e.g., "SortName", "DateCreated").
+   * @param sortOrder Sort direction ("Ascending" or "Descending").
+   * @param startIndex Pagination start index.
+   * @param limit Maximum number of results.
+   * @param recursive Whether to search recursively.
+   * @param genres Filter by genre names.
+   * @param years Filter by production years.
+   * @param searchTerm Search term to filter results.
+   * @param fields Additional fields to include in the response.
+   * @return A [JellyfinResult] containing the [ItemsResult].
+   */
+  @Suppress("LongParameterList")
+  suspend fun getItems(
+    parentId: String? = null,
+    includeItemTypes: List<String>? = null,
+    sortBy: List<String>? = null,
+    sortOrder: String? = null,
+    startIndex: Int? = null,
+    limit: Int? = null,
+    recursive: Boolean? = null,
+    genres: List<String>? = null,
+    years: List<Int>? = null,
+    searchTerm: String? = null,
+    fields: List<String>? = null,
+  ): JellyfinResult<ItemsResult>
+
+  /**
+   * Gets a single item by its ID.
+   *
+   * @param itemId The item's unique ID.
+   * @return A [JellyfinResult] containing the [BaseItemDto].
+   */
+  suspend fun getItem(itemId: String): JellyfinResult<BaseItemDto>
+
+  /**
+   * Gets items similar to the specified item.
+   *
+   * @param itemId The item to find similar items for.
+   * @param limit Maximum number of similar items to return.
+   * @return A [JellyfinResult] containing the [ItemsResult].
+   */
+  suspend fun getSimilarItems(
+    itemId: String,
+    limit: Int? = null,
+  ): JellyfinResult<ItemsResult>
+
+  /**
    * Generates the URL for an item image.
    *
    * @param itemId The item ID.
