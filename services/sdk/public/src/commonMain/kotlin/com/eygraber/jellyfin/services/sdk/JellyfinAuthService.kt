@@ -2,6 +2,7 @@ package com.eygraber.jellyfin.services.sdk
 
 import com.eygraber.jellyfin.common.JellyfinResult
 import com.eygraber.jellyfin.sdk.core.model.AuthenticationResult
+import com.eygraber.jellyfin.sdk.core.model.QuickConnectResult
 import com.eygraber.jellyfin.sdk.core.model.UserDto
 
 /**
@@ -43,6 +44,31 @@ interface JellyfinAuthService {
    * @return A [JellyfinResult] containing a list of [UserDto].
    */
   suspend fun getPublicUsers(serverUrl: String): JellyfinResult<List<UserDto>>
+
+  /**
+   * Initiates Quick Connect on the specified server.
+   *
+   * Returns a [QuickConnectResult] containing a code to display to the user
+   * and a secret for polling approval status.
+   *
+   * @param serverUrl The URL of the Jellyfin server.
+   * @return A [JellyfinResult] containing the [QuickConnectResult].
+   */
+  suspend fun initiateQuickConnect(
+    serverUrl: String,
+  ): JellyfinResult<QuickConnectResult>
+
+  /**
+   * Checks the status of a Quick Connect request.
+   *
+   * @param serverUrl The URL of the Jellyfin server.
+   * @param secret The secret from [initiateQuickConnect].
+   * @return A [JellyfinResult] containing the [QuickConnectResult] with updated status.
+   */
+  suspend fun getQuickConnectStatus(
+    serverUrl: String,
+    secret: String,
+  ): JellyfinResult<QuickConnectResult>
 
   /**
    * Logs out the current session.
