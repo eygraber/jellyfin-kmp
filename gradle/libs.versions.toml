@@ -20,7 +20,7 @@ composeJetpack = "1.10.2"
 composeMaterial3Jetbrains = "1.9.0"
 composeNav3 = "1.0.0-alpha06"
 
-conventions = "0.0.98"
+conventions = "0.0.99"
 
 detekt = "2.0.0-alpha.2"
 detektCompose = "0.5.6"
