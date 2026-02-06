@@ -8,6 +8,7 @@ data class HomeViewState(
   val isLoading: Boolean = true,
   val error: HomeError? = null,
   val isRefreshing: Boolean = false,
+  val continueWatchingState: ContinueWatchingState = ContinueWatchingState.Loading,
 ) {
   companion object {
     val Loading = HomeViewState(isLoading = true)
@@ -20,4 +21,44 @@ sealed interface HomeError {
 
   data class Network(override val message: String = "Unable to connect to server") : HomeError
   data class Generic(override val message: String = "Something went wrong") : HomeError
+}
+
+@Immutable
+sealed interface ContinueWatchingState {
+  data object Loading : ContinueWatchingState
+  data object Empty : ContinueWatchingState
+  data object Error : ContinueWatchingState
+
+  data class Loaded(
+    val items: List<ContinueWatchingItem>,
+  ) : ContinueWatchingState
+}
+
+@Immutable
+data class ContinueWatchingItem(
+  val id: String,
+  val name: String,
+  val type: String,
+  val seriesName: String?,
+  val seasonName: String?,
+  val indexNumber: Int?,
+  val parentIndexNumber: Int?,
+  val progressPercent: Float,
+  val imageUrl: String,
+  val backdropImageUrl: String?,
+) {
+  val displayName: String
+    get() = when {
+      seriesName != null && parentIndexNumber != null && indexNumber != null ->
+        "$seriesName - S$parentIndexNumber:E$indexNumber"
+
+      seriesName != null -> "$seriesName - $name"
+      else -> name
+    }
+
+  val subtitle: String?
+    get() = when {
+      seriesName != null -> name
+      else -> null
+    }
 }
