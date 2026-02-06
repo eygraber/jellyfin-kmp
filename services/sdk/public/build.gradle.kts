@@ -4,22 +4,20 @@ plugins {
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
-  alias(libs.plugins.metro)
 }
 
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "com.eygraber.jellyfin.services.logging.impl",
+    androidNamespace = "com.eygraber.jellyfin.services.sdk",
   )
 
   sourceSets {
     commonMain.dependencies {
-      api(projects.services.logging.public)
+      api(projects.common)
+      api(projects.sdk.core)
 
-      implementation(projects.di)
-
-      implementation(libs.khronicle)
+      api(libs.kotlinx.coroutines.core)
     }
 
     commonTest.dependencies {
