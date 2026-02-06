@@ -37,6 +37,8 @@ kotlin {
       api(projects.data.server.impl)
       api(projects.data.server.public)
 
+      api(projects.domain.server.impl)
+      api(projects.domain.server.public)
       api(projects.domain.session.impl)
       api(projects.domain.session.public)
 
