@@ -263,6 +263,10 @@ private class FakeJellyfinLibraryService : JellyfinLibraryService {
     fields: List<String>?,
   ): JellyfinResult<List<BaseItemDto>> = latestItemsResult
 
+  override suspend fun getUserViews(): JellyfinResult<ItemsResult> = JellyfinResult.Success(
+    ItemsResult(items = emptyList(), totalRecordCount = 0),
+  )
+
   override fun getImageUrl(
     itemId: String,
     imageType: ImageType,
