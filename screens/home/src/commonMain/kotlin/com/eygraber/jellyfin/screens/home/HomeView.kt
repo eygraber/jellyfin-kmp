@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.home.components.ContinueWatchingLoading
 import com.eygraber.jellyfin.screens.home.components.ContinueWatchingRow
+import com.eygraber.jellyfin.screens.home.components.NextUpRow
+import com.eygraber.jellyfin.screens.home.components.RecentlyAddedSection
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
@@ -124,6 +126,18 @@ private fun HomeContent(
       state = state.continueWatchingState,
       onItemClick = { itemId -> onIntent(HomeIntent.ContinueWatchingItemClicked(itemId)) },
     )
+
+    NextUpSection(
+      state = state.nextUpState,
+      onItemClick = { itemId -> onIntent(HomeIntent.NextUpItemClicked(itemId)) },
+    )
+
+    RecentlyAddedHomeSection(
+      state = state.recentlyAddedState,
+      onItemClick = { itemId -> onIntent(HomeIntent.RecentlyAddedItemClicked(itemId)) },
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
   }
 }
 
@@ -142,6 +156,50 @@ private fun ContinueWatchingSection(
 
     is ContinueWatchingState.Empty,
     is ContinueWatchingState.Error,
+    -> Unit
+  }
+}
+
+@Composable
+private fun NextUpSection(
+  state: NextUpState,
+  onItemClick: (itemId: String) -> Unit,
+) {
+  when(state) {
+    is NextUpState.Loading -> Unit
+
+    is NextUpState.Loaded -> {
+      Spacer(modifier = Modifier.height(16.dp))
+      NextUpRow(
+        items = state.items,
+        onItemClick = onItemClick,
+      )
+    }
+
+    is NextUpState.Empty,
+    is NextUpState.Error,
+    -> Unit
+  }
+}
+
+@Composable
+private fun RecentlyAddedHomeSection(
+  state: RecentlyAddedState,
+  onItemClick: (itemId: String) -> Unit,
+) {
+  when(state) {
+    is RecentlyAddedState.Loading -> Unit
+
+    is RecentlyAddedState.Loaded -> {
+      Spacer(modifier = Modifier.height(16.dp))
+      RecentlyAddedSection(
+        items = state.items,
+        onItemClick = onItemClick,
+      )
+    }
+
+    is RecentlyAddedState.Empty,
+    is RecentlyAddedState.Error,
     -> Unit
   }
 }

@@ -241,11 +241,20 @@ private class FakeJellyfinLibraryService : JellyfinLibraryService {
 
   var latestItemsResult: JellyfinResult<List<BaseItemDto>> = JellyfinResult.Success(emptyList())
 
+  var nextUpResult: JellyfinResult<ItemsResult> = JellyfinResult.Success(
+    ItemsResult(items = emptyList(), totalRecordCount = 0),
+  )
+
   override suspend fun getResumeItems(
     limit: Int?,
     mediaTypes: List<String>?,
     fields: List<String>?,
   ): JellyfinResult<ItemsResult> = resumeItemsResult
+
+  override suspend fun getNextUpEpisodes(
+    limit: Int?,
+    fields: List<String>?,
+  ): JellyfinResult<ItemsResult> = nextUpResult
 
   override suspend fun getLatestItems(
     parentId: String?,
