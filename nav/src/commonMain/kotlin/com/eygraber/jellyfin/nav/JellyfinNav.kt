@@ -28,6 +28,8 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.eygraber.jellyfin.nav.dev.DetectShakesEffect
 import com.eygraber.jellyfin.nav.dev.jellyfinDevNavGraph
+import com.eygraber.jellyfin.screens.home.HomeGraph
+import com.eygraber.jellyfin.screens.home.HomeKey
 import com.eygraber.jellyfin.screens.root.RootGraph
 import com.eygraber.jellyfin.screens.root.RootKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeGraph
@@ -114,6 +116,10 @@ private fun jellyfinNavEntryProvider(
     provideWelcome(navGraph, backStack),
   )
 
+  viceEntry<HomeKey>(
+    provideHome(navGraph, backStack),
+  )
+
   jellyfinDevNavGraph(
     navGraph = navGraph,
     backStack = backStack,
@@ -160,6 +166,19 @@ sealed interface JellyfinNavKeys : NavKey {
   @Serializable
   data class ComingSoon(val feature: String) : JellyfinNavKeys
 }
+
+private fun provideHome(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: HomeKey ->
+  navGraph.homeFactory.createHomeGraph(
+    navigator = JellyfinNavigators.home(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private val JellyfinNavGraph.homeFactory
+  get() = this as HomeGraph.Factory
 
 private val JellyfinNavGraph.rootFactory
   get() = this as RootGraph.Factory
