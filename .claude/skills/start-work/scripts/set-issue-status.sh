@@ -11,17 +11,17 @@
 set -e
 
 OWNER="eygraber"
-PROJECT_ID="PVT_kwHOABDKXc4BOFIP"
-PROJECT_NUMBER=5
-STATUS_FIELD_ID="PVTSSF_lAHOABDKXc4BOFIPzg84wPs"
+PROJECT_ID="PVT_kwHOABDKXc4BOYQM"
+PROJECT_NUMBER=6
+STATUS_FIELD_ID="PVTSSF_lAHOABDKXc4BOYQMzg9GUow"
 
 # Status option IDs
 declare -A STATUS_IDS
-STATUS_IDS["backlog"]="00d992b2"
-STATUS_IDS["ready"]="f81fe634"
-STATUS_IDS["in-progress"]="11e3b05f"
-STATUS_IDS["in-review"]="e44e270f"
-STATUS_IDS["done"]="740920d0"
+STATUS_IDS["backlog"]="506dc4ca"
+STATUS_IDS["ready"]="01d0843d"
+STATUS_IDS["in-progress"]="2b058326"
+STATUS_IDS["in-review"]="dec70db3"
+STATUS_IDS["done"]="61ff0272"
 
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
   echo "Usage: $0 ISSUE_NUMBER STATUS" >&2

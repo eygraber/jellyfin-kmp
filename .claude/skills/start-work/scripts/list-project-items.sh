@@ -11,7 +11,7 @@
 set -e
 
 OWNER="eygraber"
-PROJECT_NUMBER=5
+PROJECT_NUMBER=6
 LIMIT=100
 STATUS=""
 
