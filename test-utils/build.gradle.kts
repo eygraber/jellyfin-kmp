@@ -7,10 +7,6 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
 }
 
-dependencies {
-  "androidRuntimeClasspath"(libs.test.compose.uiManifest)
-}
-
 kotlin {
   defaultKmpTargets(
     project = project,
@@ -26,6 +22,8 @@ kotlin {
       implementation(libs.bundles.test.composeUi)
       api(libs.test.junit)
 
+      implementation(libs.test.kotlinx.coroutines)
+
       api(libs.test.paparazzi)
 
       implementation(libs.test.robolectric)
@@ -36,12 +34,11 @@ kotlin {
       implementation(libs.compose.runtime)
 
       implementation(libs.kotlinx.coroutines.core)
-
-      implementation(libs.test.kotlinx.coroutines)
     }
   }
 }
 
 dependencies {
   androidRuntimeClasspath(libs.compose.uiToolingPreviewIde)
+  androidRuntimeClasspath(libs.test.compose.uiManifest)
 }
