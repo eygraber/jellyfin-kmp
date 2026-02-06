@@ -6,6 +6,7 @@ plugins {
   alias(libs.plugins.conventionsKotlinMultiplatform)
   alias(libs.plugins.conventionsProjectCommon)
   alias(libs.plugins.dependencyAnalysis)
+  alias(libs.plugins.metro)
   alias(libs.plugins.sqldelight)
 }
 
@@ -31,6 +32,8 @@ kotlin {
   sourceSets {
     commonMain.dependencies {
       api(projects.services.database.public)
+
+      implementation(projects.di)
 
       api(libs.kotlinx.coroutines.core)
 
