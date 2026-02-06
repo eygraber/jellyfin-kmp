@@ -45,6 +45,7 @@ kotlin {
       api(projects.nav)
 
       api(projects.screens.devSettings)
+      api(projects.screens.home)
       api(projects.screens.root)
       api(projects.screens.welcome)
 
