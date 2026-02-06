@@ -140,6 +140,33 @@ private class FakeRecentLibraryService : JellyfinLibraryService {
     ItemsResult(items = emptyList(), totalRecordCount = 0),
   )
 
+  @Suppress("LongParameterList")
+  override suspend fun getItems(
+    parentId: String?,
+    includeItemTypes: List<String>?,
+    sortBy: List<String>?,
+    sortOrder: String?,
+    startIndex: Int?,
+    limit: Int?,
+    recursive: Boolean?,
+    genres: List<String>?,
+    years: List<Int>?,
+    searchTerm: String?,
+    fields: List<String>?,
+  ): JellyfinResult<ItemsResult> = JellyfinResult.Success(
+    ItemsResult(items = emptyList(), totalRecordCount = 0),
+  )
+
+  override suspend fun getItem(itemId: String): JellyfinResult<BaseItemDto> =
+    JellyfinResult.Success(BaseItemDto(id = itemId))
+
+  override suspend fun getSimilarItems(
+    itemId: String,
+    limit: Int?,
+  ): JellyfinResult<ItemsResult> = JellyfinResult.Success(
+    ItemsResult(items = emptyList(), totalRecordCount = 0),
+  )
+
   override fun getImageUrl(
     itemId: String,
     imageType: ImageType,
