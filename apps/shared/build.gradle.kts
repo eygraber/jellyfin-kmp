@@ -40,6 +40,10 @@ kotlin {
 
       api(projects.services.deviceSensors.impl)
       api(projects.services.deviceSensors.public)
+      api(projects.services.logging.impl)
+      api(projects.services.logging.public)
+      api(projects.services.sdk.impl)
+      api(projects.services.sdk.public)
       api(projects.services.splashScreen.impl)
       api(projects.services.splashScreen.public)
 
@@ -68,6 +72,9 @@ licensee {
 
   // de.drick.compose:edge-to-edge-preview
   allow("Unlicense")
+
+  // slf4j uses a non-standard MIT license URL
+  allowUrl("https://opensource.org/license/mit")
 
   allowDependency(libs.jellyfinLint)
 }
