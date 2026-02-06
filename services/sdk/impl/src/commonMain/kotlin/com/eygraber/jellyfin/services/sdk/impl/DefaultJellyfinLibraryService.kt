@@ -152,6 +152,114 @@ class DefaultJellyfinLibraryService(
     }
   }
 
+  @Suppress("LongParameterList")
+  override suspend fun getItems(
+    parentId: String?,
+    includeItemTypes: List<String>?,
+    sortBy: List<String>?,
+    sortOrder: String?,
+    startIndex: Int?,
+    limit: Int?,
+    recursive: Boolean?,
+    genres: List<String>?,
+    years: List<Int>?,
+    searchTerm: String?,
+    fields: List<String>?,
+  ): JellyfinResult<ItemsResult> {
+    val serverInfo = sessionManager.currentServer.value
+      ?: return JellyfinResult.Error(
+        message = "Not connected to a server",
+        isEphemeral = false,
+      )
+
+    val userId = serverInfo.userId
+      ?: return JellyfinResult.Error(
+        message = "Not authenticated",
+        isEphemeral = false,
+      )
+
+    logger.debug(tag = TAG, message = "Fetching items for user: $userId")
+
+    val apiClient = sdk.createApiClient(serverInfo = serverInfo)
+    return try {
+      apiClient.libraryApi.getItems(
+        userId = userId,
+        parentId = parentId,
+        includeItemTypes = includeItemTypes,
+        sortBy = sortBy,
+        sortOrder = sortOrder,
+        startIndex = startIndex,
+        limit = limit,
+        recursive = recursive,
+        genres = genres,
+        years = years,
+        searchTerm = searchTerm,
+        fields = fields,
+      ).toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
+  override suspend fun getItem(itemId: String): JellyfinResult<BaseItemDto> {
+    val serverInfo = sessionManager.currentServer.value
+      ?: return JellyfinResult.Error(
+        message = "Not connected to a server",
+        isEphemeral = false,
+      )
+
+    val userId = serverInfo.userId
+      ?: return JellyfinResult.Error(
+        message = "Not authenticated",
+        isEphemeral = false,
+      )
+
+    logger.debug(tag = TAG, message = "Fetching item $itemId for user: $userId")
+
+    val apiClient = sdk.createApiClient(serverInfo = serverInfo)
+    return try {
+      apiClient.libraryApi.getItem(
+        userId = userId,
+        itemId = itemId,
+      ).toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
+  override suspend fun getSimilarItems(
+    itemId: String,
+    limit: Int?,
+  ): JellyfinResult<ItemsResult> {
+    val serverInfo = sessionManager.currentServer.value
+      ?: return JellyfinResult.Error(
+        message = "Not connected to a server",
+        isEphemeral = false,
+      )
+
+    val userId = serverInfo.userId
+      ?: return JellyfinResult.Error(
+        message = "Not authenticated",
+        isEphemeral = false,
+      )
+
+    logger.debug(tag = TAG, message = "Fetching similar items for $itemId, user: $userId")
+
+    val apiClient = sdk.createApiClient(serverInfo = serverInfo)
+    return try {
+      apiClient.libraryApi.getSimilarItems(
+        itemId = itemId,
+        userId = userId,
+        limit = limit,
+      ).toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
   override fun getImageUrl(
     itemId: String,
     imageType: ImageType,
