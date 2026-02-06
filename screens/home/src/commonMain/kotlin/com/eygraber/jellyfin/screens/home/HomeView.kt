@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.home.components.ContinueWatchingLoading
 import com.eygraber.jellyfin.screens.home.components.ContinueWatchingRow
+import com.eygraber.jellyfin.screens.home.components.LibraryCardsSection
 import com.eygraber.jellyfin.screens.home.components.NextUpRow
 import com.eygraber.jellyfin.screens.home.components.RecentlyAddedSection
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
@@ -132,6 +133,11 @@ private fun HomeContent(
       onItemClick = { itemId -> onIntent(HomeIntent.NextUpItemClicked(itemId)) },
     )
 
+    LibrariesHomeSection(
+      state = state.librariesState,
+      onLibraryClick = { libraryId -> onIntent(HomeIntent.LibraryClicked(libraryId)) },
+    )
+
     RecentlyAddedHomeSection(
       state = state.recentlyAddedState,
       onItemClick = { itemId -> onIntent(HomeIntent.RecentlyAddedItemClicked(itemId)) },
@@ -200,6 +206,28 @@ private fun RecentlyAddedHomeSection(
 
     is RecentlyAddedState.Empty,
     is RecentlyAddedState.Error,
+    -> Unit
+  }
+}
+
+@Composable
+private fun LibrariesHomeSection(
+  state: LibrariesState,
+  onLibraryClick: (libraryId: String) -> Unit,
+) {
+  when(state) {
+    is LibrariesState.Loading -> Unit
+
+    is LibrariesState.Loaded -> {
+      Spacer(modifier = Modifier.height(16.dp))
+      LibraryCardsSection(
+        libraries = state.libraries,
+        onLibraryClick = onLibraryClick,
+      )
+    }
+
+    is LibrariesState.Empty,
+    is LibrariesState.Error,
     -> Unit
   }
 }
