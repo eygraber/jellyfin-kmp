@@ -133,6 +133,26 @@ class LibraryApi(
   )
 
   /**
+   * Gets the next episodes that the user should watch for their in-progress series.
+   *
+   * @param userId The user ID.
+   * @param limit Maximum number of items to return.
+   * @param fields Additional fields to include in the response.
+   */
+  suspend fun getNextUpEpisodes(
+    userId: String,
+    limit: Int? = null,
+    fields: List<String>? = null,
+  ): SdkResult<ItemsResult> = get(
+    path = "Shows/NextUp",
+    queryParams = mapOf(
+      "userId" to userId,
+      "limit" to limit,
+      "fields" to fields?.joinToString(","),
+    ),
+  )
+
+  /**
    * Generates the URL for an item image.
    *
    * @param itemId The item ID.

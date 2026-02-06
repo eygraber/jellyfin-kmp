@@ -9,6 +9,8 @@ data class HomeViewState(
   val error: HomeError? = null,
   val isRefreshing: Boolean = false,
   val continueWatchingState: ContinueWatchingState = ContinueWatchingState.Loading,
+  val nextUpState: NextUpState = NextUpState.Loading,
+  val recentlyAddedState: RecentlyAddedState = RecentlyAddedState.Loading,
 ) {
   companion object {
     val Loading = HomeViewState(isLoading = true)
@@ -62,3 +64,58 @@ data class ContinueWatchingItem(
       else -> null
     }
 }
+
+@Immutable
+sealed interface NextUpState {
+  data object Loading : NextUpState
+  data object Empty : NextUpState
+  data object Error : NextUpState
+
+  data class Loaded(
+    val items: List<NextUpItem>,
+  ) : NextUpState
+}
+
+@Immutable
+data class NextUpItem(
+  val id: String,
+  val name: String,
+  val seriesName: String?,
+  val seasonName: String?,
+  val indexNumber: Int?,
+  val parentIndexNumber: Int?,
+  val imageUrl: String,
+  val backdropImageUrl: String?,
+) {
+  val displayName: String
+    get() = when {
+      seriesName != null && parentIndexNumber != null && indexNumber != null ->
+        "S$parentIndexNumber:E$indexNumber"
+
+      else -> name
+    }
+
+  val subtitle: String
+    get() = name
+}
+
+@Immutable
+sealed interface RecentlyAddedState {
+  data object Loading : RecentlyAddedState
+  data object Empty : RecentlyAddedState
+  data object Error : RecentlyAddedState
+
+  data class Loaded(
+    val items: List<RecentlyAddedItem>,
+  ) : RecentlyAddedState
+}
+
+@Immutable
+data class RecentlyAddedItem(
+  val id: String,
+  val name: String,
+  val type: String,
+  val productionYear: Int?,
+  val imageUrl: String,
+  val seriesName: String?,
+)
