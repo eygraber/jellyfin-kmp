@@ -6,6 +6,7 @@ import com.eygraber.jellyfin.sdk.core.JellyfinSdk
 import com.eygraber.jellyfin.sdk.core.ServerInfo
 import com.eygraber.jellyfin.sdk.core.api.user.userApi
 import com.eygraber.jellyfin.sdk.core.model.AuthenticationResult
+import com.eygraber.jellyfin.sdk.core.model.QuickConnectResult
 import com.eygraber.jellyfin.sdk.core.model.UserDto
 import com.eygraber.jellyfin.services.logging.JellyfinLogger
 import com.eygraber.jellyfin.services.sdk.JellyfinAuthService
@@ -96,6 +97,39 @@ class DefaultJellyfinAuthService(
 
     return try {
       apiClient.userApi.getPublicUsers().toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
+  override suspend fun initiateQuickConnect(
+    serverUrl: String,
+  ): JellyfinResult<QuickConnectResult> {
+    logger.info(tag = TAG, message = "Initiating Quick Connect on $serverUrl")
+
+    val apiClient = sdk.createApiClient(
+      serverInfo = ServerInfo(baseUrl = serverUrl),
+    )
+
+    return try {
+      apiClient.userApi.initiateQuickConnect().toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
+  override suspend fun getQuickConnectStatus(
+    serverUrl: String,
+    secret: String,
+  ): JellyfinResult<QuickConnectResult> {
+    val apiClient = sdk.createApiClient(
+      serverInfo = ServerInfo(baseUrl = serverUrl),
+    )
+
+    return try {
+      apiClient.userApi.getQuickConnectStatus(secret = secret).toJellyfinResult()
     }
     finally {
       apiClient.close()
