@@ -20,6 +20,7 @@ kotlin {
       api(projects.di)
 
       implementation(projects.screens.devSettings)
+      implementation(projects.screens.home)
       implementation(projects.screens.root)
       implementation(projects.screens.welcome)
 
