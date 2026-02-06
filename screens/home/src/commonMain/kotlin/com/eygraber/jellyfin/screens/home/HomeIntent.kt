@@ -4,4 +4,6 @@ sealed interface HomeIntent {
   data object Refresh : HomeIntent
   data object RetryLoad : HomeIntent
   data class ContinueWatchingItemClicked(val itemId: String) : HomeIntent
+  data class NextUpItemClicked(val itemId: String) : HomeIntent
+  data class RecentlyAddedItemClicked(val itemId: String) : HomeIntent
 }

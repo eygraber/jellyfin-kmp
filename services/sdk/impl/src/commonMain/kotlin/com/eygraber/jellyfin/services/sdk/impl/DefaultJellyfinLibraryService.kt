@@ -95,6 +95,37 @@ class DefaultJellyfinLibraryService(
     }
   }
 
+  override suspend fun getNextUpEpisodes(
+    limit: Int?,
+    fields: List<String>?,
+  ): JellyfinResult<ItemsResult> {
+    val serverInfo = sessionManager.currentServer.value
+      ?: return JellyfinResult.Error(
+        message = "Not connected to a server",
+        isEphemeral = false,
+      )
+
+    val userId = serverInfo.userId
+      ?: return JellyfinResult.Error(
+        message = "Not authenticated",
+        isEphemeral = false,
+      )
+
+    logger.debug(tag = TAG, message = "Fetching next up episodes for user: $userId")
+
+    val apiClient = sdk.createApiClient(serverInfo = serverInfo)
+    return try {
+      apiClient.libraryApi.getNextUpEpisodes(
+        userId = userId,
+        limit = limit,
+        fields = fields,
+      ).toJellyfinResult()
+    }
+    finally {
+      apiClient.close()
+    }
+  }
+
   override fun getImageUrl(
     itemId: String,
     imageType: ImageType,

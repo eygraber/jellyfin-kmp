@@ -45,6 +45,18 @@ interface JellyfinLibraryService {
   ): JellyfinResult<List<BaseItemDto>>
 
   /**
+   * Gets the next episodes the user should watch for their in-progress series.
+   *
+   * @param limit Maximum number of items to return.
+   * @param fields Additional fields to include in the response.
+   * @return A [JellyfinResult] containing the [ItemsResult].
+   */
+  suspend fun getNextUpEpisodes(
+    limit: Int? = null,
+    fields: List<String>? = null,
+  ): JellyfinResult<ItemsResult>
+
+  /**
    * Generates the URL for an item image.
    *
    * @param itemId The item ID.

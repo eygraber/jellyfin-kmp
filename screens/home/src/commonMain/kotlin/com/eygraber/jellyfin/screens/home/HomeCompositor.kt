@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.domain.session.SessionManager
 import com.eygraber.jellyfin.domain.session.SessionState
 import com.eygraber.jellyfin.screens.home.model.ContinueWatchingModel
+import com.eygraber.jellyfin.screens.home.model.NextUpModel
+import com.eygraber.jellyfin.screens.home.model.RecentlyAddedModel
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
 
@@ -15,6 +17,8 @@ class HomeCompositor(
   private val sessionManager: SessionManager,
   private val navigator: HomeNavigator,
   private val continueWatchingModel: ContinueWatchingModel,
+  private val nextUpModel: NextUpModel,
+  private val recentlyAddedModel: RecentlyAddedModel,
 ) : ViceCompositor<HomeIntent, HomeViewState> {
   private var isLoading by mutableStateOf(true)
   private var isRefreshing by mutableStateOf(false)
@@ -32,6 +36,8 @@ class HomeCompositor(
     }
 
     val continueWatchingState = continueWatchingModel.currentState()
+    val nextUpState = nextUpModel.currentState()
+    val recentlyAddedState = recentlyAddedModel.currentState()
 
     return HomeViewState(
       userName = userName,
@@ -39,6 +45,8 @@ class HomeCompositor(
       error = error,
       isRefreshing = isRefreshing,
       continueWatchingState = continueWatchingState,
+      nextUpState = nextUpState,
+      recentlyAddedState = recentlyAddedState,
     )
   }
 
@@ -47,6 +55,8 @@ class HomeCompositor(
       HomeIntent.Refresh -> refresh()
       HomeIntent.RetryLoad -> retryLoad()
       is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(intent.itemId)
+      is HomeIntent.NextUpItemClicked -> navigator.navigateToItemDetail(intent.itemId)
+      is HomeIntent.RecentlyAddedItemClicked -> navigator.navigateToItemDetail(intent.itemId)
     }
   }
 
@@ -60,6 +70,8 @@ class HomeCompositor(
     }
 
     continueWatchingModel.refresh()
+    nextUpModel.refresh()
+    recentlyAddedModel.refresh()
 
     isRefreshing = false
   }
