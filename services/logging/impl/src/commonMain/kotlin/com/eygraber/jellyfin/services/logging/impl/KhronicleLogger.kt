@@ -3,6 +3,9 @@ package com.eygraber.jellyfin.services.logging.impl
 import com.eygraber.jellyfin.services.logging.JellyfinLogger
 import com.eygraber.jellyfin.services.logging.LogSanitizer
 import com.juul.khronicle.Log
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 
 /**
  * [JellyfinLogger] implementation backed by Khronicle.
@@ -10,8 +13,10 @@ import com.juul.khronicle.Log
  * All messages are sanitized via the provided [LogSanitizer] before being logged.
  * This ensures sensitive data (tokens, passwords, emails) never appears in logs.
  */
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class KhronicleLogger(
-  private val sanitizer: LogSanitizer = DefaultLogSanitizer(),
+  private val sanitizer: LogSanitizer,
 ) : JellyfinLogger {
   override fun verbose(tag: String, message: String) {
     Log.verbose(tag = tag) { sanitizer.sanitize(message) }

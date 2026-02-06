@@ -1,6 +1,9 @@
 package com.eygraber.jellyfin.services.logging.impl
 
 import com.eygraber.jellyfin.services.logging.LogSanitizer
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 
 /**
  * Default [LogSanitizer] that redacts common sensitive data patterns.
@@ -13,6 +16,8 @@ import com.eygraber.jellyfin.services.logging.LogSanitizer
  * - API keys (e.g., `api_key=...`, `apikey=...`)
  * - Email addresses
  */
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultLogSanitizer : LogSanitizer {
   override fun sanitize(message: String): String =
     sensitivePatterns.fold(message) { current, (pattern, replacement) ->
