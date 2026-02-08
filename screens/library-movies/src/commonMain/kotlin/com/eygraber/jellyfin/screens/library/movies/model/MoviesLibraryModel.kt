@@ -12,6 +12,8 @@ import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.screens.library.movies.MovieItem
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
+import com.eygraber.jellyfin.ui.library.controls.LibraryFilters
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import com.eygraber.vice.ViceSource
 import dev.zacsweers.metro.Inject
 
@@ -21,6 +23,10 @@ data class MoviesLibraryState(
   val isLoadingMore: Boolean = false,
   val hasMore: Boolean = false,
   val error: MoviesLibraryModelError? = null,
+  val sortConfig: LibrarySortConfig = LibrarySortConfig(),
+  val filters: LibraryFilters = LibraryFilters(),
+  val availableGenres: List<String> = emptyList(),
+  val availableYears: List<Int> = emptyList(),
 )
 
 enum class MoviesLibraryModelError {
@@ -47,10 +53,12 @@ class MoviesLibraryModel(
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("Movie"),
-      sortBy = ItemSortBy.SortName,
-      sortOrder = SortOrder.Ascending,
+      sortBy = state.sortConfig.sortBy,
+      sortOrder = state.sortConfig.sortOrder,
       startIndex = 0,
       limit = PAGE_SIZE,
+      genres = state.filters.genres.ifEmpty { null },
+      years = state.filters.years.ifEmpty { null },
     )
 
     state = if(result.isSuccess()) {
@@ -58,14 +66,15 @@ class MoviesLibraryModel(
       val movieItems = paginatedResult.items.map { item -> item.toMovieItem() }
       currentStartIndex = movieItems.size
 
-      MoviesLibraryState(
+      state.copy(
         items = movieItems,
         isLoading = false,
         hasMore = paginatedResult.hasMore,
+        error = null,
       )
     }
     else {
-      MoviesLibraryState(
+      state.copy(
         isLoading = false,
         error = MoviesLibraryModelError.LoadFailed,
       )
@@ -80,10 +89,12 @@ class MoviesLibraryModel(
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("Movie"),
-      sortBy = ItemSortBy.SortName,
-      sortOrder = SortOrder.Ascending,
+      sortBy = state.sortConfig.sortBy,
+      sortOrder = state.sortConfig.sortOrder,
       startIndex = currentStartIndex,
       limit = PAGE_SIZE,
+      genres = state.filters.genres.ifEmpty { null },
+      years = state.filters.years.ifEmpty { null },
     )
 
     state = if(result.isSuccess()) {
@@ -106,6 +117,30 @@ class MoviesLibraryModel(
     loadInitial(libraryId)
   }
 
+  fun updateSortConfig(sortConfig: LibrarySortConfig) {
+    state = state.copy(sortConfig = sortConfig)
+  }
+
+  fun updateFilters(filters: LibraryFilters) {
+    state = state.copy(filters = filters)
+  }
+
+  suspend fun loadAvailableFilters(libraryId: String) {
+    val genresResult = itemsRepository.getItems(
+      parentId = libraryId,
+      includeItemTypes = listOf("Genre"),
+      sortBy = ItemSortBy.SortName,
+      sortOrder = SortOrder.Ascending,
+      limit = FILTER_LIMIT,
+    )
+
+    if(genresResult.isSuccess()) {
+      state = state.copy(
+        availableGenres = genresResult.value.items.map { it.name },
+      )
+    }
+  }
+
   private fun LibraryItem.toMovieItem(): MovieItem = MovieItem(
     id = id,
     name = name,
@@ -125,5 +160,6 @@ class MoviesLibraryModel(
   companion object {
     private const val PAGE_SIZE = 50
     private const val POSTER_MAX_WIDTH = 300
+    private const val FILTER_LIMIT = 200
   }
 }

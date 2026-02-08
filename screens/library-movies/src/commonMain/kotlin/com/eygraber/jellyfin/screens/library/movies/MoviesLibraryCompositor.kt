@@ -2,8 +2,13 @@ package com.eygraber.jellyfin.screens.library.movies
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.screens.library.movies.model.MoviesLibraryModel
 import com.eygraber.jellyfin.screens.library.movies.model.MoviesLibraryModelError
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
+import com.eygraber.jellyfin.ui.library.controls.LibraryViewMode
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
 
@@ -13,6 +18,8 @@ class MoviesLibraryCompositor(
   private val navigator: MoviesLibraryNavigator,
   private val moviesModel: MoviesLibraryModel,
 ) : ViceCompositor<MoviesLibraryIntent, MoviesLibraryViewState> {
+  private var isFilterSheetVisible by mutableStateOf(false)
+  private var viewMode by mutableStateOf(LibraryViewMode.Grid)
 
   @Composable
   override fun composite(): MoviesLibraryViewState {
@@ -20,6 +27,7 @@ class MoviesLibraryCompositor(
 
     LaunchedEffect(Unit) {
       moviesModel.loadInitial(key.libraryId)
+      moviesModel.loadAvailableFilters(key.libraryId)
     }
 
     return MoviesLibraryViewState(
@@ -29,6 +37,12 @@ class MoviesLibraryCompositor(
       error = modelState.error?.toViewError(),
       hasMore = modelState.hasMore,
       isEmpty = !modelState.isLoading && modelState.error == null && modelState.items.isEmpty(),
+      sortConfig = modelState.sortConfig,
+      filters = modelState.filters,
+      viewMode = viewMode,
+      availableGenres = modelState.availableGenres,
+      availableYears = modelState.availableYears,
+      isFilterSheetVisible = isFilterSheetVisible,
     )
   }
 
@@ -38,6 +52,25 @@ class MoviesLibraryCompositor(
       MoviesLibraryIntent.Refresh -> moviesModel.refresh(key.libraryId)
       MoviesLibraryIntent.RetryLoad -> moviesModel.loadInitial(key.libraryId)
       is MoviesLibraryIntent.SelectMovie -> navigator.navigateToMovieDetail(intent.movieId)
+
+      is MoviesLibraryIntent.ChangeSortOption -> {
+        moviesModel.updateSortConfig(
+          LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder),
+        )
+        moviesModel.loadInitial(key.libraryId)
+      }
+
+      is MoviesLibraryIntent.ChangeFilters -> {
+        moviesModel.updateFilters(intent.filters)
+        moviesModel.loadInitial(key.libraryId)
+      }
+
+      is MoviesLibraryIntent.ChangeViewMode ->
+        viewMode = intent.viewMode
+
+      MoviesLibraryIntent.ToggleFilterSheet ->
+        isFilterSheetVisible = !isFilterSheetVisible
+
       MoviesLibraryIntent.NavigateBack -> navigator.navigateBack()
     }
   }

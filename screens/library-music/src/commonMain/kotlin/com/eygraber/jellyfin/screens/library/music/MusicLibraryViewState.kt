@@ -1,6 +1,7 @@
 package com.eygraber.jellyfin.screens.library.music
 
 import androidx.compose.runtime.Immutable
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 
 @Immutable
 data class MusicLibraryViewState(
@@ -12,6 +13,7 @@ data class MusicLibraryViewState(
   val error: MusicLibraryError? = null,
   val hasMore: Boolean = false,
   val isEmpty: Boolean = false,
+  val sortConfig: LibrarySortConfig = LibrarySortConfig(),
 ) {
   companion object {
     val Loading = MusicLibraryViewState(isLoading = true)
