@@ -36,6 +36,8 @@ kotlin {
       api(projects.data.auth.public)
       api(projects.data.items.impl)
       api(projects.data.items.public)
+      api(projects.data.search.impl)
+      api(projects.data.search.public)
       api(projects.data.server.impl)
       api(projects.data.server.public)
 
