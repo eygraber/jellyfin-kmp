@@ -35,6 +35,7 @@ kotlin {
       implementation(projects.screens.root)
       implementation(projects.screens.search)
       implementation(projects.screens.tvshowDetail)
+      implementation(projects.screens.videoPlayer)
       implementation(projects.screens.tvshowEpisodes)
       implementation(projects.screens.tvshowSeasons)
       implementation(projects.screens.welcome)

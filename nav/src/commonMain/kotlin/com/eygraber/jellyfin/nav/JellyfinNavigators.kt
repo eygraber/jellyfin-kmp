@@ -33,6 +33,7 @@ import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailNavigator
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesNavigator
 import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsNavigator
+import com.eygraber.jellyfin.screens.video.player.VideoPlayerNavigator
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeNavigator
 
@@ -223,5 +224,11 @@ internal object JellyfinNavigators {
     onNavigateToItemDetail = { itemId ->
       backStack.add(JellyfinNavKeys.ComingSoon("Item Detail ($itemId)"))
     },
+  )
+
+  fun videoPlayer(
+    backStack: NavBackStack<NavKey>,
+  ) = VideoPlayerNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
   )
 }

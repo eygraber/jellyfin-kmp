@@ -18,6 +18,7 @@ import com.eygraber.jellyfin.screens.search.SearchKey
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
 import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsKey
+import com.eygraber.jellyfin.screens.video.player.VideoPlayerKey
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 
 internal fun PolymorphicModuleBuilder<NavKey>.addSubclasses() {
@@ -38,4 +39,5 @@ internal fun PolymorphicModuleBuilder<NavKey>.addSubclasses() {
   subclass(TvShowEpisodesKey::class, TvShowEpisodesKey.serializer())
   subclass(TvShowSeasonsKey::class, TvShowSeasonsKey.serializer())
   subclass(TvShowsLibraryKey::class, TvShowsLibraryKey.serializer())
+  subclass(VideoPlayerKey::class, VideoPlayerKey.serializer())
 }
