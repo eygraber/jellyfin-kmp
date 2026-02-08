@@ -9,6 +9,7 @@ import com.eygraber.jellyfin.screens.library.genres.GenresLibraryKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
+import com.eygraber.jellyfin.screens.movie.detail.MovieDetailKey
 import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksKey
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsKey
 import com.eygraber.jellyfin.screens.root.RootKey
@@ -24,6 +25,7 @@ internal fun PolymorphicModuleBuilder<NavKey>.addSubclasses() {
   subclass(GenreItemsKey::class, GenreItemsKey.serializer())
   subclass(GenresLibraryKey::class, GenresLibraryKey.serializer())
   subclass(HomeKey::class, HomeKey.serializer())
+  subclass(MovieDetailKey::class, MovieDetailKey.serializer())
   subclass(MoviesLibraryKey::class, MoviesLibraryKey.serializer())
   subclass(MusicLibraryKey::class, MusicLibraryKey.serializer())
   subclass(RootKey::class, RootKey.serializer())
