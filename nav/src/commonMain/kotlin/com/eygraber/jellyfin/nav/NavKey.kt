@@ -1,7 +1,11 @@
 package com.eygraber.jellyfin.nav
 
 import androidx.navigation3.runtime.NavKey
+import com.eygraber.jellyfin.screens.collection.items.CollectionItemsKey
+import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
 import com.eygraber.jellyfin.screens.home.HomeKey
+import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryKey
+import com.eygraber.jellyfin.screens.library.genres.GenresLibraryKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
@@ -15,6 +19,10 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
 internal fun PolymorphicModuleBuilder<NavKey>.addSubclasses() {
   subclass(AlbumTracksKey::class, AlbumTracksKey.serializer())
   subclass(ArtistAlbumsKey::class, ArtistAlbumsKey.serializer())
+  subclass(CollectionItemsKey::class, CollectionItemsKey.serializer())
+  subclass(CollectionsLibraryKey::class, CollectionsLibraryKey.serializer())
+  subclass(GenreItemsKey::class, GenreItemsKey.serializer())
+  subclass(GenresLibraryKey::class, GenresLibraryKey.serializer())
   subclass(HomeKey::class, HomeKey.serializer())
   subclass(MoviesLibraryKey::class, MoviesLibraryKey.serializer())
   subclass(MusicLibraryKey::class, MusicLibraryKey.serializer())

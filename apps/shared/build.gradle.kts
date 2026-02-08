@@ -46,8 +46,12 @@ kotlin {
 
       api(projects.nav)
 
+      api(projects.screens.collectionItems)
       api(projects.screens.devSettings)
+      api(projects.screens.genreItems)
       api(projects.screens.home)
+      api(projects.screens.libraryCollections)
+      api(projects.screens.libraryGenres)
       api(projects.screens.libraryMovies)
       api(projects.screens.libraryMusic)
       api(projects.screens.libraryTvshows)
