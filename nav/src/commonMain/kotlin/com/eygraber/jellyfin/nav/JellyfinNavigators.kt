@@ -17,6 +17,8 @@ import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryNavigator
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryNavigator
+import com.eygraber.jellyfin.screens.movie.detail.MovieDetailKey
+import com.eygraber.jellyfin.screens.movie.detail.MovieDetailNavigator
 import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksKey
 import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksNavigator
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsKey
@@ -74,12 +76,18 @@ internal object JellyfinNavigators {
     },
   )
 
+  fun movieDetail(
+    backStack: NavBackStack<NavKey>,
+  ) = MovieDetailNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+  )
+
   fun moviesLibrary(
     backStack: NavBackStack<NavKey>,
   ) = MoviesLibraryNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
     onNavigateToMovieDetail = { movieId ->
-      backStack.add(JellyfinNavKeys.ComingSoon("Movie Detail ($movieId)"))
+      backStack.add(MovieDetailKey(movieId = movieId))
     },
   )
 
