@@ -3,6 +3,7 @@ package com.eygraber.jellyfin.screens.library.movies
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -25,6 +26,12 @@ import com.eygraber.jellyfin.screens.library.movies.components.MoviePosterGrid
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
+import com.eygraber.jellyfin.ui.library.controls.ActiveFilterChips
+import com.eygraber.jellyfin.ui.library.controls.FilterButton
+import com.eygraber.jellyfin.ui.library.controls.FilterSheet
+import com.eygraber.jellyfin.ui.library.controls.SortMenu
+import com.eygraber.jellyfin.ui.library.controls.ViewToggle
+import com.eygraber.jellyfin.ui.library.controls.movieSortOptions
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -50,6 +57,27 @@ internal fun MoviesLibraryView(
               )
             }
           },
+          actions = {
+            Row {
+              SortMenu(
+                sortConfig = state.sortConfig,
+                sortOptions = movieSortOptions,
+                onSortChange = { sortBy, sortOrder ->
+                  onIntent(MoviesLibraryIntent.ChangeSortOption(sortBy = sortBy, sortOrder = sortOrder))
+                },
+              )
+
+              FilterButton(
+                activeFilterCount = state.filters.activeFilterCount,
+                onClick = { onIntent(MoviesLibraryIntent.ToggleFilterSheet) },
+              )
+
+              ViewToggle(
+                viewMode = state.viewMode,
+                onViewModeChange = { onIntent(MoviesLibraryIntent.ChangeViewMode(viewMode = it)) },
+              )
+            }
+          },
         )
       },
     ) { contentPadding ->
@@ -60,21 +88,51 @@ internal fun MoviesLibraryView(
           .fillMaxSize()
           .padding(contentPadding),
       ) {
-        when {
-          state.isLoading -> LoadingContent()
-          state.error != null -> ErrorContent(
-            error = state.error,
-            onRetry = { onIntent(MoviesLibraryIntent.RetryLoad) },
+        Column {
+          ActiveFilterChips(
+            filters = state.filters,
+            onRemoveGenre = { genre ->
+              onIntent(
+                MoviesLibraryIntent.ChangeFilters(
+                  filters = state.filters.copy(genres = state.filters.genres - genre),
+                ),
+              )
+            },
+            onRemoveYear = { year ->
+              onIntent(
+                MoviesLibraryIntent.ChangeFilters(
+                  filters = state.filters.copy(years = state.filters.years - year),
+                ),
+              )
+            },
           )
-          state.isEmpty -> EmptyContent()
-          else -> MoviePosterGrid(
-            items = state.items,
-            isLoadingMore = state.isLoadingMore,
-            hasMore = state.hasMore,
-            onMovieClick = { movieId -> onIntent(MoviesLibraryIntent.SelectMovie(movieId)) },
-            onLoadMore = { onIntent(MoviesLibraryIntent.LoadMore) },
-          )
+
+          when {
+            state.isLoading -> LoadingContent()
+            state.error != null -> ErrorContent(
+              error = state.error,
+              onRetry = { onIntent(MoviesLibraryIntent.RetryLoad) },
+            )
+            state.isEmpty -> EmptyContent()
+            else -> MoviePosterGrid(
+              items = state.items,
+              isLoadingMore = state.isLoadingMore,
+              hasMore = state.hasMore,
+              onMovieClick = { movieId -> onIntent(MoviesLibraryIntent.SelectMovie(movieId)) },
+              onLoadMore = { onIntent(MoviesLibraryIntent.LoadMore) },
+            )
+          }
         }
+      }
+
+      if(state.isFilterSheetVisible) {
+        FilterSheet(
+          filters = state.filters,
+          availableGenres = state.availableGenres,
+          availableYears = state.availableYears,
+          onFilterChange = { onIntent(MoviesLibraryIntent.ChangeFilters(filters = it)) },
+          onDismiss = { onIntent(MoviesLibraryIntent.ToggleFilterSheet) },
+        )
       }
     }
   }

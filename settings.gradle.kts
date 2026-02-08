@@ -136,6 +136,7 @@ include(":services:splash-screen:public")
 include(":test-utils")
 include(":ui:compose")
 include(":ui:icons")
+include(":ui:library-controls")
 include(":ui:material")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

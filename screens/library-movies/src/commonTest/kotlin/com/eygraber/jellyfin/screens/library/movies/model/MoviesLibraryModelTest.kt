@@ -8,8 +8,11 @@ import com.eygraber.jellyfin.data.items.PaginatedResult
 import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
+import com.eygraber.jellyfin.ui.library.controls.LibraryFilters
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -195,6 +198,60 @@ class MoviesLibraryModelTest {
 
       val state = model.stateForTest
       state.items[0].imageUrl.shouldBeNull()
+    }
+  }
+
+  @Test
+  fun updateSortConfig_changes_sort_configuration() {
+    runTest {
+      val newConfig = LibrarySortConfig(
+        sortBy = ItemSortBy.CommunityRating,
+        sortOrder = SortOrder.Descending,
+      )
+
+      model.updateSortConfig(newConfig)
+
+      val state = model.stateForTest
+      state.sortConfig.sortBy shouldBe ItemSortBy.CommunityRating
+      state.sortConfig.sortOrder shouldBe SortOrder.Descending
+    }
+  }
+
+  @Test
+  fun updateFilters_changes_active_filters() {
+    runTest {
+      val newFilters = LibraryFilters(
+        genres = listOf("Action", "Comedy"),
+        years = listOf(2020, 2021),
+      )
+
+      model.updateFilters(newFilters)
+
+      val state = model.stateForTest
+      state.filters.genres shouldBe listOf("Action", "Comedy")
+      state.filters.years shouldBe listOf(2020, 2021)
+    }
+  }
+
+  @Test
+  fun loadAvailableFilters_populates_genres() {
+    runTest {
+      fakeRepository.getItemsResult = JellyfinResult.Success(
+        PaginatedResult(
+          items = listOf(
+            createLibraryItem(id = "genre-1", name = "Action"),
+            createLibraryItem(id = "genre-2", name = "Comedy"),
+          ),
+          totalRecordCount = 2,
+          startIndex = 0,
+        ),
+      )
+
+      model.loadAvailableFilters("lib-1")
+
+      val state = model.stateForTest
+      state.availableGenres shouldContain "Action"
+      state.availableGenres shouldContain "Comedy"
     }
   }
 

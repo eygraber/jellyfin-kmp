@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.eygraber.jellyfin.screens.library.music.model.MusicLibraryModel
 import com.eygraber.jellyfin.screens.library.music.model.MusicLibraryModelError
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
 
@@ -34,6 +35,7 @@ class MusicLibraryCompositor(
         modelState.error == null &&
         modelState.artists.isEmpty() &&
         modelState.albums.isEmpty(),
+      sortConfig = modelState.sortConfig,
     )
   }
 
@@ -45,6 +47,14 @@ class MusicLibraryCompositor(
       is MusicLibraryIntent.SelectTab -> musicModel.switchTab(key.libraryId, intent.tab)
       is MusicLibraryIntent.SelectArtist -> navigator.navigateToArtistAlbums(intent.artistId)
       is MusicLibraryIntent.SelectAlbum -> navigator.navigateToAlbumTracks(intent.albumId)
+
+      is MusicLibraryIntent.ChangeSortOption -> {
+        musicModel.updateSortConfig(
+          LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder),
+        )
+        musicModel.loadInitial(key.libraryId)
+      }
+
       MusicLibraryIntent.NavigateBack -> navigator.navigateBack()
     }
   }

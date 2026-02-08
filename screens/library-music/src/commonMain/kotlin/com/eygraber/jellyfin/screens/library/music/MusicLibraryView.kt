@@ -27,6 +27,8 @@ import com.eygraber.jellyfin.screens.library.music.components.ArtistsList
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
+import com.eygraber.jellyfin.ui.library.controls.SortMenu
+import com.eygraber.jellyfin.ui.library.controls.musicSortOptions
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -52,6 +54,15 @@ internal fun MusicLibraryView(
                   contentDescription = "Navigate back",
                 )
               }
+            },
+            actions = {
+              SortMenu(
+                sortConfig = state.sortConfig,
+                sortOptions = musicSortOptions,
+                onSortChange = { sortBy, sortOrder ->
+                  onIntent(MusicLibraryIntent.ChangeSortOption(sortBy = sortBy, sortOrder = sortOrder))
+                },
+              )
             },
           )
 
