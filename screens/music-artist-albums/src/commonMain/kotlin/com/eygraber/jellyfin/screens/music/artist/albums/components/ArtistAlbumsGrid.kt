@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
@@ -21,20 +22,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumItem
+import com.eygraber.jellyfin.screens.music.artist.albums.ArtistDetail
+import com.eygraber.jellyfin.screens.music.artist.albums.ArtistHeader
+
+private const val GRID_COLUMNS = 2
 
 @Composable
 internal fun ArtistAlbumsGrid(
+  artist: ArtistDetail?,
   albums: List<ArtistAlbumItem>,
   onAlbumClick: (albumId: String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   LazyVerticalGrid(
-    columns = GridCells.Adaptive(minSize = 140.dp),
+    columns = GridCells.Fixed(GRID_COLUMNS),
     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     verticalArrangement = Arrangement.spacedBy(8.dp),
     modifier = modifier.fillMaxSize(),
   ) {
+    item(
+      key = "artist-header",
+      span = { GridItemSpan(maxLineSpan) },
+    ) {
+      ArtistHeader(artist = artist)
+    }
+
     items(
       items = albums,
       key = { it.id },
