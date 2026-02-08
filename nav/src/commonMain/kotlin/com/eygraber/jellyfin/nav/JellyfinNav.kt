@@ -32,8 +32,14 @@ import com.eygraber.jellyfin.screens.home.HomeGraph
 import com.eygraber.jellyfin.screens.home.HomeKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryGraph
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
+import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryGraph
+import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
 import com.eygraber.jellyfin.screens.root.RootGraph
 import com.eygraber.jellyfin.screens.root.RootKey
+import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesGraph
+import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
+import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsGraph
+import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeGraph
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import com.eygraber.vice.nav3.LocalSharedTransitionScope
@@ -126,6 +132,18 @@ private fun jellyfinNavEntryProvider(
     provideMoviesLibrary(navGraph, backStack),
   )
 
+  viceEntry<TvShowsLibraryKey>(
+    provideTvShowsLibrary(navGraph, backStack),
+  )
+
+  viceEntry<TvShowSeasonsKey>(
+    provideTvShowSeasons(navGraph, backStack),
+  )
+
+  viceEntry<TvShowEpisodesKey>(
+    provideTvShowEpisodes(navGraph, backStack),
+  )
+
   jellyfinDevNavGraph(
     navGraph = navGraph,
     backStack = backStack,
@@ -193,6 +211,36 @@ private fun provideMoviesLibrary(
   ).navEntryProvider
 }
 
+private fun provideTvShowsLibrary(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: TvShowsLibraryKey ->
+  navGraph.tvShowsLibraryFactory.createTvShowsLibraryGraph(
+    navigator = JellyfinNavigators.tvShowsLibrary(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideTvShowSeasons(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: TvShowSeasonsKey ->
+  navGraph.tvShowSeasonsFactory.createTvShowSeasonsGraph(
+    navigator = JellyfinNavigators.tvShowSeasons(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideTvShowEpisodes(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: TvShowEpisodesKey ->
+  navGraph.tvShowEpisodesFactory.createTvShowEpisodesGraph(
+    navigator = JellyfinNavigators.tvShowEpisodes(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private val JellyfinNavGraph.homeFactory
   get() = this as HomeGraph.Factory
 
@@ -201,6 +249,15 @@ private val JellyfinNavGraph.moviesLibraryFactory
 
 private val JellyfinNavGraph.rootFactory
   get() = this as RootGraph.Factory
+
+private val JellyfinNavGraph.tvShowEpisodesFactory
+  get() = this as TvShowEpisodesGraph.Factory
+
+private val JellyfinNavGraph.tvShowSeasonsFactory
+  get() = this as TvShowSeasonsGraph.Factory
+
+private val JellyfinNavGraph.tvShowsLibraryFactory
+  get() = this as TvShowsLibraryGraph.Factory
 
 private val JellyfinNavGraph.welcomeFactory
   get() = this as WelcomeGraph.Factory
