@@ -24,6 +24,9 @@ class MovieDetailCompositor(
 
     return MovieDetailViewState(
       movie = modelState.movie,
+      cast = modelState.cast,
+      crew = modelState.crew,
+      similarItems = modelState.similarItems,
       isLoading = modelState.isLoading,
       error = modelState.error?.toViewError(),
     )
@@ -32,6 +35,7 @@ class MovieDetailCompositor(
   override suspend fun onIntent(intent: MovieDetailIntent) {
     when(intent) {
       MovieDetailIntent.RetryLoad -> movieModel.loadMovie(key.movieId)
+      is MovieDetailIntent.SelectSimilarItem -> navigator.navigateToSimilarItem(intent.itemId)
       MovieDetailIntent.NavigateBack -> navigator.navigateBack()
     }
   }

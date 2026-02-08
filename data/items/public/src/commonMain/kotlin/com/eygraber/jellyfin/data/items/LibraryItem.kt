@@ -21,4 +21,16 @@ data class LibraryItem(
   val seriesId: String?,
   val childCount: Int?,
   val runTimeTicks: Long?,
+  val people: List<PersonItem> = emptyList(),
+)
+
+/**
+ * A person associated with a media item (cast member, crew, etc.).
+ */
+data class PersonItem(
+  val id: String,
+  val name: String,
+  val role: String?,
+  val type: String?,
+  val primaryImageTag: String?,
 )
