@@ -2,8 +2,15 @@ package com.eygraber.jellyfin.nav
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.eygraber.jellyfin.screens.collection.items.CollectionItemsKey
+import com.eygraber.jellyfin.screens.collection.items.CollectionItemsNavigator
+import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
+import com.eygraber.jellyfin.screens.genre.items.GenreItemsNavigator
 import com.eygraber.jellyfin.screens.home.CollectionType
 import com.eygraber.jellyfin.screens.home.HomeNavigator
+import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryKey
+import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryNavigator
+import com.eygraber.jellyfin.screens.library.genres.GenresLibraryNavigator
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryNavigator
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
@@ -53,8 +60,9 @@ internal object JellyfinNavigators {
 
         CollectionType.Music -> backStack.add(MusicLibraryKey(libraryId = libraryId))
 
+        CollectionType.Collections -> backStack.add(CollectionsLibraryKey(libraryId = libraryId))
+
         CollectionType.MusicVideos,
-        CollectionType.Collections,
         CollectionType.Playlists,
         CollectionType.LiveTv,
         CollectionType.Photos,
@@ -129,6 +137,42 @@ internal object JellyfinNavigators {
     onNavigateBack = { backStack.removeLastOrNull() },
     onNavigateToTrackPlayback = { trackId ->
       backStack.add(JellyfinNavKeys.ComingSoon("Track Playback ($trackId)"))
+    },
+  )
+
+  fun collectionsLibrary(
+    backStack: NavBackStack<NavKey>,
+  ) = CollectionsLibraryNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToCollectionItems = { collectionId ->
+      backStack.add(CollectionItemsKey(collectionId = collectionId))
+    },
+  )
+
+  fun collectionItems(
+    backStack: NavBackStack<NavKey>,
+  ) = CollectionItemsNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToItemDetail = { itemId ->
+      backStack.add(JellyfinNavKeys.ComingSoon("Item Detail ($itemId)"))
+    },
+  )
+
+  fun genresLibrary(
+    backStack: NavBackStack<NavKey>,
+  ) = GenresLibraryNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToGenreItems = { libraryId, genreName ->
+      backStack.add(GenreItemsKey(libraryId = libraryId, genreName = genreName))
+    },
+  )
+
+  fun genreItems(
+    backStack: NavBackStack<NavKey>,
+  ) = GenreItemsNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToItemDetail = { itemId ->
+      backStack.add(JellyfinNavKeys.ComingSoon("Item Detail ($itemId)"))
     },
   )
 }
