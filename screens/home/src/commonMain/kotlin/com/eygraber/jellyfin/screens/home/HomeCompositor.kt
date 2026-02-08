@@ -61,7 +61,10 @@ class HomeCompositor(
       is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(intent.itemId)
       is HomeIntent.NextUpItemClicked -> navigator.navigateToItemDetail(intent.itemId)
       is HomeIntent.RecentlyAddedItemClicked -> navigator.navigateToItemDetail(intent.itemId)
-      is HomeIntent.LibraryClicked -> navigator.navigateToLibrary(intent.libraryId)
+      is HomeIntent.LibraryClicked -> navigator.navigateToLibrary(
+        libraryId = intent.libraryId,
+        collectionType = intent.collectionType,
+      )
     }
   }
 

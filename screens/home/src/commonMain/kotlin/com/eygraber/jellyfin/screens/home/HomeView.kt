@@ -135,7 +135,9 @@ private fun HomeContent(
 
     LibrariesHomeSection(
       state = state.librariesState,
-      onLibraryClick = { libraryId -> onIntent(HomeIntent.LibraryClicked(libraryId)) },
+      onLibraryClick = { libraryId, collectionType ->
+        onIntent(HomeIntent.LibraryClicked(libraryId, collectionType))
+      },
     )
 
     RecentlyAddedHomeSection(
@@ -213,7 +215,7 @@ private fun RecentlyAddedHomeSection(
 @Composable
 private fun LibrariesHomeSection(
   state: LibrariesState,
-  onLibraryClick: (libraryId: String) -> Unit,
+  onLibraryClick: (libraryId: String, collectionType: CollectionType) -> Unit,
 ) {
   when(state) {
     is LibrariesState.Loading -> Unit
@@ -222,7 +224,7 @@ private fun LibrariesHomeSection(
       Spacer(modifier = Modifier.height(16.dp))
       LibraryCardsSection(
         libraries = state.libraries,
-        onLibraryClick = onLibraryClick,
+        onLibraryClick = { library -> onLibraryClick(library.id, library.collectionType) },
       )
     }
 

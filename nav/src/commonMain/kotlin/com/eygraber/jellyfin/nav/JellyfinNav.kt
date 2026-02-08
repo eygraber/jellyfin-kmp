@@ -30,6 +30,8 @@ import com.eygraber.jellyfin.nav.dev.DetectShakesEffect
 import com.eygraber.jellyfin.nav.dev.jellyfinDevNavGraph
 import com.eygraber.jellyfin.screens.home.HomeGraph
 import com.eygraber.jellyfin.screens.home.HomeKey
+import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryGraph
+import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
 import com.eygraber.jellyfin.screens.root.RootGraph
 import com.eygraber.jellyfin.screens.root.RootKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeGraph
@@ -120,6 +122,10 @@ private fun jellyfinNavEntryProvider(
     provideHome(navGraph, backStack),
   )
 
+  viceEntry<MoviesLibraryKey>(
+    provideMoviesLibrary(navGraph, backStack),
+  )
+
   jellyfinDevNavGraph(
     navGraph = navGraph,
     backStack = backStack,
@@ -177,8 +183,21 @@ private fun provideHome(
   ).navEntryProvider
 }
 
+private fun provideMoviesLibrary(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: MoviesLibraryKey ->
+  navGraph.moviesLibraryFactory.createMoviesLibraryGraph(
+    navigator = JellyfinNavigators.moviesLibrary(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private val JellyfinNavGraph.homeFactory
   get() = this as HomeGraph.Factory
+
+private val JellyfinNavGraph.moviesLibraryFactory
+  get() = this as MoviesLibraryGraph.Factory
 
 private val JellyfinNavGraph.rootFactory
   get() = this as RootGraph.Factory
