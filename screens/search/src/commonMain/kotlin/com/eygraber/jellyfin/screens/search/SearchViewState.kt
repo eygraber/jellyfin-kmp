@@ -10,6 +10,7 @@ data class SearchViewState(
   val episodeResults: List<SearchViewItem> = emptyList(),
   val musicResults: List<SearchViewItem> = emptyList(),
   val peopleResults: List<SearchViewItem> = emptyList(),
+  val recentSearches: List<String> = emptyList(),
   val isLoading: Boolean = false,
   val isEmptyResults: Boolean = false,
   val error: SearchError? = null,
@@ -20,6 +21,8 @@ data class SearchViewState(
       episodeResults.isNotEmpty() ||
       musicResults.isNotEmpty() ||
       peopleResults.isNotEmpty()
+
+  val hasRecentSearches: Boolean get() = recentSearches.isNotEmpty()
 
   companion object {
     val Initial = SearchViewState()

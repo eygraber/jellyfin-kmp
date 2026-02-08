@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,6 +39,7 @@ import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.Close
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
+import com.eygraber.jellyfin.ui.icons.Search
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -81,6 +85,13 @@ internal fun SearchView(
           state.isLoading -> LoadingContent()
 
           state.error != null -> ErrorContent(error = state.error)
+
+          state.query.isBlank() && state.hasRecentSearches -> RecentSearchesContent(
+            recentSearches = state.recentSearches,
+            onHistoryClick = { query -> onIntent(SearchIntent.HistoryItemClicked(query = query)) },
+            onDeleteClick = { query -> onIntent(SearchIntent.DeleteHistoryItem(query = query)) },
+            onClearAll = { onIntent(SearchIntent.ClearHistory) },
+          )
 
           state.query.isBlank() -> EmptyQueryContent()
 
@@ -261,6 +272,92 @@ private fun SearchResultCard(
 }
 
 @Composable
+private fun RecentSearchesContent(
+  recentSearches: List<String>,
+  onHistoryClick: (query: String) -> Unit,
+  onDeleteClick: (query: String) -> Unit,
+  onClearAll: () -> Unit,
+) {
+  Column(
+    modifier = Modifier.fillMaxSize(),
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Text(
+        text = "Recent Searches",
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+      )
+
+      TextButton(onClick = onClearAll) {
+        Text("Clear all")
+      }
+    }
+
+    LazyColumn {
+      items(
+        items = recentSearches,
+        key = { it },
+      ) { query ->
+        RecentSearchItem(
+          query = query,
+          onClick = { onHistoryClick(query) },
+          onDelete = { onDeleteClick(query) },
+        )
+      }
+    }
+  }
+}
+
+@Composable
+private fun RecentSearchItem(
+  query: String,
+  onClick: () -> Unit,
+  onDelete: () -> Unit,
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable(onClick = onClick)
+      .padding(horizontal = 16.dp, vertical = 12.dp),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(12.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier.weight(1F),
+    ) {
+      Icon(
+        imageVector = JellyfinIcons.Search,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+
+      Text(
+        text = query,
+        style = MaterialTheme.typography.bodyLarge,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+      )
+    }
+
+    IconButton(onClick = onDelete) {
+      Icon(
+        imageVector = JellyfinIcons.Close,
+        contentDescription = "Remove from history",
+        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
+  }
+}
+
+@Composable
 private fun LoadingContent() {
   Box(
     modifier = Modifier.fillMaxSize(),
@@ -318,6 +415,24 @@ private fun SearchEmptyPreview() {
   JellyfinPreviewTheme {
     SearchView(
       state = SearchViewState.Initial,
+      onIntent = {},
+    )
+  }
+}
+
+@PreviewJellyfinScreen
+@Composable
+private fun SearchHistoryPreview() {
+  JellyfinPreviewTheme {
+    SearchView(
+      state = SearchViewState(
+        recentSearches = listOf(
+          "Inception",
+          "Breaking Bad",
+          "The Matrix",
+          "Stranger Things",
+        ),
+      ),
       onIntent = {},
     )
   }
