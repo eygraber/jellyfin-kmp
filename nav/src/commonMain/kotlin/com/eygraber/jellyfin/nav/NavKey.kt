@@ -2,6 +2,7 @@ package com.eygraber.jellyfin.nav
 
 import androidx.navigation3.runtime.NavKey
 import com.eygraber.jellyfin.screens.collection.items.CollectionItemsKey
+import com.eygraber.jellyfin.screens.episode.detail.EpisodeDetailKey
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
 import com.eygraber.jellyfin.screens.home.HomeKey
 import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryKey
@@ -23,6 +24,7 @@ internal fun PolymorphicModuleBuilder<NavKey>.addSubclasses() {
   subclass(ArtistAlbumsKey::class, ArtistAlbumsKey.serializer())
   subclass(CollectionItemsKey::class, CollectionItemsKey.serializer())
   subclass(CollectionsLibraryKey::class, CollectionsLibraryKey.serializer())
+  subclass(EpisodeDetailKey::class, EpisodeDetailKey.serializer())
   subclass(GenreItemsKey::class, GenreItemsKey.serializer())
   subclass(GenresLibraryKey::class, GenresLibraryKey.serializer())
   subclass(HomeKey::class, HomeKey.serializer())

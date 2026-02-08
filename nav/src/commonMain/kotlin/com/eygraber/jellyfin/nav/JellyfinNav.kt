@@ -30,6 +30,8 @@ import com.eygraber.jellyfin.nav.dev.DetectShakesEffect
 import com.eygraber.jellyfin.nav.dev.jellyfinDevNavGraph
 import com.eygraber.jellyfin.screens.collection.items.CollectionItemsGraph
 import com.eygraber.jellyfin.screens.collection.items.CollectionItemsKey
+import com.eygraber.jellyfin.screens.episode.detail.EpisodeDetailGraph
+import com.eygraber.jellyfin.screens.episode.detail.EpisodeDetailKey
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsGraph
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
 import com.eygraber.jellyfin.screens.home.HomeGraph
@@ -172,6 +174,10 @@ private fun jellyfinNavEntryProvider(
 
   viceEntry<CollectionItemsKey>(
     provideCollectionItems(navGraph, backStack),
+  )
+
+  viceEntry<EpisodeDetailKey>(
+    provideEpisodeDetail(navGraph, backStack),
   )
 
   viceEntry<GenresLibraryKey>(
@@ -325,6 +331,16 @@ private fun provideCollectionItems(
   ).navEntryProvider
 }
 
+private fun provideEpisodeDetail(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: EpisodeDetailKey ->
+  navGraph.episodeDetailFactory.createEpisodeDetailGraph(
+    navigator = JellyfinNavigators.episodeDetail(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private fun provideGenresLibrary(
   navGraph: JellyfinNavGraph,
   backStack: NavBackStack<NavKey>,
@@ -396,6 +412,9 @@ private val JellyfinNavGraph.collectionItemsFactory
 
 private val JellyfinNavGraph.collectionsLibraryFactory
   get() = this as CollectionsLibraryGraph.Factory
+
+private val JellyfinNavGraph.episodeDetailFactory
+  get() = this as EpisodeDetailGraph.Factory
 
 private val JellyfinNavGraph.genreItemsFactory
   get() = this as GenreItemsGraph.Factory

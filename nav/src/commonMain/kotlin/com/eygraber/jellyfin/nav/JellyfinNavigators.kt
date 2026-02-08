@@ -4,6 +4,8 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.eygraber.jellyfin.screens.collection.items.CollectionItemsKey
 import com.eygraber.jellyfin.screens.collection.items.CollectionItemsNavigator
+import com.eygraber.jellyfin.screens.episode.detail.EpisodeDetailKey
+import com.eygraber.jellyfin.screens.episode.detail.EpisodeDetailNavigator
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsNavigator
 import com.eygraber.jellyfin.screens.home.CollectionType
@@ -124,8 +126,14 @@ internal object JellyfinNavigators {
   ) = TvShowEpisodesNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
     onNavigateToEpisodeDetail = { episodeId ->
-      backStack.add(JellyfinNavKeys.ComingSoon("Episode Detail ($episodeId)"))
+      backStack.add(EpisodeDetailKey(episodeId = episodeId))
     },
+  )
+
+  fun episodeDetail(
+    backStack: NavBackStack<NavKey>,
+  ) = EpisodeDetailNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
   )
 
   fun musicLibrary(
