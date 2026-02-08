@@ -24,9 +24,10 @@ import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksNavigator
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsKey
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsNavigator
 import com.eygraber.jellyfin.screens.root.RootNavigator
+import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailKey
+import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailNavigator
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesNavigator
-import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsKey
 import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsNavigator
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeNavigator
@@ -91,12 +92,21 @@ internal object JellyfinNavigators {
     },
   )
 
+  fun tvShowDetail(
+    backStack: NavBackStack<NavKey>,
+  ) = TvShowDetailNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToSeasonEpisodes = { seriesId, seasonId ->
+      backStack.add(TvShowEpisodesKey(seriesId = seriesId, seasonId = seasonId))
+    },
+  )
+
   fun tvShowsLibrary(
     backStack: NavBackStack<NavKey>,
   ) = TvShowsLibraryNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
     onNavigateToShowSeasons = { showId ->
-      backStack.add(TvShowSeasonsKey(seriesId = showId))
+      backStack.add(TvShowDetailKey(seriesId = showId))
     },
   )
 
