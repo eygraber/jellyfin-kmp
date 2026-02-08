@@ -28,8 +28,16 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.eygraber.jellyfin.nav.dev.DetectShakesEffect
 import com.eygraber.jellyfin.nav.dev.jellyfinDevNavGraph
+import com.eygraber.jellyfin.screens.collection.items.CollectionItemsGraph
+import com.eygraber.jellyfin.screens.collection.items.CollectionItemsKey
+import com.eygraber.jellyfin.screens.genre.items.GenreItemsGraph
+import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
 import com.eygraber.jellyfin.screens.home.HomeGraph
 import com.eygraber.jellyfin.screens.home.HomeKey
+import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryGraph
+import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryKey
+import com.eygraber.jellyfin.screens.library.genres.GenresLibraryGraph
+import com.eygraber.jellyfin.screens.library.genres.GenresLibraryKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryGraph
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryGraph
@@ -150,6 +158,22 @@ private fun jellyfinNavEntryProvider(
     provideAlbumTracks(navGraph, backStack),
   )
 
+  viceEntry<CollectionsLibraryKey>(
+    provideCollectionsLibrary(navGraph, backStack),
+  )
+
+  viceEntry<CollectionItemsKey>(
+    provideCollectionItems(navGraph, backStack),
+  )
+
+  viceEntry<GenresLibraryKey>(
+    provideGenresLibrary(navGraph, backStack),
+  )
+
+  viceEntry<GenreItemsKey>(
+    provideGenreItems(navGraph, backStack),
+  )
+
   viceEntry<TvShowsLibraryKey>(
     provideTvShowsLibrary(navGraph, backStack),
   )
@@ -259,6 +283,46 @@ private fun provideAlbumTracks(
   ).navEntryProvider
 }
 
+private fun provideCollectionsLibrary(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: CollectionsLibraryKey ->
+  navGraph.collectionsLibraryFactory.createCollectionsLibraryGraph(
+    navigator = JellyfinNavigators.collectionsLibrary(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideCollectionItems(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: CollectionItemsKey ->
+  navGraph.collectionItemsFactory.createCollectionItemsGraph(
+    navigator = JellyfinNavigators.collectionItems(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideGenresLibrary(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: GenresLibraryKey ->
+  navGraph.genresLibraryFactory.createGenresLibraryGraph(
+    navigator = JellyfinNavigators.genresLibrary(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideGenreItems(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: GenreItemsKey ->
+  navGraph.genreItemsFactory.createGenreItemsGraph(
+    navigator = JellyfinNavigators.genreItems(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private fun provideTvShowsLibrary(
   navGraph: JellyfinNavGraph,
   backStack: NavBackStack<NavKey>,
@@ -294,6 +358,18 @@ private val JellyfinNavGraph.albumTracksFactory
 
 private val JellyfinNavGraph.artistAlbumsFactory
   get() = this as ArtistAlbumsGraph.Factory
+
+private val JellyfinNavGraph.collectionItemsFactory
+  get() = this as CollectionItemsGraph.Factory
+
+private val JellyfinNavGraph.collectionsLibraryFactory
+  get() = this as CollectionsLibraryGraph.Factory
+
+private val JellyfinNavGraph.genreItemsFactory
+  get() = this as GenreItemsGraph.Factory
+
+private val JellyfinNavGraph.genresLibraryFactory
+  get() = this as GenresLibraryGraph.Factory
 
 private val JellyfinNavGraph.homeFactory
   get() = this as HomeGraph.Factory
