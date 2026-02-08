@@ -27,7 +27,7 @@ import com.eygraber.jellyfin.screens.home.LibraryView
 @Composable
 internal fun LibraryCardsSection(
   libraries: List<LibraryView>,
-  onLibraryClick: (libraryId: String) -> Unit,
+  onLibraryClick: (library: LibraryView) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(modifier = modifier) {
@@ -49,7 +49,7 @@ internal fun LibraryCardsSection(
       ) { library ->
         LibraryCard(
           library = library,
-          onClick = { onLibraryClick(library.id) },
+          onClick = { onLibraryClick(library) },
         )
       }
     }
