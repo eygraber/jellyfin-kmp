@@ -5,11 +5,14 @@ import com.eygraber.jellyfin.data.items.ItemSortBy
 import com.eygraber.jellyfin.data.items.ItemsRepository
 import com.eygraber.jellyfin.data.items.LibraryItem
 import com.eygraber.jellyfin.data.items.PaginatedResult
+import com.eygraber.jellyfin.data.items.PersonItem
 import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -158,6 +161,130 @@ class MovieDetailModelTest {
     state.isLoading.shouldBeTrue()
     state.movie.shouldBeNull()
     state.error.shouldBeNull()
+    state.cast.shouldBeEmpty()
+    state.crew.shouldBeEmpty()
+    state.similarItems.shouldBeEmpty()
+  }
+
+  @Test
+  fun loadMovie_extracts_cast_from_people() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "movie-1",
+          name = "Inception",
+          people = listOf(
+            PersonItem(id = "p1", name = "Leonardo DiCaprio", role = "Cobb", type = "Actor", primaryImageTag = "tag1"),
+            PersonItem(
+              id = "p2",
+              name = "Joseph Gordon-Levitt",
+              role = "Arthur",
+              type = "Actor",
+              primaryImageTag = null,
+            ),
+            PersonItem(
+              id = "p3",
+              name = "Christopher Nolan",
+              role = "Director",
+              type = "Director",
+              primaryImageTag = null,
+            ),
+          ),
+        ),
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val state = model.stateForTest
+      state.cast shouldHaveSize 2
+      state.cast[0].name shouldBe "Leonardo DiCaprio"
+      state.cast[0].role shouldBe "Cobb"
+      state.cast[0].imageUrl.shouldNotBeNull()
+      state.cast[1].name shouldBe "Joseph Gordon-Levitt"
+      state.cast[1].role shouldBe "Arthur"
+      state.cast[1].imageUrl.shouldBeNull()
+    }
+  }
+
+  @Test
+  fun loadMovie_extracts_crew_from_people() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "movie-1",
+          name = "Inception",
+          people = listOf(
+            PersonItem(id = "p1", name = "Leonardo DiCaprio", role = "Cobb", type = "Actor", primaryImageTag = null),
+            PersonItem(
+              id = "p2",
+              name = "Christopher Nolan",
+              role = "Director",
+              type = "Director",
+              primaryImageTag = null,
+            ),
+            PersonItem(id = "p3", name = "Hans Zimmer", role = "Music", type = "Composer", primaryImageTag = "tag2"),
+          ),
+        ),
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val state = model.stateForTest
+      state.crew shouldHaveSize 2
+      state.crew[0].name shouldBe "Christopher Nolan"
+      state.crew[0].job shouldBe "Director"
+      state.crew[1].name shouldBe "Hans Zimmer"
+      state.crew[1].job shouldBe "Music"
+      state.crew[1].imageUrl.shouldNotBeNull()
+    }
+  }
+
+  @Test
+  fun loadMovie_loads_similar_items() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(id = "movie-1", name = "Inception"),
+      )
+      fakeRepository.getSimilarItemsResult = JellyfinResult.Success(
+        listOf(
+          createLibraryItem(id = "sim-1", name = "Interstellar", productionYear = 2014, primaryImageTag = "img1"),
+          createLibraryItem(id = "sim-2", name = "The Matrix", productionYear = 1999),
+        ),
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val state = model.stateForTest
+      state.similarItems shouldHaveSize 2
+      state.similarItems[0].id shouldBe "sim-1"
+      state.similarItems[0].name shouldBe "Interstellar"
+      state.similarItems[0].productionYear shouldBe 2014
+      state.similarItems[0].imageUrl.shouldNotBeNull()
+      state.similarItems[1].id shouldBe "sim-2"
+      state.similarItems[1].name shouldBe "The Matrix"
+      state.similarItems[1].imageUrl.shouldBeNull()
+    }
+  }
+
+  @Test
+  fun loadMovie_similar_items_failure_does_not_affect_movie() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(id = "movie-1", name = "Inception"),
+      )
+      fakeRepository.getSimilarItemsResult = JellyfinResult.Error(
+        message = "Similar items failed",
+        isEphemeral = true,
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val state = model.stateForTest
+      state.movie.shouldNotBeNull()
+      state.isLoading.shouldBeFalse()
+      state.error.shouldBeNull()
+      state.similarItems.shouldBeEmpty()
+    }
   }
 
   @Suppress("LongParameterList")
@@ -171,6 +298,7 @@ class MovieDetailModelTest {
     runTimeTicks: Long? = null,
     primaryImageTag: String? = null,
     backdropImageTags: List<String> = emptyList(),
+    people: List<PersonItem> = emptyList(),
   ) = LibraryItem(
     id = id,
     name = name,
@@ -186,6 +314,7 @@ class MovieDetailModelTest {
     seriesId = null,
     childCount = null,
     runTimeTicks = runTimeTicks,
+    people = people,
   )
 }
 

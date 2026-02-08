@@ -5,8 +5,10 @@ import com.eygraber.jellyfin.common.mapSuccessTo
 import com.eygraber.jellyfin.data.items.ItemSortBy
 import com.eygraber.jellyfin.data.items.LibraryItem
 import com.eygraber.jellyfin.data.items.PaginatedResult
+import com.eygraber.jellyfin.data.items.PersonItem
 import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.sdk.core.model.BaseItemDto
+import com.eygraber.jellyfin.sdk.core.model.BaseItemPerson
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
 import dev.zacsweers.metro.Inject
 
@@ -84,5 +86,18 @@ private fun BaseItemDto.toLibraryItem(): LibraryItem? {
     seriesId = seriesId,
     childCount = childCount,
     runTimeTicks = runTimeTicks,
+    people = people.mapNotNull { it.toPersonItem() },
+  )
+}
+
+private fun BaseItemPerson.toPersonItem(): PersonItem? {
+  val personId = id ?: return null
+
+  return PersonItem(
+    id = personId,
+    name = name.orEmpty(),
+    role = role,
+    type = type,
+    primaryImageTag = primaryImageTag,
   )
 }

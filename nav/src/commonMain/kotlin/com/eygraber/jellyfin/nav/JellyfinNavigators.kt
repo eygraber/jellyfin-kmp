@@ -83,6 +83,9 @@ internal object JellyfinNavigators {
     backStack: NavBackStack<NavKey>,
   ) = MovieDetailNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToSimilarItem = { itemId ->
+      backStack.add(MovieDetailKey(movieId = itemId))
+    },
   )
 
   fun moviesLibrary(
