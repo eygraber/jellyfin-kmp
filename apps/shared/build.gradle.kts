@@ -62,6 +62,7 @@ kotlin {
       api(projects.screens.musicAlbumTracks)
       api(projects.screens.musicArtistAlbums)
       api(projects.screens.root)
+      api(projects.screens.search)
       api(projects.screens.tvshowDetail)
       api(projects.screens.tvshowEpisodes)
       api(projects.screens.tvshowSeasons)

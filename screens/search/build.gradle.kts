@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.dependencies
-
 plugins {
   alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
@@ -9,10 +7,9 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.kotlinxSerialization)
   alias(libs.plugins.metro)
-  // alias(libs.plugins.paparazzi)
 }
 
-val pkg = "com.eygraber.jellyfin.screens.home"
+val pkg = "com.eygraber.jellyfin.screens.search"
 
 kotlin {
   defaultKmpTargets(
@@ -20,21 +17,7 @@ kotlin {
     androidNamespace = pkg,
   )
 
-  androidLibrary {
-    androidResources.enable = true
-
-    withHostTest {
-      isIncludeAndroidResources = true
-    }
-  }
-
   sourceSets {
-    // https://youtrack.jetbrains.com/issue/KT-83321/
-    named("androidHostTest").dependencies {
-      implementation(projects.testUtils)
-      implementation(libs.bundles.test.paparazzi)
-    }
-
     commonTest.dependencies {
       implementation(kotlin("test"))
 
@@ -45,7 +28,7 @@ kotlin {
     commonMain.dependencies {
       api(projects.di)
 
-      implementation(projects.domain.session.public)
+      implementation(projects.data.search.public)
       implementation(projects.services.sdk.public)
 
       implementation(projects.ui.compose)
@@ -68,8 +51,4 @@ kotlin {
       implementation(libs.vice.nav3)
     }
   }
-}
-
-dependencies {
-  androidRuntimeClasspath(libs.compose.uiToolingPreviewIde)
 }
