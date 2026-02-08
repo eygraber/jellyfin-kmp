@@ -32,6 +32,7 @@ kotlin {
       implementation(projects.screens.musicAlbumTracks)
       implementation(projects.screens.musicArtistAlbums)
       implementation(projects.screens.root)
+      implementation(projects.screens.tvshowDetail)
       implementation(projects.screens.tvshowEpisodes)
       implementation(projects.screens.tvshowSeasons)
       implementation(projects.screens.welcome)
