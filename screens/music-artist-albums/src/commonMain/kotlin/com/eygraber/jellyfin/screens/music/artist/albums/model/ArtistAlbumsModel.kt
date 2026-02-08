@@ -10,13 +10,14 @@ import com.eygraber.jellyfin.data.items.ItemsRepository
 import com.eygraber.jellyfin.data.items.LibraryItem
 import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumItem
+import com.eygraber.jellyfin.screens.music.artist.albums.ArtistDetail
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
 import com.eygraber.vice.ViceSource
 import dev.zacsweers.metro.Inject
 
 data class ArtistAlbumsState(
-  val artistName: String = "",
+  val artist: ArtistDetail? = null,
   val albums: List<ArtistAlbumItem> = emptyList(),
   val isLoading: Boolean = true,
   val error: ArtistAlbumsModelError? = null,
@@ -42,7 +43,12 @@ class ArtistAlbumsModel(
     state = state.copy(isLoading = true, error = null)
 
     val artistResult = itemsRepository.getItem(artistId)
-    val artistName = if(artistResult.isSuccess()) artistResult.value.name else ""
+    val artistDetail = if(artistResult.isSuccess()) {
+      artistResult.value.toArtistDetail()
+    }
+    else {
+      null
+    }
 
     val result = itemsRepository.getItems(
       parentId = artistId,
@@ -57,19 +63,34 @@ class ArtistAlbumsModel(
       val albums = result.value.items.map { it.toAlbumItem() }
 
       ArtistAlbumsState(
-        artistName = artistName,
+        artist = artistDetail,
         albums = albums,
         isLoading = false,
       )
     }
     else {
       ArtistAlbumsState(
-        artistName = artistName,
+        artist = artistDetail,
         isLoading = false,
         error = ArtistAlbumsModelError.LoadFailed,
       )
     }
   }
+
+  private fun LibraryItem.toArtistDetail(): ArtistDetail = ArtistDetail(
+    id = id,
+    name = name,
+    overview = overview,
+    genre = officialRating,
+    imageUrl = primaryImageTag?.let { tag ->
+      libraryService.getImageUrl(
+        itemId = id,
+        imageType = ImageType.Primary,
+        maxWidth = ARTIST_IMAGE_MAX_WIDTH,
+        tag = tag,
+      )
+    },
+  )
 
   private fun LibraryItem.toAlbumItem(): ArtistAlbumItem = ArtistAlbumItem(
     id = id,
@@ -80,7 +101,7 @@ class ArtistAlbumsModel(
       libraryService.getImageUrl(
         itemId = id,
         imageType = ImageType.Primary,
-        maxWidth = IMAGE_MAX_WIDTH,
+        maxWidth = ALBUM_IMAGE_MAX_WIDTH,
         tag = tag,
       )
     },
@@ -88,6 +109,7 @@ class ArtistAlbumsModel(
 
   companion object {
     private const val MAX_ALBUMS = 100
-    private const val IMAGE_MAX_WIDTH = 300
+    private const val ARTIST_IMAGE_MAX_WIDTH = 600
+    private const val ALBUM_IMAGE_MAX_WIDTH = 300
   }
 }
