@@ -9,13 +9,15 @@ import com.eygraber.jellyfin.data.items.ItemSortBy
 import com.eygraber.jellyfin.data.items.ItemsRepository
 import com.eygraber.jellyfin.data.items.LibraryItem
 import com.eygraber.jellyfin.data.items.SortOrder
+import com.eygraber.jellyfin.screens.music.album.tracks.AlbumDetail
 import com.eygraber.jellyfin.screens.music.album.tracks.TrackItem
+import com.eygraber.jellyfin.sdk.core.model.ImageType
+import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
 import com.eygraber.vice.ViceSource
 import dev.zacsweers.metro.Inject
 
 data class AlbumTracksState(
-  val albumName: String = "",
-  val artistName: String = "",
+  val album: AlbumDetail? = null,
   val tracks: List<TrackItem> = emptyList(),
   val isLoading: Boolean = true,
   val error: AlbumTracksModelError? = null,
@@ -28,6 +30,7 @@ enum class AlbumTracksModelError {
 @Inject
 class AlbumTracksModel(
   private val itemsRepository: ItemsRepository,
+  private val libraryService: JellyfinLibraryService,
 ) : ViceSource<AlbumTracksState> {
   private var state by mutableStateOf(AlbumTracksState())
 
@@ -36,12 +39,18 @@ class AlbumTracksModel(
   @Composable
   override fun currentState(): AlbumTracksState = state
 
+  fun currentAlbumArtistId(): String? = state.album?.artistId
+
   suspend fun loadTracks(albumId: String) {
     state = state.copy(isLoading = true, error = null)
 
     val albumResult = itemsRepository.getItem(albumId)
-    val albumName = if(albumResult.isSuccess()) albumResult.value.name else ""
-    val artistName = if(albumResult.isSuccess()) albumResult.value.seriesName.orEmpty() else ""
+    val albumDetail = if(albumResult.isSuccess()) {
+      albumResult.value.toAlbumDetail()
+    }
+    else {
+      null
+    }
 
     val result = itemsRepository.getItems(
       parentId = albumId,
@@ -56,21 +65,36 @@ class AlbumTracksModel(
       val tracks = result.value.items.map { it.toTrackItem() }
 
       AlbumTracksState(
-        albumName = albumName,
-        artistName = artistName,
+        album = albumDetail,
         tracks = tracks,
         isLoading = false,
       )
     }
     else {
       AlbumTracksState(
-        albumName = albumName,
-        artistName = artistName,
+        album = albumDetail,
         isLoading = false,
         error = AlbumTracksModelError.LoadFailed,
       )
     }
   }
+
+  private fun LibraryItem.toAlbumDetail(): AlbumDetail = AlbumDetail(
+    id = id,
+    name = name,
+    artistName = seriesName.orEmpty(),
+    artistId = seriesId,
+    productionYear = productionYear,
+    genre = officialRating,
+    albumArtUrl = primaryImageTag?.let { tag ->
+      libraryService.getImageUrl(
+        itemId = id,
+        imageType = ImageType.Primary,
+        maxWidth = ALBUM_ART_MAX_WIDTH,
+        tag = tag,
+      )
+    },
+  )
 
   private fun LibraryItem.toTrackItem(): TrackItem = TrackItem(
     id = id,
@@ -81,6 +105,7 @@ class AlbumTracksModel(
 
   companion object {
     private const val MAX_TRACKS = 200
+    private const val ALBUM_ART_MAX_WIDTH = 600
     private const val TICKS_PER_SECOND = 10_000_000L
     private const val SECONDS_PER_MINUTE = 60
 
