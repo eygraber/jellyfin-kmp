@@ -54,6 +54,8 @@ import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsGraph
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsKey
 import com.eygraber.jellyfin.screens.root.RootGraph
 import com.eygraber.jellyfin.screens.root.RootKey
+import com.eygraber.jellyfin.screens.search.SearchGraph
+import com.eygraber.jellyfin.screens.search.SearchKey
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailGraph
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesGraph
@@ -186,6 +188,10 @@ private fun jellyfinNavEntryProvider(
 
   viceEntry<GenreItemsKey>(
     provideGenreItems(navGraph, backStack),
+  )
+
+  viceEntry<SearchKey>(
+    provideSearch(navGraph, backStack),
   )
 
   viceEntry<TvShowDetailKey>(
@@ -361,6 +367,16 @@ private fun provideGenreItems(
   ).navEntryProvider
 }
 
+private fun provideSearch(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: SearchKey ->
+  navGraph.searchFactory.createSearchGraph(
+    navigator = JellyfinNavigators.search(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private fun provideTvShowDetail(
   navGraph: JellyfinNavGraph,
   backStack: NavBackStack<NavKey>,
@@ -436,6 +452,9 @@ private val JellyfinNavGraph.musicLibraryFactory
 
 private val JellyfinNavGraph.rootFactory
   get() = this as RootGraph.Factory
+
+private val JellyfinNavGraph.searchFactory
+  get() = this as SearchGraph.Factory
 
 private val JellyfinNavGraph.tvShowDetailFactory
   get() = this as TvShowDetailGraph.Factory
