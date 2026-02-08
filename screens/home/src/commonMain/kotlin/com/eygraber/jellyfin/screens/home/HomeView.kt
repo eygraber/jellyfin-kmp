@@ -12,6 +12,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,6 +29,8 @@ import com.eygraber.jellyfin.screens.home.components.LibraryCardsSection
 import com.eygraber.jellyfin.screens.home.components.NextUpRow
 import com.eygraber.jellyfin.screens.home.components.RecentlyAddedSection
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
+import com.eygraber.jellyfin.ui.icons.JellyfinIcons
+import com.eygraber.jellyfin.ui.icons.Search
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -49,6 +53,14 @@ internal fun HomeView(
             }
             else {
               Text("Home")
+            }
+          },
+          actions = {
+            IconButton(onClick = { onIntent(HomeIntent.SearchClicked) }) {
+              Icon(
+                imageVector = JellyfinIcons.Search,
+                contentDescription = "Search",
+              )
             }
           },
         )
