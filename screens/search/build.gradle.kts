@@ -29,6 +29,7 @@ kotlin {
       api(projects.di)
 
       implementation(projects.data.search.public)
+      implementation(projects.data.searchHistory.public)
       implementation(projects.services.sdk.public)
 
       implementation(projects.ui.compose)

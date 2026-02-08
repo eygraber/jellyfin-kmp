@@ -1,0 +1,9 @@
+-- Migration 2: Add search history table for persisting recent user searches.
+
+CREATE TABLE search_history (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  query TEXT NOT NULL UNIQUE,
+  searched_at INTEGER NOT NULL
+);
+
+CREATE INDEX idx_search_history_searched_at ON search_history(searched_at);
