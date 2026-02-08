@@ -3,6 +3,7 @@ package com.eygraber.jellyfin.screens.library.tvshows
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -25,6 +26,12 @@ import com.eygraber.jellyfin.screens.library.tvshows.components.TvShowPosterGrid
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
+import com.eygraber.jellyfin.ui.library.controls.ActiveFilterChips
+import com.eygraber.jellyfin.ui.library.controls.FilterButton
+import com.eygraber.jellyfin.ui.library.controls.FilterSheet
+import com.eygraber.jellyfin.ui.library.controls.SortMenu
+import com.eygraber.jellyfin.ui.library.controls.ViewToggle
+import com.eygraber.jellyfin.ui.library.controls.tvShowSortOptions
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -50,6 +57,27 @@ internal fun TvShowsLibraryView(
               )
             }
           },
+          actions = {
+            Row {
+              SortMenu(
+                sortConfig = state.sortConfig,
+                sortOptions = tvShowSortOptions,
+                onSortChange = { sortBy, sortOrder ->
+                  onIntent(TvShowsLibraryIntent.ChangeSortOption(sortBy = sortBy, sortOrder = sortOrder))
+                },
+              )
+
+              FilterButton(
+                activeFilterCount = state.filters.activeFilterCount,
+                onClick = { onIntent(TvShowsLibraryIntent.ToggleFilterSheet) },
+              )
+
+              ViewToggle(
+                viewMode = state.viewMode,
+                onViewModeChange = { onIntent(TvShowsLibraryIntent.ChangeViewMode(viewMode = it)) },
+              )
+            }
+          },
         )
       },
     ) { contentPadding ->
@@ -60,21 +88,51 @@ internal fun TvShowsLibraryView(
           .fillMaxSize()
           .padding(contentPadding),
       ) {
-        when {
-          state.isLoading -> LoadingContent()
-          state.error != null -> ErrorContent(
-            error = state.error,
-            onRetry = { onIntent(TvShowsLibraryIntent.RetryLoad) },
+        Column {
+          ActiveFilterChips(
+            filters = state.filters,
+            onRemoveGenre = { genre ->
+              onIntent(
+                TvShowsLibraryIntent.ChangeFilters(
+                  filters = state.filters.copy(genres = state.filters.genres - genre),
+                ),
+              )
+            },
+            onRemoveYear = { year ->
+              onIntent(
+                TvShowsLibraryIntent.ChangeFilters(
+                  filters = state.filters.copy(years = state.filters.years - year),
+                ),
+              )
+            },
           )
-          state.isEmpty -> EmptyContent()
-          else -> TvShowPosterGrid(
-            items = state.items,
-            isLoadingMore = state.isLoadingMore,
-            hasMore = state.hasMore,
-            onShowClick = { showId -> onIntent(TvShowsLibraryIntent.SelectShow(showId)) },
-            onLoadMore = { onIntent(TvShowsLibraryIntent.LoadMore) },
-          )
+
+          when {
+            state.isLoading -> LoadingContent()
+            state.error != null -> ErrorContent(
+              error = state.error,
+              onRetry = { onIntent(TvShowsLibraryIntent.RetryLoad) },
+            )
+            state.isEmpty -> EmptyContent()
+            else -> TvShowPosterGrid(
+              items = state.items,
+              isLoadingMore = state.isLoadingMore,
+              hasMore = state.hasMore,
+              onShowClick = { showId -> onIntent(TvShowsLibraryIntent.SelectShow(showId)) },
+              onLoadMore = { onIntent(TvShowsLibraryIntent.LoadMore) },
+            )
+          }
         }
+      }
+
+      if(state.isFilterSheetVisible) {
+        FilterSheet(
+          filters = state.filters,
+          availableGenres = state.availableGenres,
+          availableYears = state.availableYears,
+          onFilterChange = { onIntent(TvShowsLibraryIntent.ChangeFilters(filters = it)) },
+          onDismiss = { onIntent(TvShowsLibraryIntent.ToggleFilterSheet) },
+        )
       }
     }
   }

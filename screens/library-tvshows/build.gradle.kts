@@ -33,6 +33,7 @@ kotlin {
 
       implementation(projects.ui.compose)
       implementation(projects.ui.icons)
+      implementation(projects.ui.libraryControls)
       implementation(projects.ui.material)
 
       implementation(libs.compose.foundation)
