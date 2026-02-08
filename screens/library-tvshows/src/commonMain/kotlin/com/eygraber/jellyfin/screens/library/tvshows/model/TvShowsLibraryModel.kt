@@ -12,6 +12,8 @@ import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowItem
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
+import com.eygraber.jellyfin.ui.library.controls.LibraryFilters
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import com.eygraber.vice.ViceSource
 import dev.zacsweers.metro.Inject
 
@@ -21,6 +23,10 @@ data class TvShowsLibraryState(
   val isLoadingMore: Boolean = false,
   val hasMore: Boolean = false,
   val error: TvShowsLibraryModelError? = null,
+  val sortConfig: LibrarySortConfig = LibrarySortConfig(),
+  val filters: LibraryFilters = LibraryFilters(),
+  val availableGenres: List<String> = emptyList(),
+  val availableYears: List<Int> = emptyList(),
 )
 
 enum class TvShowsLibraryModelError {
@@ -47,10 +53,12 @@ class TvShowsLibraryModel(
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("Series"),
-      sortBy = ItemSortBy.SortName,
-      sortOrder = SortOrder.Ascending,
+      sortBy = state.sortConfig.sortBy,
+      sortOrder = state.sortConfig.sortOrder,
       startIndex = 0,
       limit = PAGE_SIZE,
+      genres = state.filters.genres.ifEmpty { null },
+      years = state.filters.years.ifEmpty { null },
     )
 
     state = if(result.isSuccess()) {
@@ -58,14 +66,15 @@ class TvShowsLibraryModel(
       val showItems = paginatedResult.items.map { item -> item.toTvShowItem() }
       currentStartIndex = showItems.size
 
-      TvShowsLibraryState(
+      state.copy(
         items = showItems,
         isLoading = false,
         hasMore = paginatedResult.hasMore,
+        error = null,
       )
     }
     else {
-      TvShowsLibraryState(
+      state.copy(
         isLoading = false,
         error = TvShowsLibraryModelError.LoadFailed,
       )
@@ -80,10 +89,12 @@ class TvShowsLibraryModel(
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("Series"),
-      sortBy = ItemSortBy.SortName,
-      sortOrder = SortOrder.Ascending,
+      sortBy = state.sortConfig.sortBy,
+      sortOrder = state.sortConfig.sortOrder,
       startIndex = currentStartIndex,
       limit = PAGE_SIZE,
+      genres = state.filters.genres.ifEmpty { null },
+      years = state.filters.years.ifEmpty { null },
     )
 
     state = if(result.isSuccess()) {
@@ -106,6 +117,30 @@ class TvShowsLibraryModel(
     loadInitial(libraryId)
   }
 
+  fun updateSortConfig(sortConfig: LibrarySortConfig) {
+    state = state.copy(sortConfig = sortConfig)
+  }
+
+  fun updateFilters(filters: LibraryFilters) {
+    state = state.copy(filters = filters)
+  }
+
+  suspend fun loadAvailableFilters(libraryId: String) {
+    val genresResult = itemsRepository.getItems(
+      parentId = libraryId,
+      includeItemTypes = listOf("Genre"),
+      sortBy = ItemSortBy.SortName,
+      sortOrder = SortOrder.Ascending,
+      limit = FILTER_LIMIT,
+    )
+
+    if(genresResult.isSuccess()) {
+      state = state.copy(
+        availableGenres = genresResult.value.items.map { it.name },
+      )
+    }
+  }
+
   private fun LibraryItem.toTvShowItem(): TvShowItem = TvShowItem(
     id = id,
     name = name,
@@ -126,5 +161,6 @@ class TvShowsLibraryModel(
   companion object {
     private const val PAGE_SIZE = 50
     private const val POSTER_MAX_WIDTH = 300
+    private const val FILTER_LIMIT = 200
   }
 }

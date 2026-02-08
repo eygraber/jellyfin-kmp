@@ -5,15 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.common.isSuccess
-import com.eygraber.jellyfin.data.items.ItemSortBy
 import com.eygraber.jellyfin.data.items.ItemsRepository
 import com.eygraber.jellyfin.data.items.LibraryItem
-import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.screens.library.music.AlbumItem
 import com.eygraber.jellyfin.screens.library.music.ArtistItem
 import com.eygraber.jellyfin.screens.library.music.MusicTab
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import com.eygraber.vice.ViceSource
 import dev.zacsweers.metro.Inject
 
@@ -25,6 +24,7 @@ data class MusicLibraryState(
   val isLoadingMore: Boolean = false,
   val hasMore: Boolean = false,
   val error: MusicLibraryModelError? = null,
+  val sortConfig: LibrarySortConfig = LibrarySortConfig(),
 )
 
 enum class MusicLibraryModelError {
@@ -81,12 +81,16 @@ class MusicLibraryModel(
     loadInitial(libraryId)
   }
 
+  fun updateSortConfig(sortConfig: LibrarySortConfig) {
+    state = state.copy(sortConfig = sortConfig)
+  }
+
   private suspend fun loadArtists(libraryId: String, isInitial: Boolean) {
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("MusicArtist"),
-      sortBy = ItemSortBy.SortName,
-      sortOrder = SortOrder.Ascending,
+      sortBy = state.sortConfig.sortBy,
+      sortOrder = state.sortConfig.sortOrder,
       startIndex = if(isInitial) 0 else currentStartIndex,
       limit = PAGE_SIZE,
     )
@@ -118,8 +122,8 @@ class MusicLibraryModel(
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("MusicAlbum"),
-      sortBy = ItemSortBy.SortName,
-      sortOrder = SortOrder.Ascending,
+      sortBy = state.sortConfig.sortBy,
+      sortOrder = state.sortConfig.sortOrder,
       startIndex = if(isInitial) 0 else currentStartIndex,
       limit = PAGE_SIZE,
     )
