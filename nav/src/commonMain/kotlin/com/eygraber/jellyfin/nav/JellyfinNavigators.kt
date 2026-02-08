@@ -6,7 +6,13 @@ import com.eygraber.jellyfin.screens.home.CollectionType
 import com.eygraber.jellyfin.screens.home.HomeNavigator
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryNavigator
+import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
+import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryNavigator
 import com.eygraber.jellyfin.screens.root.RootNavigator
+import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
+import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesNavigator
+import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsKey
+import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsNavigator
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeNavigator
 
@@ -37,7 +43,8 @@ internal object JellyfinNavigators {
       when(collectionType) {
         CollectionType.Movies -> backStack.add(MoviesLibraryKey(libraryId = libraryId))
 
-        CollectionType.TvShows,
+        CollectionType.TvShows -> backStack.add(TvShowsLibraryKey(libraryId = libraryId))
+
         CollectionType.Music,
         CollectionType.MusicVideos,
         CollectionType.Collections,
@@ -58,6 +65,33 @@ internal object JellyfinNavigators {
     onNavigateBack = { backStack.removeLastOrNull() },
     onNavigateToMovieDetail = { movieId ->
       backStack.add(JellyfinNavKeys.ComingSoon("Movie Detail ($movieId)"))
+    },
+  )
+
+  fun tvShowsLibrary(
+    backStack: NavBackStack<NavKey>,
+  ) = TvShowsLibraryNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToShowSeasons = { showId ->
+      backStack.add(TvShowSeasonsKey(seriesId = showId))
+    },
+  )
+
+  fun tvShowSeasons(
+    backStack: NavBackStack<NavKey>,
+  ) = TvShowSeasonsNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToSeasonEpisodes = { seriesId, seasonId ->
+      backStack.add(TvShowEpisodesKey(seriesId = seriesId, seasonId = seasonId))
+    },
+  )
+
+  fun tvShowEpisodes(
+    backStack: NavBackStack<NavKey>,
+  ) = TvShowEpisodesNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToEpisodeDetail = { episodeId ->
+      backStack.add(JellyfinNavKeys.ComingSoon("Episode Detail ($episodeId)"))
     },
   )
 }
