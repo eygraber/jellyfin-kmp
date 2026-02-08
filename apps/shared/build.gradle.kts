@@ -49,7 +49,10 @@ kotlin {
       api(projects.screens.devSettings)
       api(projects.screens.home)
       api(projects.screens.libraryMovies)
+      api(projects.screens.libraryTvshows)
       api(projects.screens.root)
+      api(projects.screens.tvshowEpisodes)
+      api(projects.screens.tvshowSeasons)
       api(projects.screens.welcome)
 
       api(projects.services.database.impl)
