@@ -7,7 +7,11 @@ import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.common.isSuccess
 import com.eygraber.jellyfin.data.items.ItemsRepository
 import com.eygraber.jellyfin.data.items.LibraryItem
+import com.eygraber.jellyfin.data.items.PersonItem
+import com.eygraber.jellyfin.screens.movie.detail.CastMember
+import com.eygraber.jellyfin.screens.movie.detail.CrewMember
 import com.eygraber.jellyfin.screens.movie.detail.MovieDetail
+import com.eygraber.jellyfin.screens.movie.detail.SimilarItem
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
 import com.eygraber.vice.ViceSource
@@ -15,6 +19,9 @@ import dev.zacsweers.metro.Inject
 
 data class MovieDetailState(
   val movie: MovieDetail? = null,
+  val cast: List<CastMember> = emptyList(),
+  val crew: List<CrewMember> = emptyList(),
+  val similarItems: List<SimilarItem> = emptyList(),
   val isLoading: Boolean = true,
   val error: MovieDetailModelError? = null,
 )
@@ -40,16 +47,42 @@ class MovieDetailModel(
 
     val result = itemsRepository.getItem(itemId = movieId)
 
-    state = if(result.isSuccess()) {
-      MovieDetailState(
-        movie = result.value.toMovieDetail(),
+    if(result.isSuccess()) {
+      val item = result.value
+      val movieDetail = item.toMovieDetail()
+      val cast = item.people
+        .filter { it.type == PERSON_TYPE_ACTOR }
+        .map { it.toCastMember() }
+      val crew = item.people
+        .filter { it.type != PERSON_TYPE_ACTOR }
+        .map { it.toCrewMember() }
+
+      state = MovieDetailState(
+        movie = movieDetail,
+        cast = cast,
+        crew = crew,
         isLoading = false,
       )
+
+      loadSimilarItems(movieId)
     }
     else {
-      MovieDetailState(
+      state = MovieDetailState(
         isLoading = false,
         error = MovieDetailModelError.LoadFailed,
+      )
+    }
+  }
+
+  private suspend fun loadSimilarItems(movieId: String) {
+    val similarResult = itemsRepository.getSimilarItems(
+      itemId = movieId,
+      limit = MAX_SIMILAR_ITEMS,
+    )
+
+    if(similarResult.isSuccess()) {
+      state = state.copy(
+        similarItems = similarResult.value.map { it.toSimilarItem() },
       )
     }
   }
@@ -80,9 +113,54 @@ class MovieDetailModel(
     },
   )
 
+  private fun PersonItem.toCastMember(): CastMember = CastMember(
+    id = id,
+    name = name,
+    role = role,
+    imageUrl = primaryImageTag?.let { tag ->
+      libraryService.getImageUrl(
+        itemId = id,
+        imageType = ImageType.Primary,
+        maxWidth = PERSON_IMAGE_MAX_WIDTH,
+        tag = tag,
+      )
+    },
+  )
+
+  private fun PersonItem.toCrewMember(): CrewMember = CrewMember(
+    id = id,
+    name = name,
+    job = role,
+    imageUrl = primaryImageTag?.let { tag ->
+      libraryService.getImageUrl(
+        itemId = id,
+        imageType = ImageType.Primary,
+        maxWidth = PERSON_IMAGE_MAX_WIDTH,
+        tag = tag,
+      )
+    },
+  )
+
+  private fun LibraryItem.toSimilarItem(): SimilarItem = SimilarItem(
+    id = id,
+    name = name,
+    productionYear = productionYear,
+    imageUrl = primaryImageTag?.let { tag ->
+      libraryService.getImageUrl(
+        itemId = id,
+        imageType = ImageType.Primary,
+        maxWidth = POSTER_MAX_WIDTH,
+        tag = tag,
+      )
+    },
+  )
+
   companion object {
+    private const val PERSON_TYPE_ACTOR = "Actor"
     private const val TICKS_PER_MINUTE = 600_000_000L
     private const val BACKDROP_MAX_WIDTH = 1_920
     private const val POSTER_MAX_WIDTH = 400
+    private const val PERSON_IMAGE_MAX_WIDTH = 200
+    private const val MAX_SIMILAR_ITEMS = 12
   }
 }
