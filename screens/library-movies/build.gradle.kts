@@ -9,41 +9,46 @@ plugins {
   alias(libs.plugins.metro)
 }
 
+val pkg = "com.eygraber.jellyfin.screens.library.movies"
+
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "com.eygraber.jellyfin.nav",
+    androidNamespace = pkg,
   )
 
   sourceSets {
+    commonTest.dependencies {
+      implementation(kotlin("test"))
+
+      implementation(libs.test.kotest.assertions.core)
+      implementation(libs.test.kotlinx.coroutines)
+    }
+
     commonMain.dependencies {
       api(projects.di)
 
-      implementation(projects.screens.devSettings)
-      implementation(projects.screens.home)
-      implementation(projects.screens.libraryMovies)
-      implementation(projects.screens.root)
-      implementation(projects.screens.welcome)
+      implementation(projects.data.items.public)
+      implementation(projects.services.sdk.public)
 
-      api(projects.services.deviceSensors.public)
+      implementation(projects.ui.compose)
+      implementation(projects.ui.icons)
+      implementation(projects.ui.material)
 
-      implementation(libs.compose.nav3.runtime)
-      implementation(libs.compose.nav3.ui)
-
-      implementation(libs.compose.animation)
+      implementation(libs.compose.foundation)
+      implementation(libs.compose.foundationLayout)
       implementation(libs.compose.material3)
+      implementation(libs.compose.nav3.runtime)
       implementation(libs.compose.runtime)
+      implementation(libs.compose.runtimeAnnotation)
       implementation(libs.compose.ui)
+      implementation(libs.compose.uiToolingPreview)
 
       implementation(libs.kotlinx.coroutines.core)
       implementation(libs.kotlinx.serialization.core)
 
+      implementation(libs.vice.core)
       implementation(libs.vice.nav3)
-    }
-
-    commonTest.dependencies {
-      implementation(libs.test.kotest.assertions.core)
-      implementation(kotlin("test"))
     }
   }
 }
