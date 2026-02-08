@@ -19,8 +19,12 @@ kotlin {
     commonMain.dependencies {
       api(projects.di)
 
+      implementation(projects.screens.collectionItems)
       implementation(projects.screens.devSettings)
+      implementation(projects.screens.genreItems)
       implementation(projects.screens.home)
+      implementation(projects.screens.libraryCollections)
+      implementation(projects.screens.libraryGenres)
       implementation(projects.screens.libraryMovies)
       implementation(projects.screens.libraryMusic)
       implementation(projects.screens.libraryTvshows)
