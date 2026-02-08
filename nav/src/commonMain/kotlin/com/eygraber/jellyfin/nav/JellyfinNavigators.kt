@@ -26,6 +26,8 @@ import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksNavigator
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsKey
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsNavigator
 import com.eygraber.jellyfin.screens.root.RootNavigator
+import com.eygraber.jellyfin.screens.search.SearchKey
+import com.eygraber.jellyfin.screens.search.SearchNavigator
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailKey
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailNavigator
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
@@ -75,6 +77,21 @@ internal object JellyfinNavigators {
         CollectionType.Books,
         CollectionType.Unknown,
         -> backStack.add(JellyfinNavKeys.ComingSoon("Library ($libraryId)"))
+      }
+    },
+    onNavigateToSearch = { backStack.add(SearchKey) },
+  )
+
+  fun search(
+    backStack: NavBackStack<NavKey>,
+  ) = SearchNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToItemDetail = { itemId, itemType ->
+      when(itemType) {
+        "Movie" -> backStack.add(MovieDetailKey(movieId = itemId))
+        "Series" -> backStack.add(TvShowDetailKey(seriesId = itemId))
+        "Episode" -> backStack.add(EpisodeDetailKey(episodeId = itemId))
+        else -> backStack.add(JellyfinNavKeys.ComingSoon("$itemType Detail ($itemId)"))
       }
     },
   )
