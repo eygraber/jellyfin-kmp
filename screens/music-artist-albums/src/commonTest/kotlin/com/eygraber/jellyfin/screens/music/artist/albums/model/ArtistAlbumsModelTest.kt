@@ -32,10 +32,17 @@ class ArtistAlbumsModelTest {
   }
 
   @Test
-  fun loadAlbums_success_populates_albums() {
+  fun loadAlbums_success_populates_artist_detail_and_albums() {
     runTest {
       fakeRepository.getItemResult = JellyfinResult.Success(
-        createLibraryItem(id = "artist-1", name = "Pink Floyd", type = "MusicArtist"),
+        createLibraryItem(
+          id = "artist-1",
+          name = "Pink Floyd",
+          type = "MusicArtist",
+          overview = "English rock band formed in London.",
+          officialRating = "Progressive Rock",
+          primaryImageTag = "artist-tag",
+        ),
       )
 
       fakeRepository.getItemsResult = JellyfinResult.Success(
@@ -68,7 +75,14 @@ class ArtistAlbumsModelTest {
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
       state.error.shouldBeNull()
-      state.artistName shouldBe "Pink Floyd"
+
+      val artist = state.artist
+      artist.shouldNotBeNull()
+      artist.name shouldBe "Pink Floyd"
+      artist.overview shouldBe "English rock band formed in London."
+      artist.genre shouldBe "Progressive Rock"
+      artist.imageUrl.shouldNotBeNull()
+
       state.albums.size shouldBe 2
       state.albums[0].name shouldBe "The Dark Side of the Moon"
       state.albums[0].productionYear shouldBe 1973
@@ -128,6 +142,57 @@ class ArtistAlbumsModelTest {
     }
   }
 
+  @Test
+  fun artist_without_image_tag_has_null_image_url() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "artist-1",
+          name = "Artist",
+          type = "MusicArtist",
+          primaryImageTag = null,
+        ),
+      )
+
+      fakeRepository.getItemsResult = JellyfinResult.Success(
+        PaginatedResult(items = emptyList(), totalRecordCount = 0, startIndex = 0),
+      )
+
+      model.loadAlbums("artist-1")
+
+      val state = model.stateForTest
+      val artist = state.artist
+      artist.shouldNotBeNull()
+      artist.imageUrl.shouldBeNull()
+    }
+  }
+
+  @Test
+  fun artist_overview_is_populated_when_available() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "artist-1",
+          name = "Artist",
+          type = "MusicArtist",
+          overview = "A great band with many hits.",
+        ),
+      )
+
+      fakeRepository.getItemsResult = JellyfinResult.Success(
+        PaginatedResult(items = emptyList(), totalRecordCount = 0, startIndex = 0),
+      )
+
+      model.loadAlbums("artist-1")
+
+      val state = model.stateForTest
+      val artist = state.artist
+      artist.shouldNotBeNull()
+      artist.overview shouldBe "A great band with many hits."
+    }
+  }
+
+  @Suppress("LongParameterList")
   private fun createLibraryItem(
     id: String,
     name: String,
@@ -135,15 +200,17 @@ class ArtistAlbumsModelTest {
     productionYear: Int? = null,
     primaryImageTag: String? = null,
     childCount: Int? = null,
+    overview: String? = null,
+    officialRating: String? = null,
   ) = LibraryItem(
     id = id,
     name = name,
     sortName = null,
     type = type,
-    overview = null,
+    overview = overview,
     productionYear = productionYear,
     communityRating = null,
-    officialRating = null,
+    officialRating = officialRating,
     primaryImageTag = primaryImageTag,
     backdropImageTags = emptyList(),
     seriesName = null,

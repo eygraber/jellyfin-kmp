@@ -23,8 +23,7 @@ class AlbumTracksCompositor(
     }
 
     return AlbumTracksViewState(
-      albumName = modelState.albumName,
-      artistName = modelState.artistName,
+      album = modelState.album,
       tracks = modelState.tracks,
       isLoading = modelState.isLoading,
       error = modelState.error?.toViewError(),
@@ -36,7 +35,17 @@ class AlbumTracksCompositor(
     when(intent) {
       AlbumTracksIntent.RetryLoad -> tracksModel.loadTracks(key.albumId)
       is AlbumTracksIntent.SelectTrack -> navigator.navigateToTrackPlayback(intent.trackId)
+      AlbumTracksIntent.PlayAll -> Unit // Playback not yet implemented
+      AlbumTracksIntent.ShufflePlay -> Unit // Playback not yet implemented
+      AlbumTracksIntent.ToggleFavorite -> Unit // Favorites not yet implemented
+      AlbumTracksIntent.NavigateToArtist -> navigateToArtist()
       AlbumTracksIntent.NavigateBack -> navigator.navigateBack()
+    }
+  }
+
+  private fun navigateToArtist() {
+    tracksModel.currentAlbumArtistId()?.let { artistId ->
+      navigator.navigateToArtist(artistId)
     }
   }
 

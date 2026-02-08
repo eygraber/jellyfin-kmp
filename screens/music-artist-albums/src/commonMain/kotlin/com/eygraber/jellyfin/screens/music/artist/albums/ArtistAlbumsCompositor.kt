@@ -23,7 +23,7 @@ class ArtistAlbumsCompositor(
     }
 
     return ArtistAlbumsViewState(
-      artistName = modelState.artistName,
+      artist = modelState.artist,
       albums = modelState.albums,
       isLoading = modelState.isLoading,
       error = modelState.error?.toViewError(),
@@ -35,6 +35,7 @@ class ArtistAlbumsCompositor(
     when(intent) {
       ArtistAlbumsIntent.RetryLoad -> albumsModel.loadAlbums(key.artistId)
       is ArtistAlbumsIntent.SelectAlbum -> navigator.navigateToAlbumTracks(intent.albumId)
+      ArtistAlbumsIntent.ToggleFavorite -> Unit // Favorites not yet implemented
       ArtistAlbumsIntent.NavigateBack -> navigator.navigateBack()
     }
   }

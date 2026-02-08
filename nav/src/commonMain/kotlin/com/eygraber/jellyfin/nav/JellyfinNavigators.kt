@@ -164,6 +164,9 @@ internal object JellyfinNavigators {
     onNavigateToTrackPlayback = { trackId ->
       backStack.add(JellyfinNavKeys.ComingSoon("Track Playback ($trackId)"))
     },
+    onNavigateToArtist = { artistId ->
+      backStack.add(ArtistAlbumsKey(artistId = artistId))
+    },
   )
 
   fun collectionsLibrary(

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class ArtistAlbumsViewState(
-  val artistName: String = "",
+  val artist: ArtistDetail? = null,
   val albums: List<ArtistAlbumItem> = emptyList(),
   val isLoading: Boolean = true,
   val error: ArtistAlbumsError? = null,
@@ -23,6 +23,15 @@ sealed interface ArtistAlbumsError {
     override val message: String = "Unable to connect to server",
   ) : ArtistAlbumsError
 }
+
+@Immutable
+data class ArtistDetail(
+  val id: String,
+  val name: String,
+  val overview: String?,
+  val genre: String?,
+  val imageUrl: String?,
+)
 
 @Immutable
 data class ArtistAlbumItem(
