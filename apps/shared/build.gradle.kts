@@ -53,6 +53,7 @@ kotlin {
       api(projects.screens.libraryCollections)
       api(projects.screens.libraryGenres)
       api(projects.screens.libraryMovies)
+      api(projects.screens.movieDetail)
       api(projects.screens.libraryMusic)
       api(projects.screens.libraryTvshows)
       api(projects.screens.musicAlbumTracks)

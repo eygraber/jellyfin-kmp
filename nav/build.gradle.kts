@@ -26,6 +26,7 @@ kotlin {
       implementation(projects.screens.libraryCollections)
       implementation(projects.screens.libraryGenres)
       implementation(projects.screens.libraryMovies)
+      implementation(projects.screens.movieDetail)
       implementation(projects.screens.libraryMusic)
       implementation(projects.screens.libraryTvshows)
       implementation(projects.screens.musicAlbumTracks)
