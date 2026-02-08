@@ -38,6 +38,8 @@ class SearchModel(
 
   internal val stateForTest: SearchModelState get() = state
 
+  val currentQuery: String get() = state.query
+
   @Composable
   override fun currentState(): SearchModelState = state
 
