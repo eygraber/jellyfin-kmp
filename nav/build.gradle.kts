@@ -21,6 +21,7 @@ kotlin {
 
       implementation(projects.screens.collectionItems)
       implementation(projects.screens.devSettings)
+      implementation(projects.screens.episodeDetail)
       implementation(projects.screens.genreItems)
       implementation(projects.screens.home)
       implementation(projects.screens.libraryCollections)

@@ -48,6 +48,7 @@ kotlin {
 
       api(projects.screens.collectionItems)
       api(projects.screens.devSettings)
+      api(projects.screens.episodeDetail)
       api(projects.screens.genreItems)
       api(projects.screens.home)
       api(projects.screens.libraryCollections)
