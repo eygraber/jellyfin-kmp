@@ -32,8 +32,14 @@ import com.eygraber.jellyfin.screens.home.HomeGraph
 import com.eygraber.jellyfin.screens.home.HomeKey
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryGraph
 import com.eygraber.jellyfin.screens.library.movies.MoviesLibraryKey
+import com.eygraber.jellyfin.screens.library.music.MusicLibraryGraph
+import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryGraph
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
+import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksGraph
+import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksKey
+import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsGraph
+import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsKey
 import com.eygraber.jellyfin.screens.root.RootGraph
 import com.eygraber.jellyfin.screens.root.RootKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesGraph
@@ -132,6 +138,18 @@ private fun jellyfinNavEntryProvider(
     provideMoviesLibrary(navGraph, backStack),
   )
 
+  viceEntry<MusicLibraryKey>(
+    provideMusicLibrary(navGraph, backStack),
+  )
+
+  viceEntry<ArtistAlbumsKey>(
+    provideArtistAlbums(navGraph, backStack),
+  )
+
+  viceEntry<AlbumTracksKey>(
+    provideAlbumTracks(navGraph, backStack),
+  )
+
   viceEntry<TvShowsLibraryKey>(
     provideTvShowsLibrary(navGraph, backStack),
   )
@@ -211,6 +229,36 @@ private fun provideMoviesLibrary(
   ).navEntryProvider
 }
 
+private fun provideMusicLibrary(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: MusicLibraryKey ->
+  navGraph.musicLibraryFactory.createMusicLibraryGraph(
+    navigator = JellyfinNavigators.musicLibrary(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideArtistAlbums(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: ArtistAlbumsKey ->
+  navGraph.artistAlbumsFactory.createArtistAlbumsGraph(
+    navigator = JellyfinNavigators.artistAlbums(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideAlbumTracks(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: AlbumTracksKey ->
+  navGraph.albumTracksFactory.createAlbumTracksGraph(
+    navigator = JellyfinNavigators.albumTracks(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private fun provideTvShowsLibrary(
   navGraph: JellyfinNavGraph,
   backStack: NavBackStack<NavKey>,
@@ -241,11 +289,20 @@ private fun provideTvShowEpisodes(
   ).navEntryProvider
 }
 
+private val JellyfinNavGraph.albumTracksFactory
+  get() = this as AlbumTracksGraph.Factory
+
+private val JellyfinNavGraph.artistAlbumsFactory
+  get() = this as ArtistAlbumsGraph.Factory
+
 private val JellyfinNavGraph.homeFactory
   get() = this as HomeGraph.Factory
 
 private val JellyfinNavGraph.moviesLibraryFactory
   get() = this as MoviesLibraryGraph.Factory
+
+private val JellyfinNavGraph.musicLibraryFactory
+  get() = this as MusicLibraryGraph.Factory
 
 private val JellyfinNavGraph.rootFactory
   get() = this as RootGraph.Factory
