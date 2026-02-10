@@ -49,6 +49,7 @@ kotlin {
       api(projects.domain.server.public)
       api(projects.domain.session.impl)
       api(projects.domain.session.public)
+      api(projects.domain.validators)
 
       api(projects.nav)
 
@@ -57,6 +58,7 @@ kotlin {
       api(projects.screens.episodeDetail)
       api(projects.screens.genreItems)
       api(projects.screens.home)
+      api(projects.screens.login)
       api(projects.screens.libraryCollections)
       api(projects.screens.libraryGenres)
       api(projects.screens.libraryMovies)

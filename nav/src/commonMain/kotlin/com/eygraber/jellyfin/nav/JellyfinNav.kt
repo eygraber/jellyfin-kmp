@@ -46,6 +46,8 @@ import com.eygraber.jellyfin.screens.library.music.MusicLibraryGraph
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryGraph
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
+import com.eygraber.jellyfin.screens.login.LoginGraph
+import com.eygraber.jellyfin.screens.login.LoginKey
 import com.eygraber.jellyfin.screens.movie.detail.MovieDetailGraph
 import com.eygraber.jellyfin.screens.movie.detail.MovieDetailKey
 import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksGraph
@@ -144,6 +146,10 @@ private fun jellyfinNavEntryProvider(
 
   viceEntry<WelcomeKey>(
     provideWelcome(navGraph, backStack),
+  )
+
+  viceEntry<LoginKey>(
+    provideLogin(navGraph, backStack),
   )
 
   viceEntry<HomeKey>(
@@ -247,6 +253,16 @@ private fun provideWelcome(
 ) = { key: WelcomeKey ->
   navGraph.welcomeFactory.createWelcomeGraph(
     navigator = JellyfinNavigators.welcome(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
+private fun provideLogin(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: LoginKey ->
+  navGraph.loginFactory.createLoginGraph(
+    navigator = JellyfinNavigators.login(backStack),
     key = key,
   ).navEntryProvider
 }
@@ -440,6 +456,9 @@ private val JellyfinNavGraph.genresLibraryFactory
 
 private val JellyfinNavGraph.homeFactory
   get() = this as HomeGraph.Factory
+
+private val JellyfinNavGraph.loginFactory
+  get() = this as LoginGraph.Factory
 
 private val JellyfinNavGraph.movieDetailFactory
   get() = this as MovieDetailGraph.Factory

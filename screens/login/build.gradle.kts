@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.dependencies
+
 plugins {
   alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
@@ -7,9 +9,10 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.kotlinxSerialization)
   alias(libs.plugins.metro)
+  // alias(libs.plugins.paparazzi)
 }
 
-val pkg = "com.eygraber.jellyfin.screens.root"
+val pkg = "com.eygraber.jellyfin.screens.login"
 
 compose {
   resources {
@@ -25,26 +28,34 @@ kotlin {
 
   androidLibrary {
     androidResources.enable = true
+
+    withHostTest {
+      isIncludeAndroidResources = true
+    }
   }
 
   sourceSets {
-    androidMain.dependencies {
-      implementation(libs.androidx.activityCompose)
+    // https://youtrack.jetbrains.com/issue/KT-83321/
+    named("androidHostTest").dependencies {
+      implementation(projects.testUtils)
+      implementation(libs.bundles.test.paparazzi)
     }
 
     commonMain.dependencies {
       api(projects.di)
 
+      implementation(projects.data.auth.public)
+      implementation(projects.data.server.public)
+      implementation(projects.domain.server.public)
       implementation(projects.domain.session.public)
-
-      api(projects.services.splashScreen.public)
+      implementation(projects.domain.validators)
 
       implementation(projects.ui.compose)
       implementation(projects.ui.icons)
       implementation(projects.ui.material)
 
-      implementation(libs.compose.animation)
       implementation(libs.compose.foundation)
+      implementation(libs.compose.foundationLayout)
       implementation(libs.compose.material3)
       implementation(libs.compose.resources)
       implementation(libs.compose.runtime)

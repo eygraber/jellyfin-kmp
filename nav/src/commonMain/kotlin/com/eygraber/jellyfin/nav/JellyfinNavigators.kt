@@ -9,6 +9,7 @@ import com.eygraber.jellyfin.screens.episode.detail.EpisodeDetailNavigator
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsKey
 import com.eygraber.jellyfin.screens.genre.items.GenreItemsNavigator
 import com.eygraber.jellyfin.screens.home.CollectionType
+import com.eygraber.jellyfin.screens.home.HomeKey
 import com.eygraber.jellyfin.screens.home.HomeNavigator
 import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryKey
 import com.eygraber.jellyfin.screens.library.collections.CollectionsLibraryNavigator
@@ -19,6 +20,8 @@ import com.eygraber.jellyfin.screens.library.music.MusicLibraryKey
 import com.eygraber.jellyfin.screens.library.music.MusicLibraryNavigator
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryKey
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowsLibraryNavigator
+import com.eygraber.jellyfin.screens.login.LoginKey
+import com.eygraber.jellyfin.screens.login.LoginNavigator
 import com.eygraber.jellyfin.screens.movie.detail.MovieDetailKey
 import com.eygraber.jellyfin.screens.movie.detail.MovieDetailNavigator
 import com.eygraber.jellyfin.screens.music.album.tracks.AlbumTracksKey
@@ -43,13 +46,23 @@ internal object JellyfinNavigators {
     onNavigateToOnboarding = {
       backStack.replaceWith(WelcomeKey)
     },
+    onNavigateToHome = {
+      backStack.replaceWith(HomeKey)
+    },
   )
 
   fun welcome(
     backStack: NavBackStack<NavKey>,
   ) = WelcomeNavigator(
     onNavigateToSignUp = { backStack.add(JellyfinNavKeys.ComingSoon("SignUp")) },
-    onNavigateToLogin = { backStack.add(JellyfinNavKeys.ComingSoon("Login")) },
+    onNavigateToLogin = { backStack.add(LoginKey) },
+  )
+
+  fun login(
+    backStack: NavBackStack<NavKey>,
+  ) = LoginNavigator(
+    onNavigateToHome = { backStack.replaceWith(HomeKey) },
+    onNavigateBack = { backStack.removeLastOrNull() },
   )
 
   fun home(
