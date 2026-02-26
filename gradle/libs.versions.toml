@@ -79,7 +79,7 @@ conventionsKotlin = { id = "com.eygraber.conventions-kotlin-library" }
 conventionsKotlinMultiplatform = { id = "com.eygraber.conventions-kotlin-multiplatform" }
 conventionsProjectCommon = { id = "com.eygraber.conventions-project-common" }
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
-dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.5.1" }
+dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.6.1" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.2.1" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
