@@ -14,7 +14,7 @@ androidx-nav3 = "1.0.1"
 
 atomicfu = "0.31.0"
 
-compose-bom = "2026.02.00"
+compose-bom = "2026.02.01"
 composeJetbrains = "1.11.0-alpha03"
 composeJetpack = "1.10.4"
 composeMaterial3Jetbrains = "1.11.0-alpha03"
