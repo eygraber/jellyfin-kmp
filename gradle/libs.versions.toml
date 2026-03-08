@@ -35,7 +35,7 @@ jvmTarget = "17"
 
 khronicle = "0.5.2"
 
-kotest = "6.1.4"
+kotest = "6.1.5"
 
 kotlin = "2.3.10"
 
