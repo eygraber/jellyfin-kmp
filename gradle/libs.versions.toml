@@ -131,7 +131,7 @@ buildscript-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", v
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref="composeJetbrains" }
-compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.7.1"
+compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.8.0"
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeJetbrains" }
 compose-foundationLayout = { module = "org.jetbrains.compose.foundation:foundation-layout", version.ref = "composeJetbrains" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3Jetbrains" }
