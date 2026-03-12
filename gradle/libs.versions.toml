@@ -55,7 +55,7 @@ publish = "0.36.0"
 
 robolectric = "4.16.1"
 
-square-sqldelight = "2.2.1"
+square-sqldelight = "2.3.1"
 
 vice = "1.0.8"
 viceModuleGenerator = "0.1.5"
