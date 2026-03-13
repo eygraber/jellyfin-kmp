@@ -16,7 +16,7 @@ atomicfu = "0.31.0"
 
 compose-bom = "2026.03.00"
 composeJetbrains = "1.11.0-alpha04"
-composeJetpack = "1.10.4"
+composeJetpack = "1.10.5"
 composeMaterial3Jetbrains = "1.11.0-alpha03"
 composeNav3 = "1.1.0-alpha03"
 
