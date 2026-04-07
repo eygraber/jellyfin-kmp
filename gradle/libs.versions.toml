@@ -209,7 +209,7 @@ test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared",
 test-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 test-paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
-test-parameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.21"
+test-parameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.22"
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 test-robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }
 test-robolectric-shadows = { module = "org.robolectric:shadows-framework", version.ref = "robolectric" }
