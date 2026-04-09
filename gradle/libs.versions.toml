@@ -82,7 +82,7 @@ dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
 dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.6.1" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.2.1" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
 googleServices = { id = "com.google.gms.google-services" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
