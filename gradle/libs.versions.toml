@@ -44,7 +44,7 @@ kotlinx-serialization = "1.11.0"
 
 ktor = "3.4.3"
 
-ksp = "2.3.6"
+ksp = "2.3.7"
 
 ktlint = "1.8.0"
 ktlintCustomRules = "0.1.1"
