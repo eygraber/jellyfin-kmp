@@ -1,0 +1,75 @@
+#!/bin/bash
+# Filters Gradle/build output to show only actionable information.
+#
+# Usage:
+#   ./check 2>&1 | .scripts/filter-build-output
+#   ./check --continue 2>&1 | .scripts/filter-build-output
+#   ./gradlew testDebugUnitTest 2>&1 | .scripts/filter-build-output
+#
+# SHOWN: Build status, errors, warnings, findings, test failures, build health
+# HIDDEN: Configuration, progress, downloads, up-to-date tasks, passing tests
+
+# Strip ANSI color codes first, then filter
+sed 's/\x1b\[[0-9;]*m//g' | awk '
+BEGIN { ctx = 0; prev = "" }
+
+# Buffer every line so detekt category headers can be printed retroactively
+{ prev = curr; curr = $0 }
+
+# Print context lines following an important match
+ctx > 0 {
+  if (/^\s*$/) { ctx--; next }
+  print
+  ctx--
+  next
+}
+
+# === Build Result ===
+/BUILD (SUCCESSFUL|FAILED)/ { print; next }
+/actionable task/ { print; next }
+
+# === Failure Details ===
+/^FAILURE:/ { print; ctx = 10; next }
+/Execution failed for task/ { print; ctx = 3; next }
+/^> Task .* FAILED$/ { print; next }
+
+# === Compilation Errors & Warnings ===
+/^e: / { print; ctx = 2; next }
+/^w: / { print; next }
+
+# === Test Results ===
+# Keep FAILED with stacktrace context; skip PASSED
+/ FAILED$/ { print; ctx = 8; next }
+/tests? completed/ { print; next }
+
+# === Detekt Findings ===
+/^Overall finding count:/ { print; next }
+/- [0-9]+ \(threshold/ { print; next }
+# Tab-indented finding line; also print the preceding category header
+/^\t[A-Z].*- \[/ {
+  if (prev != "" && prev !~ /^>/) print prev
+  print; next
+}
+/^  [A-Z][a-zA-Z]+.* - \[/ {
+  if (prev != "" && prev !~ /^>/) print prev
+  print; next
+}
+
+# === Lint ===
+/Wrote .* report to/ { print; next }
+/Lint found .* (error|warning)/ { print; ctx = 4; next }
+/: (Error|Warning):.*\[/ { print; ctx = 3; next }
+/[0-9]+ (errors?|warnings?)/ && !/actionable task/ { print; next }
+
+# === Build Health / Dependency Analysis ===
+/^Advice for / { print; ctx = 15; next }
+/These dependencies should/ { print; ctx = 10; next }
+
+# === Kotlin Compiler Warnings ===
+/\.kt:[0-9]+:[0-9]+: warning:/ { print; next }
+
+# === ktlint ===
+/\.kt:[0-9]+:[0-9]+:/ { print; next }
+
+# Everything else is filtered out
+'
