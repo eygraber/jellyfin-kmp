@@ -109,7 +109,7 @@ android-lint-test = { module = "com.android.tools.lint:lint-tests", version.ref 
 
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-annotation = "androidx.annotation:annotation:1.9.1"
+androidx-annotation = "androidx.annotation:annotation:1.10.0"
 androidx-annotationExperimental = "androidx.annotation:annotation-experimental:1.6.0"
 androidx-appCompat = "androidx.appcompat:appcompat:1.7.1"
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
