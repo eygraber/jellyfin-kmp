@@ -1,0 +1,83 @@
+#!/bin/bash
+# Runs a Gradle command with pipefail and output filtering.
+#
+# Usage:
+#   .scripts/run-gradle --script ./check
+#   .scripts/run-gradle --script ./check -- --continue
+#   .scripts/run-gradle --tasks "detektAll"
+#   .scripts/run-gradle --tasks "testDebugUnitTest"
+#   .scripts/run-gradle --tasks ":app:lintDevRelease"
+#   .scripts/run-gradle --grep 'pattern' --tasks "testDebugUnitTest"
+#
+# Options:
+#   --script <path>       Run a script that invokes Gradle (e.g., ./check)
+#   --tasks "<tasks>"     Run ./gradlew with the given tasks (quoted string)
+#   --grep <pattern>      Filter output with grep instead of the default filter
+
+set -o pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+FILTER="$SCRIPT_DIR/filter-build-output"
+
+grep_pattern=""
+mode=""
+script_path=""
+gradle_tasks=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --grep)
+      if [[ -z "${2:-}" || "$2" == --* ]]; then
+        echo "Error: --grep requires a pattern argument" >&2
+        exit 1
+      fi
+      grep_pattern="$2"
+      shift 2
+      ;;
+    --script)
+      if [[ -z "${2:-}" || "$2" == --* ]]; then
+        echo "Error: --script requires a path argument" >&2
+        exit 1
+      fi
+      mode="script"
+      script_path="$2"
+      shift 2
+      ;;
+    --tasks)
+      if [[ -z "${2:-}" || "$2" == --* ]]; then
+        echo "Error: --tasks requires a tasks argument" >&2
+        exit 1
+      fi
+      mode="tasks"
+      gradle_tasks="$2"
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      echo "Usage: .scripts/run-gradle [--grep <pattern>] (--script <path> [-- <args...>] | --tasks \"<tasks>\")" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "$mode" ]]; then
+  echo "Usage: .scripts/run-gradle [--grep <pattern>] (--script <path> [-- <args...>] | --tasks \"<tasks>\")" >&2
+  exit 1
+fi
+
+if [[ "$mode" == "script" ]]; then
+  cmd=("$script_path" "$@")
+elif [[ "$mode" == "tasks" ]]; then
+  # shellcheck disable=SC2086
+  cmd=(./gradlew $gradle_tasks)
+fi
+
+if [[ -n "$grep_pattern" ]]; then
+  "${cmd[@]}" 2>&1 | grep -E "$grep_pattern" || true
+else
+  "${cmd[@]}" 2>&1 | "$FILTER"
+fi

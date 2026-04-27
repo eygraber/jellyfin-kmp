@@ -1,6 +1,6 @@
 ---
 name: start-work-loop
-description: Work through a scope of issues continuously until all have PRs. Stacks branches, manages context, and unblocks dependent issues.
+description: Work through a scope of issues continuously, reviewing, merging, and unblocking each before moving to the next.
 argument-hint: "<scope> - e.g., 'epic #1', 'label:area:auth', 'all ready', 'bug'"
 user-facing: true
 agent-invocable: false
@@ -10,23 +10,24 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task
 
 # Start Work Loop
 
-Autonomously work through a scope of issues until all have PRs created. This skill implements a continuous work loop that:
+Autonomously work through a scope of issues, taking each one all the way from "Ready" to "merged on master" before moving to the next. The loop:
 
 - Finds the next issue in scope
-- Implements the solution and creates a PR
-- Stacks branches to avoid conflicts
-- Manages context between issues
-- Unblocks dependent issues after each PR
+- Implements the solution on a fresh branch off `master`
+- Runs the `review` skill in a subagent and addresses findings before opening the PR
+- Creates the PR and monitors its status checks every 60 seconds
+- Fixes any failing checks, then merges the PR (rebase strategy)
+- Resolves Renovate-induced conflicts by rebasing onto an updated `master`
+- Unblocks dependent issues after each merge
 
 ## Autonomy Principle
 
-**Goal: Minimize blocking on user input.** This loop should run autonomously with minimal user intervention.
+**Goal: Minimize blocking on user input.** This loop runs autonomously with minimal user intervention.
 
-- Do NOT ask the user to choose between candidate issues - pick one automatically
+- Do NOT ask the user to choose between candidate issues — pick one automatically
 - Do NOT ask for confirmation before starting each issue
-- Do NOT merge PRs - only create them and leave for user review
-- Only block for user input when absolutely necessary (unrecoverable errors, ambiguous requirements)
 - Make reasonable decisions and keep moving forward
+- Only block for user input when truly stuck (unrecoverable errors, ambiguous requirements, irrecoverable conflicts)
 
 ## Usage
 
@@ -43,13 +44,21 @@ Autonomously work through a scope of issues until all have PRs created. This ski
 - **GitHub project config:** [/.claude/rules/github-project.md](/.claude/rules/github-project.md)
 - **gh CLI commands:** [/.claude/rules/github-commands.md](/.claude/rules/github-commands.md)
 - **Git workflow:** [/.claude/rules/git-workflow.md](/.claude/rules/git-workflow.md)
+- **Project management:** [/.claude/rules/project-management.md](/.claude/rules/project-management.md)
+- **Review skill:** [/.claude/skills/review/SKILL.md](/.claude/skills/review/SKILL.md)
 
 ## Scripts
 
-| Script                    | Purpose                                              |
-|---------------------------|------------------------------------------------------|
-| `unblock-issues.sh`       | Find and unblock issues whose blockers have PRs      |
-| `get-scope-issues.sh`     | Get all issues matching the scope                    |
+This skill's own scripts (`.claude/skills/start-work-loop/scripts/`):
+
+| Script                       | Purpose                                                              |
+|------------------------------|----------------------------------------------------------------------|
+| `get-scope-issues.sh`        | Get all issues matching the scope                                    |
+| `unblock-issues.sh`          | Find and unblock issues whose blockers have PRs                      |
+| `monitor-pr-checks.sh`       | Poll PR checks every 60s until success/failure (terminal state)      |
+| `get-pr-check-failures.sh`   | Fetch logs/details of failed checks for a PR                         |
+| `merge-pr.sh`                | Merge a PR with rebase strategy and delete the branch                |
+| `rebase-on-master.sh`        | Update master from origin and rebase the current branch onto it      |
 
 Also uses scripts from `/start-work`:
 
@@ -64,83 +73,61 @@ Also uses scripts from `/start-work`:
 
 ### 1. Parse Scope and Initialize
 
-Parse the user's scope definition and gather all issues that match:
-
 ```bash
-# Get issues matching scope
 .claude/skills/start-work-loop/scripts/get-scope-issues.sh "<scope>"
 ```
 
 **Scope types:**
-- `epic #N` - All subissues of epic N
-- `label:X` or type shorthands (`bug`, `feature`, `task`, `chore`) - Issues with that label
-- `all ready` - All issues in Ready status
-- `priority:pN` - All issues with that priority
-- Combinations: `epic #1 priority:p1` - P1 issues within epic #1
+- `epic #N` — All subissues of epic N
+- `label:X` or shorthands (`bug`, `feature`, `task`, `chore`) — Issues with that label
+- `all ready` — All issues in Ready status
+- `priority:pN` — All issues with that priority
+- Combinations: `epic #1 priority:p1`
 
 Initialize tracking:
-- `completed_issues` - Issues with PRs created this session
-- `base_branch` - Starting branch (usually `master`)
-- `current_branch` - Current working branch (for stacking)
+- `completed_issues` — Issues whose PRs have been merged this session
+- Always start each issue from a fresh `master` (no branch stacking — see below)
 
 ### 2. Find Next Issue
 
-Query for the next issue to work on within the scope:
-
 1. Get all issues matching scope
 2. Exclude issues already completed this session
-3. Exclude blocked issues (unless blocker has a PR from this session)
+3. Exclude blocked issues (use `get-blocked-issues.sh`)
 4. Filter to Ready or In Progress status
 5. Sort by priority (P0 > P1 > P2 > P3 > unlabeled)
-6. **If multiple issues have the same highest priority, pick one at random**
-7. Do NOT ask user to choose - just pick and proceed
-
-```bash
-# Get blocked issues
-.claude/skills/start-work-loop/scripts/../start-work/scripts/get-blocked-issues.sh
-```
+6. **If multiple issues tie on priority, pick one** — do not ask the user
 
 If no issues are ready but some are blocked:
-- Run the unblock check (see step 6)
-- Retry finding the next issue
-
-If no issues remain in scope:
-- Report completion and exit the loop
+- Run unblock check (step 8) and retry
+- If still nothing ready, complete the loop
 
 ### 3. Handle Epics
 
-If the selected issue is an **epic** (has `epic` label):
+If the selected issue has the `epic` label:
 
 1. Move the epic to In Progress
-2. Get the epic's subissues:
+2. List its subissues:
    ```bash
    .claude/skills/start-work/scripts/get-epic-subissues.sh EPIC_NUMBER
    ```
-3. Find the first available (Ready, not blocked) subissue
-4. Work on that subissue instead (the epic stays In Progress)
+3. Pick the first available (Ready, not blocked) subissue and work on that
+4. The epic stays In Progress until all subissues are merged (Done)
 
-If none of the subissues are ready to be worked on, find the next issue in scope.
+### 4. Start Working on the Issue
 
-**Epic status management:**
-- When starting work on any subissue, ensure parent epic is In Progress
-- After creating a PR for a subissue, check if it's the last subissue
-- If all subissues are now In Review or Done, move the epic to In Review
-
-### 4. Start Working on Issue
-
-1. **Move issue to In Progress** (and parent epic if applicable):
+1. **Move issue (and parent epic, if any) to In Progress:**
    ```bash
    .claude/skills/start-work/scripts/set-issue-status.sh ISSUE_NUMBER in-progress
-   # If this is a subissue, also ensure epic is In Progress
    ```
 
-2. **Create stacked branch:**
+2. **Create a fresh branch off master:**
    ```bash
-   # Branch from current working branch (not master) to stack
+   git checkout master
+   git pull --ff-only origin master
    git checkout -b <issue#>-<brief-description>
    ```
 
-   The branch name follows the convention: `<issue#>-<brief-description>`
+   No branch stacking — every PR is merged before the next issue starts, so each new branch always starts from the latest `master`.
 
 3. **Display issue context:**
    ```bash
@@ -151,13 +138,25 @@ If none of the subissues are ready to be worked on, find the next issue in scope
    - Read issue description and acceptance criteria
    - Explore codebase as needed
    - Write code, tests, and documentation
-   - Run `./check` to verify
+   - Run `./check` locally before considering implementation done
 
-### 5. Create PR
+### 5. Pre-PR Review (REQUIRED)
 
-After implementing the solution:
+**Before creating the PR**, run the `review` skill in a subagent over the staged/unstaged changes. This is mandatory — do not skip.
 
-1. **Commit changes:**
+Spawn a subagent (e.g. via the `Agent` tool with `subagent_type: "general-purpose"`) and instruct it to invoke the `review` skill against the current diff. The subagent should:
+
+- Run `git diff master...HEAD` (and `git status`) to identify the changed surface
+- Apply the `review` skill checklists for the relevant focus areas
+- Return a prioritized list: 🔴 Blocking, 🟡 Important, 🔵 Suggestions
+
+**Address every 🔴 Blocking finding before opening the PR.** Address 🟡 Important findings unless there's a clear reason to defer (note the reason in the PR body if so). 🔵 Suggestions are optional.
+
+Re-run `./check` after applying review fixes.
+
+### 6. Create the PR
+
+1. **Commit changes** (first commit on a new branch carries the issue number):
    ```bash
    git add <files>
    git commit -m "#ISSUE_NUMBER <description>"
@@ -168,151 +167,163 @@ After implementing the solution:
    git push -u origin <branch-name>
    ```
 
-3. **Create PR:**
-   - Set base branch to `current_branch` (the previous issue's branch, or `master` if first)
-   - Title: `#ISSUE_NUMBER <brief description>`
-   - Body: Summary, test plan, closes reference
-   - Add appropriate label (`type:task`, `type:feature`, `type:chore`, or `bug`)
-
+3. **Create PR** with `master` as the base (no stacking):
    ```bash
-   gh pr create --base <current_branch> --title "#N Title" --label "type:task" --body "..."
+   gh pr create --base master \
+     --title "#N <brief description>" \
+     --label "type:task" \
+     --body "Closes #N
+
+   ## Summary
+   <bullet points>
+
+   ## Test plan
+   - [ ] <test items>"
    ```
+   Use the appropriate type label (`type:task`, `type:feature`, `type:chore`, `bug`).
 
 4. **Move issue to In Review:**
    ```bash
    .claude/skills/start-work/scripts/set-issue-status.sh ISSUE_NUMBER in-review
    ```
 
-5. **Check epic status** (if this was a subissue):
-   - Get all subissues of the parent epic
-   - If ALL subissues are now In Review or Done, move the epic to In Review
-   - Otherwise, epic stays In Progress
+### 7. Monitor PR Checks (every 60 seconds)
 
-6. **Update tracking:**
-   - Add issue to `completed_issues`
-   - Set `current_branch` to the new branch (for stacking next PR)
+Poll the PR's checks until a terminal state is reached:
 
-### 6. Manage Context
+```bash
+.claude/skills/start-work-loop/scripts/monitor-pr-checks.sh PR_NUMBER --interval 60
+```
 
-After creating a PR, determine how to handle context for the next issue:
+The script writes a single JSON line to stdout when it terminates. Possible outcomes:
 
-**Determine relationship to next issue:**
+#### a) `{"status":"success", ...}` — Merge the PR
 
-Look at the next issue in scope (if any). Consider it "related" if:
-- Same epic
-- Same area/component (based on labels or file paths touched)
-- Sequential dependency (current issue unblocked the next)
+```bash
+.claude/skills/start-work-loop/scripts/merge-pr.sh PR_NUMBER
+```
 
-**If next issue is related AND context is manageable:**
-- Use `/compact` to summarize completed work
-- Retain relevant context about architecture, patterns, files modified
+If the merge fails because the branch is out of date with master (Renovate may have merged a dependency PR while you were working), go to **(c) conflict** below, then retry the merge.
 
-**If next issue is unrelated OR context is too large:**
-- Use `/clear` to start fresh
-- The stacked branch will still be the base for the next PR
+After the merge succeeds:
+- The remote branch is auto-deleted (`deleteBranchOnMerge=true`)
+- Locally: `git checkout master && git pull --ff-only origin master && git branch -D <branch>`
+- The closing keyword in the PR body (`Closes #N`) auto-closes the issue → moves to Done
+- Add the issue to `completed_issues`
+- Continue to step 8
 
-**Context size heuristic:**
-- If conversation has > 50 turns since last clear/compact, prefer clearing
-- If implementation touched > 20 files, prefer clearing
-- If next issue is in a completely different area, prefer clearing
+#### b) `{"status":"failure","failed_checks":[...]}` — Fix the failure
 
-### 7. Unblock Dependent Issues
+1. **Get failure details:**
+   ```bash
+   .claude/skills/start-work-loop/scripts/get-pr-check-failures.sh PR_NUMBER
+   ```
+   This prints each failed check's name, link, and the tail of its failed-step logs.
 
-After creating a PR, check if any blocked issues can now be unblocked:
+2. **Diagnose** based on the failure category:
+   - `ktlint` / `detekt` / `lint` → run `./format` and/or fix style violations locally; re-run `./check`
+   - `assemble` / build → reproduce locally with the gradle task in the log
+   - `unit_and_screenshot_tests` → run the failing test locally; for screenshot diffs use `./gradlew recordPaparazziDebug` only if the new rendering is actually correct
+   - `dependency_analysis` → adjust module dependencies per the script's recommendation
+   - `danger` → read the Danger comment on the PR for the rule violation
+   - `license_check` → ensure new dependencies have approved licenses
+
+3. **Fix, commit, push:**
+   ```bash
+   git add <files>
+   git commit -m "<short description of fix>"
+   git push origin <branch-name>
+   ```
+   (No issue number on follow-up commits — only the first commit on the branch references the issue.)
+
+4. **Resume monitoring** by re-running `monitor-pr-checks.sh`.
+
+5. **If the same check keeps failing after 3 fix attempts**, leave the issue In Review with a comment summarizing what's blocking, skip to the next issue in scope, and surface the situation in the final report.
+
+#### c) `{"status":"conflict", ...}` — Rebase onto master
+
+A conflict means `master` advanced while you were working (almost always a Renovate auto-merge). Resolve by rebasing onto the updated master:
+
+```bash
+.claude/skills/start-work-loop/scripts/rebase-on-master.sh --push
+```
+
+The script:
+- Refuses to run with uncommitted changes
+- Fetches `origin/master` and fast-forwards local `master`
+- Rebases the current branch onto `master`
+- Pushes with `--force-with-lease` if `--push` is given
+
+**If the rebase produces conflicts the script can't resolve** (exit code 1):
+- Inspect the conflict markers (`git status --short`)
+- Resolve obvious conflicts (the kind Renovate causes are usually in `gradle/libs.versions.toml`, lockfiles, or `.idea/` config — accept the master-side version unless your branch deliberately changed the same line)
+- `git add <resolved-files> && git rebase --continue`
+- `git push --force-with-lease origin <branch-name>`
+- If conflicts are non-trivial and outside your changed surface, ask the user before continuing
+
+After a successful rebase, return to step 7 (re-monitor checks).
+
+#### d) `{"status":"timeout", ...}`
+
+Checks took longer than the script's `--max-wait`. Re-invoke `monitor-pr-checks.sh` to keep waiting, or escalate to the user if something looks stuck (e.g. a runner queued for >30 min).
+
+### 8. Unblock Dependent Issues
+
+After each merge, unblock issues whose blockers are now resolved:
 
 ```bash
 .claude/skills/start-work-loop/scripts/unblock-issues.sh
 ```
 
-This script:
-1. Gets all blocked issues in the scope
-2. For each blocked issue, checks if ALL blocking issues have PRs (In Review or Done)
-3. If so, moves the issue from Backlog to Ready
+Issues are considered unblocked when their blockers are merged (Done) or have an open PR (In Review). The script moves matching issues from Backlog to Ready.
 
-**Important:** An issue is considered "unblocked" when its blocker has a PR created, not just when work has started. This allows parallel work to proceed once the blocking implementation is complete and reviewable.
+### 9. Loop or Complete
 
-### 8. Loop or Complete
+**Continue** if remaining issues in scope are Ready or can be unblocked.
 
-**Continue loop if:**
-- There are remaining issues in scope that are Ready or can be unblocked
+**Complete** when:
+- All issues in scope are Done (or In Review with their PR queued for auto-merge)
+- Remaining issues are blocked by external factors not in scope
+- Repeated check failures left an issue stuck in In Review (reported in the summary)
 
-**Complete if:**
-- All issues in scope have PRs (In Review or Done)
-- No more issues can be unblocked (circular dependencies or external blockers)
-- All remaining issues failed implementation (skipped)
-
-**On completion:**
+**Final report:**
 ```
 Completed work loop for scope: <scope>
 
-PRs Created (stacked):
-  1. #45 → PR #101 (base: master)
-  2. #46 → PR #102 (base: 45-add-validation)
-  3. #47 → PR #103 (base: 46-update-tests)
+Merged this session:
+  1. #45 → PR #101 (merged)
+  2. #46 → PR #102 (merged)
+  3. #47 → PR #103 (merged)
 
-Issues remaining (blocked by external factors):
-  - #48 blocked by #30 (not in scope)
+Stuck (left in In Review):
+  - #48 → PR #104 — repeated test failure in <test name>
 
-To merge: Merge PRs in order starting from #101
+Blocked by external factors:
+  - #50 blocked by #30 (not in scope)
 ```
 
-## Branch Stacking Strategy
+## Why No Branch Stacking?
 
-PRs are stacked to avoid merge conflicts:
+Earlier versions of this skill stacked PRs (each branch based on the previous) so multiple in-flight PRs could coexist. With merge-on-success, that's no longer needed:
 
-```
-master ─────────────────────────────────────────────
-    \
-     45-add-validation ─────────────────────────────
-         \
-          46-update-tests ──────────────────────────
-              \
-               47-add-feature ──────────────────────
-```
+- Each PR merges to `master` before the next issue begins, so the next branch is always cut from up-to-date `master`
+- No risk of cascading rebase pain when an early PR in the stack changes
+- Renovate auto-merges interleave cleanly with our merges instead of poisoning a stack
 
-Each PR's base is the previous branch, creating a stack:
-- PR #101: `45-add-validation` → `master`
-- PR #102: `46-update-tests` → `45-add-validation`
-- PR #103: `47-add-feature` → `46-update-tests`
+If a future issue truly depends on changes from a not-yet-merged PR, work on it last and pull in the merged base when starting.
 
 ## Error Handling
 
-**Principle: Attempt to recover automatically. Only ask user when truly stuck.**
+**Principle: Recover automatically when possible. Only block on the user when truly stuck.**
 
-### Implementation Fails
-
-If implementation fails (tests don't pass, can't figure out solution):
-
-1. **First, attempt to fix automatically** - review errors, adjust approach
-2. **If still failing after reasonable attempts:**
-   - Log the failure with details
-   - Skip this issue and continue with next
-   - Leave issue in In Progress (not completed)
-   - Don't add to completed list
-   - Continue with next issue (still stack from current branch)
-3. **Only ask user if:** The issue is critical (P0) or all remaining issues are failing
-
-### PR Creation Fails
-
-If PR creation fails (push rejected, conflicts):
-
-1. **Attempt to resolve automatically:**
-   ```bash
-   # Rebase onto the previous branch in the stack (the one this branch was created from)
-   git pull --rebase origin <previous-branch>
-   ```
-
-2. **If conflicts during rebase:** Attempt to resolve obvious conflicts, abort rebase if complex
-
-3. **Only ask user if:** Conflicts cannot be automatically resolved
-
-### No Ready Issues But Blocked Issues Exist
-
-If all remaining issues are blocked by external factors (issues outside the scope):
-
-1. Log what's blocking each issue
-2. **End the loop** - report completion with remaining blocked issues
-3. Do NOT ask user whether to continue - just report status and finish
+| Scenario                                | Recovery                                                                                          |
+|-----------------------------------------|---------------------------------------------------------------------------------------------------|
+| Implementation can't pass `./check`     | Iterate up to 3 times. If still failing, skip the issue (leave In Progress) and continue the loop |
+| `gh pr create` rejected (out of date)   | `rebase-on-master.sh --push`, then retry                                                          |
+| PR merge rejected for being out of date | `rebase-on-master.sh --push`, wait for checks, retry merge                                        |
+| Failing check after 3 fix attempts      | Leave PR In Review with a comment, skip to next issue, surface in final report                    |
+| Rebase has non-trivial conflicts        | Resolve obvious ones; ask the user only if the conflict is outside your changed surface           |
+| All remaining issues blocked externally | End the loop and report status — do not ask the user whether to continue                          |
 
 ## Example Session
 
@@ -330,31 +341,30 @@ Found 5 issues:
   - #22 [Blocked by #21] Add task filtering
 
 Starting with #17...
+[implementation]
+Running review skill via subagent...
+  → 1 blocking issue: missing test for empty list case. Fixing.
+  → 1 important: rename `EntityModuleX` to follow convention. Fixing.
+Creating PR #57 (base: master)...
+Issue moved to In Review.
 
-[... implements #17, creates PR ...]
+Monitoring PR #57 checks (60s interval)...
+[10:14:22] PR #57: 3 pass, 0 fail, 7 pending (of 10 total)
+[10:15:22] PR #57: 8 pass, 0 fail, 2 pending (of 10 total)
+[10:16:22] PR #57: 10 pass, 0 fail, 0 pending (of 10 total)
+All checks passed. Merging...
+Merged. Issue #17 closed (Done).
 
-PR #57 created for #17: Create entity modules
-Branch: 17-create-entity-modules (base: master)
-Issue moved to In Review
+Unblock check: #18 and #19 now Ready.
 
-Checking for newly unblocked issues...
-  - #18 unblocked (blocker #17 has PR)
-  - #19 unblocked (blocker #17 has PR)
-Moving #18 and #19 to Ready
-
-Context: Next issue #18 is related (same epic, builds on #17)
-Compacting context...
-
-[... continues with #18 ...]
+Continuing with #18...
 ```
 
 ## Interruption and Resume
 
-If the loop is interrupted (user stops, error, session ends):
+If the loop is interrupted:
 
-- Completed PRs remain as-is
-- Current issue stays In Progress
+- Merged PRs and closed issues stay as-is
+- A current in-flight issue stays In Progress (or In Review if its PR was already created)
 - Use `/resume-work` to continue the interrupted issue
-- Use `/start-work-loop <same-scope>` to restart the loop (will skip completed issues)
-
-The loop tracks completion by checking issue status (In Review = has PR), so restarting is safe.
+- Use `/start-work-loop <same-scope>` to restart the loop (it will skip already-merged issues based on issue status)
