@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import migrations.Search_history
 
 /**
  * Local data source for search history persistence using SQLDelight.
@@ -50,7 +51,7 @@ class SearchHistoryLocalDataSource(
 /**
  * Maps a SQLDelight-generated `Search_history` row to a [SearchHistoryEntry].
  */
-private fun migrations.Search_history.toEntry() = SearchHistoryEntry(
+private fun Search_history.toEntry() = SearchHistoryEntry(
   query = query,
   searchedAt = searched_at,
 )

@@ -3,6 +3,7 @@ package com.eygraber.jellyfin.sdk.core
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import kotlinx.serialization.Serializable
 import kotlin.test.Test
 
 class JellyfinApiClientTest {
@@ -88,7 +89,7 @@ class JellyfinApiClientTest {
   }
 }
 
-@kotlinx.serialization.Serializable
+@Serializable
 private data class ServerTestModel(
   val known: String,
 )

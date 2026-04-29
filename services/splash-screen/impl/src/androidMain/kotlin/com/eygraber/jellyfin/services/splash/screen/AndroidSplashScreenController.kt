@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.lang.ref.WeakReference
 import kotlin.time.Duration.Companion.seconds
+import android.R as AndroidR
 
 @SingleIn(SessionScope::class)
 @ContributesBinding(SessionScope::class)
@@ -79,10 +80,11 @@ internal class AndroidSplashScreenController(
       }
 
       withContext(Dispatchers.Main) {
-        splashScreenViewRef = splashScreenViewRef?.let { ref ->
+        val ref = splashScreenViewRef
+        if(ref != null) {
           ref.get()?.remove()
           ref.clear()
-          null
+          splashScreenViewRef = null
         }
       }
     }
@@ -91,7 +93,7 @@ internal class AndroidSplashScreenController(
   private fun findSplashScreenView() =
     if(androidVersionIsAtLeast(31)) {
       activity
-        .findViewById<ViewGroup>(android.R.id.content)
+        .findViewById<ViewGroup>(AndroidR.id.content)
         .rootView
         .findSplashScreenView()
     }

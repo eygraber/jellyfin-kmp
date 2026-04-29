@@ -26,7 +26,7 @@ kotlin {
     androidNamespace = pkg,
   )
 
-  androidLibrary {
+  android {
     androidResources.enable = true
 
     withHostTest {

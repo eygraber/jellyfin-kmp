@@ -1,5 +1,6 @@
 package com.eygraber.jellyfin.services.api
 
+import com.eygraber.jellyfin.common.JellyfinResult
 import com.eygraber.jellyfin.common.isError
 import com.eygraber.jellyfin.common.isSuccess
 import com.eygraber.jellyfin.common.successOrNull
@@ -54,7 +55,7 @@ class JellyfinResponseTest {
 
     val result = response.toResult()
     result.isError().shouldBeTrue()
-    result.shouldBeInstanceOf<com.eygraber.jellyfin.common.JellyfinResult.Error.Detailed<*>>()
+    result.shouldBeInstanceOf<JellyfinResult.Error.Detailed<*>>()
     result.details shouldBe cause
   }
 
@@ -67,7 +68,7 @@ class JellyfinResponseTest {
 
     val result = response.toResult()
     result.isError().shouldBeTrue()
-    result.shouldBeInstanceOf<com.eygraber.jellyfin.common.JellyfinResult.Error.Detailed<*>>()
+    result.shouldBeInstanceOf<JellyfinResult.Error.Detailed<*>>()
     result.details.shouldBeInstanceOf<ApiException>()
   }
 }

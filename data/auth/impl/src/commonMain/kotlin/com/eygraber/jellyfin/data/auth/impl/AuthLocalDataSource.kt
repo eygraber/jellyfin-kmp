@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import migrations.User_session
 
 /**
  * Local data source for user session persistence using SQLDelight.
@@ -89,7 +90,7 @@ class AuthLocalDataSource(
 /**
  * Maps a SQLDelight-generated `User_session` row to a [UserSessionEntity].
  */
-private fun migrations.User_session.toEntity() = UserSessionEntity(
+private fun User_session.toEntity() = UserSessionEntity(
   id = id,
   serverId = server_id,
   userId = user_id,

@@ -7,7 +7,9 @@ import com.eygraber.jellyfin.sdk.core.JellyfinSdkError
 import com.eygraber.jellyfin.sdk.core.SdkResult
 import com.eygraber.jellyfin.sdk.core.ServerInfo
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -32,7 +34,7 @@ class JellyfinApiClient(
   private val deviceInfo: DeviceInfo,
   serverInfo: ServerInfo,
   json: Json = defaultJson,
-  httpClientEngine: io.ktor.client.engine.HttpClientEngine? = null,
+  httpClientEngine: HttpClientEngine? = null,
 ) {
   var serverInfo: ServerInfo = serverInfo
     private set
@@ -78,10 +80,10 @@ class JellyfinApiClient(
   }
 
   private fun createHttpClient(
-    engine: io.ktor.client.engine.HttpClientEngine?,
+    engine: HttpClientEngine?,
     json: Json,
   ): HttpClient {
-    val config: io.ktor.client.HttpClientConfig<*>.() -> Unit = {
+    val config: HttpClientConfig<*>.() -> Unit = {
       install(ContentNegotiation) {
         json(json)
       }

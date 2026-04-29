@@ -16,6 +16,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class MediaApiTest {
@@ -85,7 +86,7 @@ class MediaApiTest {
     )
 
     val api = MediaApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getPlaybackInfo(itemId = "item-1", userId = "user-1")
       result.isSuccess.shouldBeTrue()
       val info = result.getOrThrow()
@@ -109,7 +110,7 @@ class MediaApiTest {
     val client = createApiClientWithMock(responseBody = "")
 
     val api = MediaApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.reportPlaybackStart(
         info = PlaybackStartInfo(
           itemId = "item-1",
@@ -130,7 +131,7 @@ class MediaApiTest {
     val client = createApiClientWithMock(responseBody = "")
 
     val api = MediaApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.reportPlaybackStopped(
         info = PlaybackStopInfo(
           itemId = "item-1",
@@ -159,7 +160,7 @@ class MediaApiTest {
     )
 
     val api = MediaApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.markPlayed(userId = "user-1", itemId = "item-1")
       result.isSuccess.shouldBeTrue()
       val data = result.getOrThrow()
@@ -184,7 +185,7 @@ class MediaApiTest {
     )
 
     val api = MediaApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.markUnplayed(userId = "user-1", itemId = "item-1")
       result.isSuccess.shouldBeTrue()
       val data = result.getOrThrow()
