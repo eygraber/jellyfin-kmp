@@ -31,6 +31,9 @@ import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumsNavigator
 import com.eygraber.jellyfin.screens.root.RootNavigator
 import com.eygraber.jellyfin.screens.search.SearchKey
 import com.eygraber.jellyfin.screens.search.SearchNavigator
+import com.eygraber.jellyfin.screens.settings.SettingsCategory
+import com.eygraber.jellyfin.screens.settings.SettingsKey
+import com.eygraber.jellyfin.screens.settings.SettingsNavigator
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailKey
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailNavigator
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
@@ -93,7 +96,27 @@ internal object JellyfinNavigators {
       }
     },
     onNavigateToSearch = { backStack.add(SearchKey) },
+    onNavigateToSettings = { backStack.add(SettingsKey) },
   )
+
+  fun settings(
+    backStack: NavBackStack<NavKey>,
+  ) = SettingsNavigator(
+    onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToCategory = { category ->
+      backStack.add(JellyfinNavKeys.ComingSoon("${category.toComingSoonLabel()} Settings"))
+    },
+    onNavigateToWelcome = {
+      backStack.replaceWith(WelcomeKey)
+    },
+  )
+
+  private fun SettingsCategory.toComingSoonLabel(): String = when(this) {
+    SettingsCategory.Playback -> "Playback"
+    SettingsCategory.Subtitles -> "Subtitles"
+    SettingsCategory.Display -> "Display"
+    SettingsCategory.BugReport -> "Bug Report"
+  }
 
   fun search(
     backStack: NavBackStack<NavKey>,

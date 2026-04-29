@@ -31,6 +31,7 @@ import com.eygraber.jellyfin.screens.home.components.RecentlyAddedSection
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 import com.eygraber.jellyfin.ui.icons.Search
+import com.eygraber.jellyfin.ui.icons.Settings
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -60,6 +61,12 @@ internal fun HomeView(
               Icon(
                 imageVector = JellyfinIcons.Search,
                 contentDescription = "Search",
+              )
+            }
+            IconButton(onClick = { onIntent(HomeIntent.SettingsClicked) }) {
+              Icon(
+                imageVector = JellyfinIcons.Settings,
+                contentDescription = "Settings",
               )
             }
           },

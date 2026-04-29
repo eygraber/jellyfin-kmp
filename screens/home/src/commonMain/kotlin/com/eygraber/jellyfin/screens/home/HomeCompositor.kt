@@ -59,6 +59,7 @@ class HomeCompositor(
       HomeIntent.Refresh -> refresh()
       HomeIntent.RetryLoad -> retryLoad()
       HomeIntent.SearchClicked -> navigator.navigateToSearch()
+      HomeIntent.SettingsClicked -> navigator.navigateToSettings()
       is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(intent.itemId)
       is HomeIntent.NextUpItemClicked -> navigator.navigateToItemDetail(intent.itemId)
       is HomeIntent.RecentlyAddedItemClicked -> navigator.navigateToItemDetail(intent.itemId)
