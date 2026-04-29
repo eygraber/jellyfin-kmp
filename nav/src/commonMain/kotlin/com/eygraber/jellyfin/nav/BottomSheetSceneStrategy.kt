@@ -45,7 +45,7 @@ data class BottomSheetSceneProperties(
     fun defaultWindowInsets(): @Composable (
       SheetState,
     ) -> WindowInsets = {
-      BottomSheetDefaults.windowInsets
+      BottomSheetDefaults.modalWindowInsets
     }
   }
 }
