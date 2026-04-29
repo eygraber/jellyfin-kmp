@@ -31,4 +31,29 @@ class JellyfinTopLevelDestinationTest {
   fun `forKey - returns null when key is null`() {
     JellyfinTopLevelDestination.forKey(null).shouldBeNull()
   }
+
+  @Test
+  fun `forContentKey - returns Home for HomeKey contentKey`() {
+    JellyfinTopLevelDestination.forContentKey(HomeKey.toString()) shouldBe
+      JellyfinTopLevelDestination.Home
+  }
+
+  @Test
+  fun `forContentKey - returns Search for SearchKey contentKey`() {
+    JellyfinTopLevelDestination.forContentKey(SearchKey.toString()) shouldBe
+      JellyfinTopLevelDestination.Search
+  }
+
+  @Test
+  fun `forContentKey - returns null for non top-level contentKeys`() {
+    JellyfinTopLevelDestination.forContentKey(RootKey.toString()).shouldBeNull()
+    JellyfinTopLevelDestination.forContentKey(WelcomeKey.toString()).shouldBeNull()
+    JellyfinTopLevelDestination.forContentKey(MovieDetailKey(movieId = "id").toString())
+      .shouldBeNull()
+  }
+
+  @Test
+  fun `forContentKey - returns null when contentKey is null`() {
+    JellyfinTopLevelDestination.forContentKey(null).shouldBeNull()
+  }
 }

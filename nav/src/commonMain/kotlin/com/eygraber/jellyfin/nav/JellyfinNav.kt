@@ -74,6 +74,16 @@ import kotlinx.serialization.modules.polymorphic
 
 private val screenTransitionSpec: FiniteAnimationSpec<IntOffset> = tween(400)
 
+/**
+ * Root navigation host for the Jellyfin app.
+ *
+ * The navigation suite (bottom bar / rail / drawer) is rendered by
+ * [TopLevelDestinationSceneStrategy] inside the [NavDisplay] rather than wrapping the [NavDisplay]
+ * itself. Sharing a single scene across all top-level destinations keeps the navigation suite
+ * mounted across top-level transitions, so only the inner content animates and the scaffold does
+ * not flash. Transitions to and from non-top-level destinations still animate through the standard
+ * scene-level transition specs configured here.
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun JellyfinNav(
@@ -101,47 +111,56 @@ fun JellyfinNav(
     backStack = backStack,
   )
 
-  SharedTransitionLayout {
+  SharedTransitionLayout(modifier = modifier) {
     CompositionLocalProvider(
       LocalSharedTransitionScope provides this,
     ) {
-      JellyfinNavigationSuiteScaffold(
+      NavDisplay(
         backStack = backStack,
-        modifier = modifier,
-      ) {
-        NavDisplay(
-          backStack = backStack,
-          sceneStrategies = listOf(
-            DialogSceneStrategy(),
-            BottomSheetSceneStrategy(),
-            SinglePaneSceneStrategy(),
+        sceneStrategies = listOf(
+          DialogSceneStrategy(),
+          BottomSheetSceneStrategy(),
+          TopLevelDestinationSceneStrategy(
+            onTopLevelDestinationSelected = { destination ->
+              onTopLevelDestinationSelected(backStack, destination)
+            },
           ),
-          transitionSpec = {
-            ContentTransform(
-              targetContentEnter = slideInHorizontally(screenTransitionSpec) { it * 2 },
-              initialContentExit = slideOutHorizontally(screenTransitionSpec) { -it },
-            )
-          },
-          popTransitionSpec = {
-            ContentTransform(
-              targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
-              initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
-            )
-          },
-          predictivePopTransitionSpec = { _ ->
-            ContentTransform(
-              targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
-              initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
-            )
-          },
-          onBack = { backStack.removeLastOrNull() },
-          entryProvider = remember(navGraph, backStack) {
-            jellyfinNavEntryProvider(navGraph, backStack)
-          },
-        )
-      }
+          SinglePaneSceneStrategy(),
+        ),
+        transitionSpec = {
+          ContentTransform(
+            targetContentEnter = slideInHorizontally(screenTransitionSpec) { it * 2 },
+            initialContentExit = slideOutHorizontally(screenTransitionSpec) { -it },
+          )
+        },
+        popTransitionSpec = {
+          ContentTransform(
+            targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
+            initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
+          )
+        },
+        predictivePopTransitionSpec = { _ ->
+          ContentTransform(
+            targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
+            initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
+          )
+        },
+        onBack = { backStack.removeLastOrNull() },
+        entryProvider = remember(navGraph, backStack) {
+          jellyfinNavEntryProvider(navGraph, backStack)
+        },
+      )
     }
   }
+}
+
+private fun onTopLevelDestinationSelected(
+  backStack: NavBackStack<NavKey>,
+  destination: JellyfinTopLevelDestination,
+) {
+  if(backStack.lastOrNull() == destination.key) return
+  backStack.clear()
+  backStack.add(destination.key)
 }
 
 private fun jellyfinNavEntryProvider(

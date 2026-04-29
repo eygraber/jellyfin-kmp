@@ -7,10 +7,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
 import androidx.window.core.layout.WindowSizeClass
 
 /**
@@ -25,31 +22,23 @@ import androidx.window.core.layout.WindowSizeClass
  * | 600 - 840dp  | Navigation rail        |
  * | > 840dp      | Permanent nav drawer   |
  *
- * The navigation suite is only shown when the current top-most entry on [backStack] is a known
- * [JellyfinTopLevelDestination]. Onboarding (root, welcome) and detail screens render full-bleed
- * without a navigation surface.
+ * This composable assumes it is only rendered when a top-level destination is active; the
+ * containing [TopLevelDestinationScene] is responsible for that gating. Callers pass the active
+ * [currentTopLevelDestination] (which drives the selected highlight) and a click handler that
+ * receives the chosen destination.
  *
- * Tapping a navigation item replaces the entire back stack with the destination's key. This keeps
- * top-level switches predictable on all form factors and prevents stacking duplicate destinations.
+ * Keeping this composable inside a scene that is shared across top-level destinations means the
+ * navigation suite stays mounted while inner content swaps, avoiding the visual flash of the
+ * scaffold animating between destinations.
  */
 @Composable
 internal fun JellyfinNavigationSuiteScaffold(
-  backStack: NavBackStack<NavKey>,
+  currentTopLevelDestination: JellyfinTopLevelDestination?,
+  onSelectTopLevelDestination: (JellyfinTopLevelDestination) -> Unit,
   modifier: Modifier = Modifier,
   windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
   content: @Composable () -> Unit,
 ) {
-  val currentTopLevelDestination = remember(backStack.lastOrNull()) {
-    JellyfinTopLevelDestination.forKey(backStack.lastOrNull())
-  }
-
-  val navigationSuiteType = if(currentTopLevelDestination == null) {
-    NavigationSuiteType.None
-  }
-  else {
-    jellyfinNavigationSuiteType(windowAdaptiveInfo)
-  }
-
   // Labels must be resolved in a composable scope; navigationSuiteItems is a non-composable
   // builder lambda.
   val labels = JellyfinTopLevelDestination.entries.associateWith { it.label() }
@@ -60,7 +49,7 @@ internal fun JellyfinNavigationSuiteScaffold(
         val label = labels.getValue(destination)
         item(
           selected = destination == currentTopLevelDestination,
-          onClick = { onTopLevelDestinationSelected(backStack, destination) },
+          onClick = { onSelectTopLevelDestination(destination) },
           icon = {
             Icon(
               imageVector = destination.icon,
@@ -74,18 +63,9 @@ internal fun JellyfinNavigationSuiteScaffold(
       }
     },
     modifier = modifier,
-    layoutType = navigationSuiteType,
+    layoutType = jellyfinNavigationSuiteType(windowAdaptiveInfo),
     content = content,
   )
-}
-
-private fun onTopLevelDestinationSelected(
-  backStack: NavBackStack<NavKey>,
-  destination: JellyfinTopLevelDestination,
-) {
-  if(backStack.lastOrNull() == destination.key) return
-  backStack.clear()
-  backStack.add(destination.key)
 }
 
 /**

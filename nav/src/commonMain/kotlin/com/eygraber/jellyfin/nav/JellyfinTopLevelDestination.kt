@@ -35,6 +35,14 @@ internal enum class JellyfinTopLevelDestination(
   ),
   ;
 
+  /**
+   * The default `contentKey` for a [androidx.navigation3.runtime.NavEntry] built from this
+   * destination's [key]. Vice's `viceEntry` derives the content key by calling `key.toString()`,
+   * which matches `NavEntry`'s default; this property mirrors that derivation so callers that only
+   * have access to a `NavEntry.contentKey` can still resolve the destination.
+   */
+  val contentKey: Any = key.toString()
+
   @Composable
   fun label(): String = stringResource(label)
 
@@ -44,5 +52,15 @@ internal enum class JellyfinTopLevelDestination(
      * does not correspond to a top-level destination (e.g. detail or onboarding screens).
      */
     fun forKey(key: NavKey?): JellyfinTopLevelDestination? = entries.firstOrNull { it.key == key }
+
+    /**
+     * Returns the [JellyfinTopLevelDestination] whose [contentKey] matches [contentKey], or `null`
+     * if no destination is associated with that content key.
+     *
+     * Useful when only an entry's `contentKey` is accessible (e.g. inside a custom `Scene`), since
+     * `NavEntry.key` itself is not part of the public API.
+     */
+    fun forContentKey(contentKey: Any?): JellyfinTopLevelDestination? =
+      entries.firstOrNull { it.contentKey == contentKey }
   }
 }
