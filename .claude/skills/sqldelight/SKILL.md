@@ -1,119 +1,60 @@
 ---
 name: sqldelight
-description: Work with SQLDelight database schemas, queries, and migrations.
-argument-hint: "[task] - e.g., 'create users table', 'add migration', 'explain query'"
+description: Work with SQLDelight database - create tables, write queries, debug issues, add migrations, or understand schema patterns.
+argument-hint: "[task] - e.g., 'create Payment table', 'add index', 'migrate User schema'"
 context: fork
-allowed-tools: Read, Edit, Write, Bash(./gradlew *, grep, cat, mkdir, find), Glob, Grep
+allowed-tools: Read, Edit, Write, Bash(./format, .scripts/run-gradle *, grep, cat), Glob, Grep
 ---
 
 # SQLDelight Skill
 
-Work with SQLDelight database schemas, queries, and migrations.
+Work with SQLDelight database - create tables, write queries, debug issues, add migrations, or understand existing schema.
 
 ## Common Tasks
 
 ```
-/sqldelight create users table         # Create new table
-/sqldelight add migration for v5       # Create migration file
-/sqldelight explain query pattern      # Understand query patterns
-/sqldelight fix foreign key issue      # Debug schema problems
+/sqldelight create Payment table          # Create new table with queries
+/sqldelight add index to Message          # Add index for performance
+/sqldelight migrate User add email        # Add column migration
+/sqldelight debug User query performance  # Analyze slow queries
+/sqldelight explain Message schema        # Understand existing schema
+/sqldelight write join query for messages    # Help with complex queries
 ```
 
-## File Structure
+## Schema Location
 
-```
-services/sqldelight/src/main/sqldelight/
-├── com/eygraber/jellyfin/db/
-│   ├── User.sq           # Table definition + queries
-│   └── migrations/
-│       └── 1.sqm         # Migration files
-```
-
-## Table Definition (.sq)
-
-```sql
-CREATE TABLE User (
-  id TEXT NOT NULL PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))
-);
-
-CREATE INDEX user_email ON User(email);
-
--- Queries
-selectAll:
-SELECT * FROM User;
-
-selectById:
-SELECT * FROM User WHERE id = ?;
-
-upsert:
-INSERT OR REPLACE INTO User(id, name, email) VALUES (?, ?, ?);
-
-deleteById:
-DELETE FROM User WHERE id = ?;
-```
-
-## Migration Files (.sqm)
-
-```sql
--- 1.sqm: Add email column
-ALTER TABLE User ADD COLUMN email TEXT NOT NULL DEFAULT '';
-
--- Or for complex changes (copy-drop-rename):
-CREATE TABLE User_new (
-  id TEXT NOT NULL PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL
-);
-
-INSERT INTO User_new SELECT id, name, '' FROM User;
-DROP TABLE User;
-ALTER TABLE User_new RENAME TO User;
-```
+`services/database/impl/src/commonMain/sqldelight/com/eygraber/jellyfin/services/database/`
 
 ## Key Patterns
 
-### Reserved Keywords
-- Escape reserved words with backticks: `` `Case` ``, `` `Order` ``
+- **Custom types**: Use `TEXT AS MyId` with column adapters
+- **Upsert**: `INSERT ... ON CONFLICT(id) DO UPDATE SET ...`
+- **Indexes**: Create on foreign keys and frequently queried columns
+- **Flows**: Use `.asFlow().mapToList()` in data sources
+- **Transactions**: Use `db.transaction` for writes and `db.transactionWithResult` when the transaction returns a value
 
-### Foreign Keys
-- Always add ON DELETE clause
-- Cover FK columns with an index
+## Quick Reference
 
 ```sql
-CREATE TABLE Message (
-  id TEXT NOT NULL PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES User(id) ON DELETE CASCADE
+-- Basic table
+CREATE TABLE Payment(
+  id TEXT AS PaymentId PRIMARY KEY NOT NULL,
+  userId TEXT AS UserId NOT NULL REFERENCES User(id) ON DELETE CASCADE,
+  amount INTEGER NOT NULL
 );
 
-CREATE INDEX message_user_id ON Message(user_id);
+-- Index
+CREATE INDEX IX_Payment_userId ON Payment(userId);
+
+-- Upsert query
+upsert:
+INSERT INTO Payment(id, userId, amount)
+VALUES(:id, :userId, :amount)
+ON CONFLICT(id) DO UPDATE SET amount = :amount;
 ```
 
-### Query Execution
+## Additional Resources
 
-```kotlin
-// Read (single)
-withDbReadContext(dispatchers) { queries.selectById(id).executeAsOneOrNull() }
-
-// Read (list)
-withDbReadContext(dispatchers) { queries.selectAll().executeAsList() }
-
-// Write
-db.withTransaction(dispatchers) { queries.upsert(id, name, email) }
-
-// Observe
-queries.selectAll().asFlow().mapToList(dispatchers)
-```
-
-## Regenerating Code
-
-After changing `.sq` files:
-```bash
-./gradlew :services:sqldelight:assembleDebug
-```
-
-## Documentation
-
-- [.docs/data/sqldelight.md](/.docs/data/sqldelight.md) - Complete patterns
+- [schema-patterns.md](schema-patterns.md) - Table definitions, types, indexes
+- [query-patterns.md](query-patterns.md) - Common query patterns
+- [migrations.md](migrations.md) - Schema migration strategies

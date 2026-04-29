@@ -9,6 +9,8 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.test.TestResult
+import kotlinx.coroutines.test.runTest
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -43,7 +45,7 @@ class JellyfinDatabaseTest {
   }
 
   @Test
-  fun insert_and_select_server() {
+  fun insert_and_select_server(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -55,7 +57,7 @@ class JellyfinDatabaseTest {
       last_used_at = now,
     )
 
-    val server = database.serverQueries.selectById(id = "server-1").executeAsOneOrNull()
+    val server = database.serverQueries.selectById(id = "server-1").awaitAsOneOrNull()
     server.shouldNotBeNull()
     server.id shouldBe "server-1"
     server.name shouldBe "My Jellyfin"
@@ -66,7 +68,7 @@ class JellyfinDatabaseTest {
   }
 
   @Test
-  fun select_all_servers_ordered_by_last_used() {
+  fun select_all_servers_ordered_by_last_used(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -87,14 +89,14 @@ class JellyfinDatabaseTest {
       last_used_at = now,
     )
 
-    val servers = database.serverQueries.selectAll().executeAsList()
+    val servers = database.serverQueries.selectAll().awaitAsList()
     servers shouldHaveSize 2
     servers[0].id shouldBe "server-2"
     servers[1].id shouldBe "server-1"
   }
 
   @Test
-  fun select_server_by_url() {
+  fun select_server_by_url(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -108,14 +110,14 @@ class JellyfinDatabaseTest {
 
     val server = database.serverQueries.selectByUrl(
       url = "https://jellyfin.example.com",
-    ).executeAsOneOrNull()
+    ).awaitAsOneOrNull()
     server.shouldNotBeNull()
     server.id shouldBe "server-1"
     server.version.shouldBeNull()
   }
 
   @Test
-  fun update_server_last_used() {
+  fun update_server_last_used(): TestResult = runTest {
     val now = System.currentTimeMillis()
     val later = now + 5_000
 
@@ -133,13 +135,13 @@ class JellyfinDatabaseTest {
       id = "server-1",
     )
 
-    val server = database.serverQueries.selectById(id = "server-1").executeAsOneOrNull()
+    val server = database.serverQueries.selectById(id = "server-1").awaitAsOneOrNull()
     server.shouldNotBeNull()
     server.last_used_at shouldBe later
   }
 
   @Test
-  fun delete_server() {
+  fun delete_server(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -153,12 +155,12 @@ class JellyfinDatabaseTest {
 
     database.serverQueries.delete(id = "server-1")
 
-    val server = database.serverQueries.selectById(id = "server-1").executeAsOneOrNull()
+    val server = database.serverQueries.selectById(id = "server-1").awaitAsOneOrNull()
     server.shouldBeNull()
   }
 
   @Test
-  fun delete_all_servers() {
+  fun delete_all_servers(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -181,12 +183,12 @@ class JellyfinDatabaseTest {
 
     database.serverQueries.deleteAll()
 
-    val servers = database.serverQueries.selectAll().executeAsList()
+    val servers = database.serverQueries.selectAll().awaitAsList()
     servers.shouldBeEmpty()
   }
 
   @Test
-  fun insert_and_select_user_session() {
+  fun insert_and_select_user_session(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -209,7 +211,7 @@ class JellyfinDatabaseTest {
       last_used_at = now,
     )
 
-    val session = database.userSessionQueries.selectById(id = "session-1").executeAsOneOrNull()
+    val session = database.userSessionQueries.selectById(id = "session-1").awaitAsOneOrNull()
     session.shouldNotBeNull()
     session.id shouldBe "session-1"
     session.server_id shouldBe "server-1"
@@ -220,7 +222,7 @@ class JellyfinDatabaseTest {
   }
 
   @Test
-  fun select_sessions_by_server_id() {
+  fun select_sessions_by_server_id(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -256,14 +258,14 @@ class JellyfinDatabaseTest {
 
     val sessions = database.userSessionQueries.selectByServerId(
       server_id = "server-1",
-    ).executeAsList()
+    ).awaitAsList()
     sessions shouldHaveSize 2
     sessions[0].id shouldBe "session-2"
     sessions[1].id shouldBe "session-1"
   }
 
   @Test
-  fun set_and_clear_active_session() {
+  fun set_and_clear_active_session(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -291,19 +293,19 @@ class JellyfinDatabaseTest {
       id = "session-1",
     )
 
-    val active = database.userSessionQueries.selectActive().executeAsOneOrNull()
+    val active = database.userSessionQueries.selectActive().awaitAsOneOrNull()
     active.shouldNotBeNull()
     active.id shouldBe "session-1"
     active.is_active shouldBe 1
 
     database.userSessionQueries.clearActive()
 
-    val noActive = database.userSessionQueries.selectActive().executeAsOneOrNull()
+    val noActive = database.userSessionQueries.selectActive().awaitAsOneOrNull()
     noActive.shouldBeNull()
   }
 
   @Test
-  fun cascade_delete_sessions_when_server_deleted() {
+  fun cascade_delete_sessions_when_server_deleted(): TestResult = runTest {
     val now = System.currentTimeMillis()
 
     database.serverQueries.insert(
@@ -337,7 +339,7 @@ class JellyfinDatabaseTest {
 
     val sessions = database.userSessionQueries.selectByServerId(
       server_id = "server-1",
-    ).executeAsList()
+    ).awaitAsList()
     sessions.shouldBeEmpty()
   }
 }

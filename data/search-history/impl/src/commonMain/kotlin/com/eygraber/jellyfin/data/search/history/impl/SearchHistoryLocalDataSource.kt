@@ -1,15 +1,12 @@
 package com.eygraber.jellyfin.data.search.history.impl
 
-import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToList
 import com.eygraber.jellyfin.data.search.history.SearchHistoryEntry
 import com.eygraber.jellyfin.services.database.impl.JellyfinDatabase
+import com.eygraber.jellyfin.services.database.impl.asFlow
+import com.eygraber.jellyfin.services.database.impl.mapToList
 import dev.zacsweers.metro.Inject
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import migrations.Search_history
 
 /**
@@ -20,31 +17,40 @@ import migrations.Search_history
 @Inject
 class SearchHistoryLocalDataSource(
   private val database: JellyfinDatabase,
-  private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
   fun observeRecent(limit: Int): Flow<List<SearchHistoryEntry>> =
-    database.searchHistoryQueries.selectRecent(value_ = limit.toLong())
+    database
+      .searchHistoryQueries
+      .selectRecent(value_ = limit.toLong())
       .asFlow()
-      .mapToList(dispatcher)
+      .mapToList()
       .map { rows -> rows.map { it.toEntry() } }
 
-  suspend fun upsert(query: String, timestamp: Long): Unit = withContext(dispatcher) {
-    database.searchHistoryQueries.upsert(
-      query = query,
-      searched_at = timestamp,
-    )
+  suspend fun upsert(query: String, timestamp: Long) {
+    database.transaction {
+      database.searchHistoryQueries.upsert(
+        query = query,
+        searched_at = timestamp,
+      )
+    }
   }
 
-  suspend fun deleteByQuery(query: String): Unit = withContext(dispatcher) {
-    database.searchHistoryQueries.deleteByQuery(query = query)
+  suspend fun deleteByQuery(query: String) {
+    database.transaction {
+      database.searchHistoryQueries.deleteByQuery(query = query)
+    }
   }
 
-  suspend fun deleteAll(): Unit = withContext(dispatcher) {
-    database.searchHistoryQueries.deleteAll()
+  suspend fun deleteAll() {
+    database.transaction {
+      database.searchHistoryQueries.deleteAll()
+    }
   }
 
-  suspend fun pruneOldEntries(keepCount: Int): Unit = withContext(dispatcher) {
-    database.searchHistoryQueries.deleteOldest(keepCount.toLong())
+  suspend fun pruneOldEntries(keepCount: Int) {
+    database.transaction {
+      database.searchHistoryQueries.deleteOldest(keepCount.toLong())
+    }
   }
 }
 

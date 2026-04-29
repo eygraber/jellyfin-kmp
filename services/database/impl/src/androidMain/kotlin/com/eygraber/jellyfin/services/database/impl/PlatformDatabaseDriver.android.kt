@@ -3,9 +3,11 @@ package com.eygraber.jellyfin.services.database.impl
 import android.content.Context
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import app.cash.sqldelight.db.SqlDriver
+import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteConfiguration
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteDatabaseType
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteDriver
 import com.eygraber.sqldelight.androidx.driver.FileProvider
+import com.eygraber.sqldelight.androidx.driver.SqliteJournalMode
 
 /**
  * Holder for the Android application [Context] needed by the database driver.
@@ -25,4 +27,8 @@ internal actual fun createPlatformDriver(databaseName: String): SqlDriver =
       name = databaseName,
     ),
     schema = JellyfinDatabase.Schema,
+    configuration = AndroidxSqliteConfiguration(
+      isForeignKeyConstraintsEnabled = true,
+      journalMode = SqliteJournalMode.WAL,
+    ),
   )

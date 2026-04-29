@@ -23,7 +23,6 @@ kotlin {
       implementation(projects.services.database.public)
 
       implementation(libs.kotlinx.coroutines.core)
-      implementation(libs.square.sqldelight.flow)
     }
 
     commonTest.dependencies {

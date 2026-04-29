@@ -93,10 +93,9 @@ Only use copy-drop-rename pattern when ALTER TABLE cannot accomplish the change:
 4. ALTER TABLE new_table RENAME TO old_table
 5. Recreate indexes, triggers, views
 
-Where dispatchers is an instance of JellyfinDbDispatchers
-withDbReadContext(dispatchers) { query.executeAsOneOrNull() }  # Read
-db.withTransaction(dispatchers) { queries.upsert(...) }        # Write
-queries.selectAll().asFlow().mapToList(dispatchers)            # Observe
+query.awaitAsOneOrNull()        # Read
+db.transaction { queries.upsert(...) }        # Write
+queries.selectAll().asFlow().mapToList()            # Observe
 
 # Ktorfit
 API interfaces are internal to impl module
