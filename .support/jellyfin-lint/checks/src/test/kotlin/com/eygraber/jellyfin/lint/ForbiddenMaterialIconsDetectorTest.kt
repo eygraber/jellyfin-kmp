@@ -38,11 +38,14 @@ class ForbiddenMaterialIconsDetectorTest {
           ~~~~~
         src/test.kt:6: Error: Usage of Icons from material-icons-core is not supported in Jellyfin. Use JellyfinIcons instead. [ForbiddenMaterialIcons]
           Icons.Defaults
+          ~~~~~
+        src/test.kt:6: Error: Usage of Icons from material-icons-core is not supported in Jellyfin. Use JellyfinIcons instead. [ForbiddenMaterialIcons]
+          Icons.Defaults
                 ~~~~~~~~
         src/test.kt:7: Error: Usage of Icons from material-icons-core is not supported in Jellyfin. Use JellyfinIcons instead. [ForbiddenMaterialIcons]
           Defaults
           ~~~~~~~~
-        3 errors, 0 warnings
+        4 errors
         """,
     )
   }
