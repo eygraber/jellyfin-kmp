@@ -58,7 +58,7 @@ robolectric = "4.16.1"
 
 androidx-sqlite = "2.6.2"
 
-sqldelight-androidx-driver = "0.0.17"
+sqldelight-androidx-driver = "0.1.1"
 
 square-sqldelight = "2.3.2"
 
