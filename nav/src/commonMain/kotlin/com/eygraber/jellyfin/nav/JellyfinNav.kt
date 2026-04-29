@@ -58,6 +58,8 @@ import com.eygraber.jellyfin.screens.root.RootGraph
 import com.eygraber.jellyfin.screens.root.RootKey
 import com.eygraber.jellyfin.screens.search.SearchGraph
 import com.eygraber.jellyfin.screens.search.SearchKey
+import com.eygraber.jellyfin.screens.settings.SettingsGraph
+import com.eygraber.jellyfin.screens.settings.SettingsKey
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailGraph
 import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesGraph
@@ -225,6 +227,10 @@ private fun jellyfinNavEntryProvider(
 
   viceEntry<SearchKey>(
     provideSearch(navGraph, backStack),
+  )
+
+  viceEntry<SettingsKey>(
+    provideSettings(navGraph, backStack),
   )
 
   viceEntry<TvShowDetailKey>(
@@ -420,6 +426,16 @@ private fun provideSearch(
   ).navEntryProvider
 }
 
+private fun provideSettings(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: SettingsKey ->
+  navGraph.settingsFactory.createSettingsGraph(
+    navigator = JellyfinNavigators.settings(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private fun provideTvShowDetail(
   navGraph: JellyfinNavGraph,
   backStack: NavBackStack<NavKey>,
@@ -501,6 +517,9 @@ private val JellyfinNavGraph.rootFactory
 
 private val JellyfinNavGraph.searchFactory
   get() = this as SearchGraph.Factory
+
+private val JellyfinNavGraph.settingsFactory
+  get() = this as SettingsGraph.Factory
 
 private val JellyfinNavGraph.tvShowDetailFactory
   get() = this as TvShowDetailGraph.Factory

@@ -43,6 +43,7 @@ kotlin {
       implementation(projects.screens.musicArtistAlbums)
       implementation(projects.screens.root)
       implementation(projects.screens.search)
+      implementation(projects.screens.settings)
       implementation(projects.screens.tvshowDetail)
       implementation(projects.screens.tvshowEpisodes)
       implementation(projects.screens.tvshowSeasons)
