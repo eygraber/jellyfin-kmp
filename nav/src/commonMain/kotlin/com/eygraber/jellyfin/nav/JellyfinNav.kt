@@ -103,37 +103,41 @@ fun JellyfinNav(
     CompositionLocalProvider(
       LocalSharedTransitionScope provides this,
     ) {
-      NavDisplay(
+      JellyfinNavigationSuiteScaffold(
         backStack = backStack,
         modifier = modifier,
-        sceneStrategies = listOf(
-          DialogSceneStrategy(),
-          BottomSheetSceneStrategy(),
-          SinglePaneSceneStrategy(),
-        ),
-        transitionSpec = {
-          ContentTransform(
-            targetContentEnter = slideInHorizontally(screenTransitionSpec) { it * 2 },
-            initialContentExit = slideOutHorizontally(screenTransitionSpec) { -it },
-          )
-        },
-        popTransitionSpec = {
-          ContentTransform(
-            targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
-            initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
-          )
-        },
-        predictivePopTransitionSpec = { _ ->
-          ContentTransform(
-            targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
-            initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
-          )
-        },
-        onBack = { backStack.removeLastOrNull() },
-        entryProvider = remember(navGraph, backStack) {
-          jellyfinNavEntryProvider(navGraph, backStack)
-        },
-      )
+      ) {
+        NavDisplay(
+          backStack = backStack,
+          sceneStrategies = listOf(
+            DialogSceneStrategy(),
+            BottomSheetSceneStrategy(),
+            SinglePaneSceneStrategy(),
+          ),
+          transitionSpec = {
+            ContentTransform(
+              targetContentEnter = slideInHorizontally(screenTransitionSpec) { it * 2 },
+              initialContentExit = slideOutHorizontally(screenTransitionSpec) { -it },
+            )
+          },
+          popTransitionSpec = {
+            ContentTransform(
+              targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
+              initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
+            )
+          },
+          predictivePopTransitionSpec = { _ ->
+            ContentTransform(
+              targetContentEnter = slideInHorizontally(screenTransitionSpec) { -it },
+              initialContentExit = slideOutHorizontally(screenTransitionSpec) { it * 2 },
+            )
+          },
+          onBack = { backStack.removeLastOrNull() },
+          entryProvider = remember(navGraph, backStack) {
+            jellyfinNavEntryProvider(navGraph, backStack)
+          },
+        )
+      }
     }
   }
 }

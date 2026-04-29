@@ -45,11 +45,14 @@ when (windowSizeClass.windowWidthSizeClass) {
 
 ## Adaptive Navigation
 
-This project uses `material3-adaptive-navigation3` from Compose Multiplatform:
+This project uses `material3-adaptive-navigation-suite` from Compose Multiplatform via
+`JellyfinNavigationSuiteScaffold` in the `nav` module:
 
 ```kotlin
-implementation(libs.compose.nav3.adaptive)
+implementation(libs.compose.material3.adaptiveNavigationSuite)
 ```
+
+To add a new top-level destination, add an entry to `JellyfinTopLevelDestination` (in `nav`).
 
 ## UI Implementation Checklist
 

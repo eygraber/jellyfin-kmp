@@ -9,10 +9,18 @@ plugins {
   alias(libs.plugins.metro)
 }
 
+val pkg = "com.eygraber.jellyfin.nav"
+
+compose {
+  resources {
+    packageOfResClass = pkg
+  }
+}
+
 kotlin {
   defaultKmpTargets(
     project = project,
-    androidNamespace = "com.eygraber.jellyfin.nav",
+    androidNamespace = pkg,
   )
 
   sourceSets {
@@ -39,6 +47,8 @@ kotlin {
       implementation(projects.screens.tvshowSeasons)
       implementation(projects.screens.welcome)
 
+      implementation(projects.ui.icons)
+
       api(projects.services.deviceSensors.public)
 
       implementation(libs.compose.nav3.runtime)
@@ -46,6 +56,8 @@ kotlin {
 
       implementation(libs.compose.animation)
       implementation(libs.compose.material3)
+      implementation(libs.compose.material3.adaptiveNavigationSuite)
+      implementation(libs.compose.resources)
       implementation(libs.compose.runtime)
       implementation(libs.compose.ui)
 

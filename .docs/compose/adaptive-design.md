@@ -20,13 +20,26 @@ This prevents costly rework and ensures a consistent experience across devices.
 
 ## Material 3 Adaptive Components
 
-### Adaptive Navigation (material3-adaptive-navigation3)
+### Adaptive Navigation Suite (material3-adaptive-navigation-suite)
 
-The `material3-adaptive-navigation3` library is available for Compose Multiplatform:
+The `material3-adaptive-navigation-suite` library provides `NavigationSuiteScaffold`, which
+automatically chooses between bottom navigation, navigation rail, and navigation drawer based on
+window size:
 
 ```kotlin
-implementation(libs.compose.nav3.adaptive)
+implementation(libs.compose.material3.adaptiveNavigationSuite)
 ```
+
+This library is wired up in the `nav` module via `JellyfinNavigationSuiteScaffold`, which uses the
+[adaptive breakpoints below](#form-factor-targets) and hides the navigation suite entirely on
+non-top-level destinations (onboarding, detail screens, etc.).
+
+> **Why a separate artifact?** The `compose.nav3.adaptive` artifact
+> (`org.jetbrains.compose.material3.adaptive:adaptive-navigation3`) only contains the
+> `ListDetailSceneStrategy` / `SupportingPaneSceneStrategy` for multi-pane layouts. The
+> `NavigationSuiteScaffold` API lives in the separate
+> `material3-adaptive-navigation-suite` artifact and tracks the same version as the project's
+> `composeMaterial3Jetbrains` (currently `1.11.0-alpha07`).
 
 ### Window Size Classes
 
@@ -90,32 +103,23 @@ fun AdaptiveMediaGrid(
 
 ### Navigation Integration
 
-The app uses `NavigationSuiteScaffold` for adaptive navigation:
+The app uses `JellyfinNavigationSuiteScaffold` (in the `nav` module) which wraps Material's
+`NavigationSuiteScaffold`. The scaffold:
 
-```kotlin
-@Composable
-fun JellyfinApp() {
-  NavigationSuiteScaffold(
-    navigationSuiteItems = {
-      item(
-        selected = currentRoute == "home",
-        onClick = { navigateTo("home") },
-        icon = { Icon(Icons.Default.Home, "Home") },
-        label = { Text("Home") },
-      )
-      // ... more items
-    },
-  ) {
-    // Screen content
-    NavHost(...)
-  }
-}
-```
+- Reads the current top-most key from the `NavBackStack`
+- Resolves it to a `JellyfinTopLevelDestination` (Home, Search, ...) and marks it selected
+- Replaces the entire back stack with the destination key when an item is tapped
+- Renders **no navigation surface** when the top-most key is not a top-level destination
+  (e.g. on the splash, welcome, or any detail screen) so onboarding and detail flows render
+  full-bleed
 
 The scaffold automatically switches between:
-- **Bottom navigation** on compact windows
-- **Navigation rail** on medium windows
-- **Navigation drawer** on expanded windows
+- **Bottom navigation** on compact windows (< 600dp)
+- **Navigation rail** on medium windows (600-840dp)
+- **Permanent navigation drawer** on expanded windows (> 840dp)
+
+To add a new top-level destination, add an entry to `JellyfinTopLevelDestination` with the screen's
+`NavKey`, an `ImageVector` icon, and a `StringResource` label.
 
 ## Input Method Considerations
 

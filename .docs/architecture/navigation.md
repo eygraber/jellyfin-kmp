@@ -4,17 +4,21 @@ Uses [AndroidX Navigation3](https://developer.android.com/guide/navigation/navig
 
 ## Adaptive Navigation
 
-The app uses `material3-adaptive-navigation3` for form factor-aware navigation:
+The app uses `material3-adaptive-navigation-suite` (via `JellyfinNavigationSuiteScaffold` in the
+`nav` module) for form factor-aware navigation:
 
 ```kotlin
-implementation(libs.compose.nav3.adaptive)
+implementation(libs.compose.material3.adaptiveNavigationSuite)
 ```
 
 | Window Size | Navigation Style        |
-|-------------|------------------------|
-| Compact     | Bottom navigation bar  |
-| Medium      | Navigation rail        |
-| Expanded    | Permanent nav drawer   |
+|-------------|-------------------------|
+| Compact     | Bottom navigation bar   |
+| Medium      | Navigation rail         |
+| Expanded    | Permanent nav drawer    |
+
+The navigation suite is hidden on non-top-level destinations (welcome, detail screens) and
+becomes visible only when the back stack's top-most key is a `JellyfinTopLevelDestination`.
 
 See [Adaptive Design](/.docs/compose/adaptive-design.md) for complete details.
 
