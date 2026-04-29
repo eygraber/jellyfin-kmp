@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "9.3.1"
+      "version": "9.4.1"
     }
   },
   "variants": [
@@ -29,11 +29,11 @@
         {
           "name": "jellyfin-gradle-0.0.1.jar",
           "url": "jellyfin-gradle-0.0.1.jar",
-          "size": 63503,
-          "sha512": "6e222e6e1d96f24e370b9f3d17d02cca0ab94da05faa1cb8614a7706a2a94345e4ff281af972561259b61694bec8d98a7cf9e736a2715449a6999fd4d8bf49dd",
-          "sha256": "b6bc05c6db01dd40deceed289dbaf6688256136d33cca868c4c6c815ce416425",
-          "sha1": "b03232fc6b19f4cd4f362da9d733d59e4bd14d1a",
-          "md5": "0aaa3d561fb7b37daaae4c67722a721a"
+          "size": 63454,
+          "sha512": "3db85b07392ae16226c14dc729f07c510b8274d48891868da71704929bacc8dd9f0f44a68d79c7d5d2f9e537a72075a8a9286af76c4b77031b92d07442ad8b40",
+          "sha256": "b4659776795beb546d07d19cee10fa2feadf570c65b58b120191ec74428ca957",
+          "sha1": "1441c37234da018005322c50e2283831541a2ce3",
+          "md5": "6db366407dcfcb210b70fa2039daa3f5"
         }
       ]
     },
@@ -53,7 +53,7 @@
           "group": "com.android.tools.build",
           "module": "gradle",
           "version": {
-            "requires": "9.0.0"
+            "requires": "9.2.0"
           }
         },
         {
@@ -74,21 +74,21 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-gradle-plugin",
           "version": {
-            "requires": "2.3.10"
+            "requires": "2.3.21"
           }
         },
         {
           "group": "com.google.devtools.ksp",
           "module": "com.google.devtools.ksp.gradle.plugin",
           "version": {
-            "requires": "2.3.5"
+            "requires": "2.3.7"
           }
         },
         {
           "group": "org.jetbrains.kotlinx",
           "module": "kotlinx-serialization-json",
           "version": {
-            "requires": "1.10.0"
+            "requires": "1.11.0"
           }
         }
       ],
@@ -96,11 +96,11 @@
         {
           "name": "jellyfin-gradle-0.0.1.jar",
           "url": "jellyfin-gradle-0.0.1.jar",
-          "size": 63503,
-          "sha512": "6e222e6e1d96f24e370b9f3d17d02cca0ab94da05faa1cb8614a7706a2a94345e4ff281af972561259b61694bec8d98a7cf9e736a2715449a6999fd4d8bf49dd",
-          "sha256": "b6bc05c6db01dd40deceed289dbaf6688256136d33cca868c4c6c815ce416425",
-          "sha1": "b03232fc6b19f4cd4f362da9d733d59e4bd14d1a",
-          "md5": "0aaa3d561fb7b37daaae4c67722a721a"
+          "size": 63454,
+          "sha512": "3db85b07392ae16226c14dc729f07c510b8274d48891868da71704929bacc8dd9f0f44a68d79c7d5d2f9e537a72075a8a9286af76c4b77031b92d07442ad8b40",
+          "sha256": "b4659776795beb546d07d19cee10fa2feadf570c65b58b120191ec74428ca957",
+          "sha1": "1441c37234da018005322c50e2283831541a2ce3",
+          "md5": "6db366407dcfcb210b70fa2039daa3f5"
         }
       ]
     }
