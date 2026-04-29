@@ -106,7 +106,11 @@ fun JellyfinNav(
       NavDisplay(
         backStack = backStack,
         modifier = modifier,
-        sceneStrategy = DialogSceneStrategy<NavKey>() then BottomSheetSceneStrategy() then SinglePaneSceneStrategy(),
+        sceneStrategies = listOf(
+          DialogSceneStrategy(),
+          BottomSheetSceneStrategy(),
+          SinglePaneSceneStrategy(),
+        ),
         transitionSpec = {
           ContentTransform(
             targetContentEnter = slideInHorizontally(screenTransitionSpec) { it * 2 },
