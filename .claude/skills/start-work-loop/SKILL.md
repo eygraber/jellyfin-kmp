@@ -208,7 +208,11 @@ If the merge fails because the branch is out of date with master (Renovate may h
 After the merge succeeds:
 - The remote branch is auto-deleted (`deleteBranchOnMerge=true`)
 - Locally: `git checkout master && git pull --ff-only origin master && git branch -D <branch>`
-- The closing keyword in the PR body (`Closes #N`) auto-closes the issue → moves to Done
+- The closing keyword in the PR body (`Closes #N`) auto-closes the issue → moves to Done. **Verify** the issue landed in Done (`gh issue view <N> --json state,projectItems`). If it's still In Review (no closing keyword fired, or the project field didn't update), move it manually:
+  ```bash
+  gh issue close <N>
+  .claude/skills/start-work/scripts/set-issue-status.sh <N> done
+  ```
 - Add the issue to `completed_issues`
 - Continue to step 8
 
