@@ -12,9 +12,10 @@ plugins {
 
 sqldelight {
   databases {
-    create("JellyfinDatabase") {
+    register("JellyfinDatabase") {
       packageName.set("com.eygraber.jellyfin.services.database.impl")
       dialect(libs.square.sqldelight.dialect)
+      generateAsync.set(true)
       deriveSchemaFromMigrations.set(true)
       verifyMigrations.set(true)
     }
@@ -36,8 +37,6 @@ kotlin {
       implementation(projects.di)
 
       api(libs.kotlinx.coroutines.core)
-
-      implementation(libs.square.sqldelight.flow)
     }
 
     commonTest.dependencies {

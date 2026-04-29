@@ -60,24 +60,6 @@ class SqlDelightAuthRepositoryTest {
     )
     database = JellyfinDatabase(driver)
 
-    // Insert servers to satisfy FK constraint
-    database.serverQueries.insert(
-      id = "server-1",
-      name = "Test Server",
-      url = "https://jellyfin.example.com",
-      version = "10.9.0",
-      created_at = 1000L,
-      last_used_at = 1000L,
-    )
-    database.serverQueries.insert(
-      id = "server-2",
-      name = "Other Server",
-      url = "https://other.example.com",
-      version = "10.9.0",
-      created_at = 1000L,
-      last_used_at = 1000L,
-    )
-
     val localDataSource = AuthLocalDataSource(database = database)
     val remoteDataSource = AuthRemoteDataSource(authService = fakeAuthService)
     repository = SqlDelightAuthRepository(
@@ -94,9 +76,30 @@ class SqlDelightAuthRepositoryTest {
     tempDir.deleteRecursively()
   }
 
+  // Insert servers to satisfy FK constraint
+  private suspend fun insertServers() {
+    database.serverQueries.insert(
+      id = "server-1",
+      name = "Test Server",
+      url = "https://jellyfin.example.com",
+      version = "10.9.0",
+      created_at = 1000L,
+      last_used_at = 1000L,
+    )
+    database.serverQueries.insert(
+      id = "server-2",
+      name = "Other Server",
+      url = "https://other.example.com",
+      version = "10.9.0",
+      created_at = 1000L,
+      last_used_at = 1000L,
+    )
+  }
+
   @Test
   fun login_success_creates_session() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = "token-123",
@@ -125,6 +128,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun login_failure_returns_error() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Error(
         message = "Invalid credentials",
         isEphemeral = false,
@@ -144,6 +148,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun login_missing_token_returns_error() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = null,
@@ -165,6 +170,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun get_active_session_returns_logged_in_session() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = "token-123",
@@ -191,6 +197,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun set_active_session_switches_sessions() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = "token-1",
@@ -234,6 +241,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun get_sessions_for_server() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = "token-1",
@@ -273,6 +281,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun logout_session_removes_from_database() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = "token-123",
@@ -298,6 +307,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun logout_server_removes_all_sessions() {
     runTest {
+      insertServers()
       fakeAuthService.authenticateResult = JellyfinResult.Success(
         AuthenticationResult(
           accessToken = "token-1",
@@ -337,6 +347,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun observe_active_session_emits_updates() {
     runTest {
+      insertServers()
       val initial = repository.observeActiveSession().first()
       initial shouldBe null
 
@@ -404,6 +415,7 @@ class SqlDelightAuthRepositoryTest {
   @Test
   fun check_quick_connect_authenticated() {
     runTest {
+      insertServers()
       fakeAuthService.quickConnectStatusResult = JellyfinResult.Success(
         SdkQuickConnectResult(
           authenticated = true,
