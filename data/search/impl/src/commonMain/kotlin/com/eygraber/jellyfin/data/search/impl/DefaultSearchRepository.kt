@@ -15,7 +15,7 @@ import dev.zacsweers.metro.ContributesBinding
  * This repository is stateless per project conventions.
  */
 @ContributesBinding(AppScope::class)
-class DefaultSearchRepository(
+internal class DefaultSearchRepository(
   private val remoteDataSource: SearchRemoteDataSource,
 ) : SearchRepository {
   override suspend fun search(

@@ -34,9 +34,8 @@ interface UserRepository {
 }
 
 // impl/
-@Inject
 @ContributesBinding(AppScope::class)
-class RealUserRepository(
+internal class RealUserRepository(
   private val localDataSource: UserLocalDataSource,
   private val remoteDataSource: UserRemoteDataSource,
 ) : UserRepository {

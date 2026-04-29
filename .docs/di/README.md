@@ -41,7 +41,7 @@ class UserRepository(...)
 // Contribute binding (no @Inject needed)
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class RealUserRepository(...) : UserRepository
+internal class RealUserRepository(...) : UserRepository
 
 // Contribute providers
 @ContributesTo(AppScope::class)

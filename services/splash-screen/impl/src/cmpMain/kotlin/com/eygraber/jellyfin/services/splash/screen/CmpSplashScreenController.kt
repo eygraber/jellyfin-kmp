@@ -8,7 +8,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @SingleIn(SessionScope::class)
 @ContributesBinding(SessionScope::class)
-class CmpSplashScreenController : SplashScreenController {
+internal class CmpSplashScreenController : SplashScreenController {
   override fun init(isAppRestoring: Boolean) {}
 
   override suspend fun awaitSystemSplashRemoved() {

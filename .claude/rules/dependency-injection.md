@@ -16,6 +16,10 @@ AppScope → WorkScope → Worker-specific scopes
 @ContributesBinding(AppScope::class) - Bind implementation to interface (no @Inject needed)
 @ContributesTo(AppScope::class) - Contribute providers to graph
 
+# Visibility
+@ContributesBinding classes should be `internal` (Metro's generateContributionProviders handles cross-module wiring)
+@ContributesTo interfaces must remain `public` (Metro needs to see them for graph aggregation)
+
 # Screen Graphs
 @GraphExtension(ScreenScope::class)
 interface MyScreenGraph {

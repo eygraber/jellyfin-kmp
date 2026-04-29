@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.emptyFlow
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultJellyfinServerService(
+internal class DefaultJellyfinServerService(
   private val sdk: JellyfinSdk,
   private val sessionManager: JellyfinSessionManager,
   private val logger: JellyfinLogger,

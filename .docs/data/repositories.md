@@ -19,9 +19,8 @@ interface MyFeatureRepository {
 ## Implementation (impl/)
 
 ```kotlin
-@Inject
 @ContributesBinding(AppScope::class)
-class RealMyFeatureRepository(
+internal class RealMyFeatureRepository(
   private val localDataSource: MyFeatureLocalDataSource,
   private val remoteDataSource: MyFeatureRemoteDataSource,
 ) : MyFeatureRepository {

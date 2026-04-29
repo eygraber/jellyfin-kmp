@@ -24,7 +24,7 @@ import dev.zacsweers.metro.SingleIn
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultJellyfinPlaybackService(
+internal class DefaultJellyfinPlaybackService(
   private val sdk: JellyfinSdk,
   private val sessionManager: JellyfinSessionManager,
   private val logger: JellyfinLogger,

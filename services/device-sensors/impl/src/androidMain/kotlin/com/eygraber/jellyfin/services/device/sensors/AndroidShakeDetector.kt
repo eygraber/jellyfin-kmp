@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
 
 @ContributesBinding(SessionScope::class)
-class AndroidShakeDetector(
+internal class AndroidShakeDetector(
   private val sensorManager: SensorManager,
 ) : ShakeDetector {
   override fun detectShakes(): Flow<Unit> = callbackFlow {

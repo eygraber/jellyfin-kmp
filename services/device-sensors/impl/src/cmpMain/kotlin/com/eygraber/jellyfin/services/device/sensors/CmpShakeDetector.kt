@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 @ContributesBinding(SessionScope::class)
-class CmpShakeDetector : ShakeDetector {
+internal class CmpShakeDetector : ShakeDetector {
   override fun detectShakes(): Flow<Unit> = emptyFlow()
 }

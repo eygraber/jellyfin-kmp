@@ -25,7 +25,7 @@ enum class NavShortcuts {
 
 @SingleIn(NavScope::class)
 @ContributesBinding(NavScope::class)
-class RealNavShortcutManager : NavShortcutManager {
+internal class RealNavShortcutManager : NavShortcutManager {
   private val shortcuts = MutableSharedFlow<NavShortcuts>(extraBufferCapacity = 1)
 
   override val shortcutFlow = shortcuts

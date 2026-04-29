@@ -24,7 +24,7 @@ interface ExampleRepository {
 // ✅ Use @ContributesBinding for automatic DI binding
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class) // ✅ Scoped singleton
-class RealExampleRepository(
+internal class RealExampleRepository(
   private val remoteDataSource: ExampleRemoteDataSource, // ✅ Inject dependencies
   private val localDataSource: ExampleLocalDataSource,
 ) : ExampleRepository {

@@ -13,7 +13,7 @@ import dev.zacsweers.metro.ContributesBinding
  * This repository is stateless per project conventions.
  */
 @ContributesBinding(AppScope::class)
-class DefaultPlaybackRepository(
+internal class DefaultPlaybackRepository(
   private val remoteDataSource: PlaybackRemoteDataSource,
 ) : PlaybackRepository {
   override suspend fun getPlaybackSession(

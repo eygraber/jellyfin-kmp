@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.combine
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultServerManager(
+internal class DefaultServerManager(
   private val serverRepository: ServerRepository,
   private val authRepository: AuthRepository,
   private val serverService: JellyfinServerService,

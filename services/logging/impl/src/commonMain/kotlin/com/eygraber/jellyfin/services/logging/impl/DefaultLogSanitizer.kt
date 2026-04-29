@@ -18,7 +18,7 @@ import dev.zacsweers.metro.SingleIn
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultLogSanitizer : LogSanitizer {
+internal class DefaultLogSanitizer : LogSanitizer {
   override fun sanitize(message: String): String =
     sensitivePatterns.fold(message) { current, (pattern, replacement) ->
       pattern.replace(input = current, replacement = replacement)
