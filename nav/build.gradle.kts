@@ -32,6 +32,7 @@ kotlin {
       implementation(projects.screens.episodeDetail)
       implementation(projects.screens.genreItems)
       implementation(projects.screens.home)
+      implementation(projects.screens.login)
       implementation(projects.screens.libraryCollections)
       implementation(projects.screens.libraryGenres)
       implementation(projects.screens.libraryMovies)
