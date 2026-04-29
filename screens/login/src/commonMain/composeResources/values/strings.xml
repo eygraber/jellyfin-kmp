@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="login_title">Login to Server</string>
+  <string name="login_server_url_label">Server URL</string>
+  <string name="login_server_url_placeholder">https://jellyfin.example.com</string>
+  <string name="login_username_label">Username</string>
+  <string name="login_password_label">Password</string>
+  <string name="login_button">Login</string>
+  <string name="login_cd_back">Navigate back</string>
+  <string name="login_cd_show_password">Show password</string>
+  <string name="login_cd_hide_password">Hide password</string>
+  <string name="login_error_server_url_empty">Server URL is required</string>
+  <string name="login_error_server_url_invalid">Invalid server URL format</string>
+  <string name="login_error_server_url_insecure">Insecure connections (http) are not supported</string>
+  <string name="login_error_invalid_credentials">Invalid username or password</string>
+  <string name="login_error_server_unreachable">Could not connect to server</string>
+  <string name="login_error_unknown">An unexpected error occurred</string>
+</resources>
