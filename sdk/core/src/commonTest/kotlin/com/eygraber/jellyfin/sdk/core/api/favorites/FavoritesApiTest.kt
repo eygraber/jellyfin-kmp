@@ -13,6 +13,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class FavoritesApiTest {
@@ -53,7 +54,7 @@ class FavoritesApiTest {
     )
 
     val api = FavoritesApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.addFavorite(userId = "user-1", itemId = "item-1")
       result.isSuccess.shouldBeTrue()
       val data = result.getOrThrow()
@@ -77,7 +78,7 @@ class FavoritesApiTest {
     )
 
     val api = FavoritesApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.removeFavorite(userId = "user-1", itemId = "item-1")
       result.isSuccess.shouldBeTrue()
       val data = result.getOrThrow()

@@ -2,6 +2,7 @@ package com.eygraber.jellyfin.sdk.core.api.user
 
 import com.eygraber.jellyfin.sdk.core.ClientInfo
 import com.eygraber.jellyfin.sdk.core.DeviceInfo
+import com.eygraber.jellyfin.sdk.core.JellyfinSdkError
 import com.eygraber.jellyfin.sdk.core.ServerInfo
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -14,6 +15,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class UserApiTest {
@@ -57,7 +59,7 @@ class UserApiTest {
     )
 
     val api = UserApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.authenticateByName(username = "testuser", password = "password")
       result.isSuccess.shouldBeTrue()
       val auth = result.getOrThrow()
@@ -86,7 +88,7 @@ class UserApiTest {
     )
 
     val api = UserApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getCurrentUser()
       result.isSuccess.shouldBeTrue()
       val user = result.getOrThrow()
@@ -110,7 +112,7 @@ class UserApiTest {
     )
 
     val api = UserApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getPublicUsers()
       result.isSuccess.shouldBeTrue()
       val users = result.getOrThrow()
@@ -130,11 +132,11 @@ class UserApiTest {
     )
 
     val api = UserApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.authenticateByName(username = "bad", password = "wrong")
       result.isFailure.shouldBeTrue()
       val error = result.errorOrNull()
-      error.shouldBeInstanceOf<com.eygraber.jellyfin.sdk.core.JellyfinSdkError.Http>()
+      error.shouldBeInstanceOf<JellyfinSdkError.Http>()
         .statusCode shouldBe 401
     }
 
@@ -154,7 +156,7 @@ class UserApiTest {
     )
 
     val api = UserApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.initiateQuickConnect()
       result.isSuccess.shouldBeTrue()
       val quickConnect = result.getOrThrow()

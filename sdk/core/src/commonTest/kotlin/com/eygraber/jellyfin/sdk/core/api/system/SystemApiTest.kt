@@ -2,6 +2,7 @@ package com.eygraber.jellyfin.sdk.core.api.system
 
 import com.eygraber.jellyfin.sdk.core.ClientInfo
 import com.eygraber.jellyfin.sdk.core.DeviceInfo
+import com.eygraber.jellyfin.sdk.core.JellyfinSdkError
 import com.eygraber.jellyfin.sdk.core.ServerInfo
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -14,6 +15,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class SystemApiTest {
@@ -56,7 +58,7 @@ class SystemApiTest {
     )
 
     val api = SystemApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getPublicSystemInfo()
       result.isSuccess.shouldBeTrue()
       val info = result.getOrThrow()
@@ -89,7 +91,7 @@ class SystemApiTest {
     )
 
     val api = SystemApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getSystemInfo()
       result.isSuccess.shouldBeTrue()
       val info = result.getOrThrow()
@@ -115,7 +117,7 @@ class SystemApiTest {
     )
 
     val api = SystemApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getBrandingConfiguration()
       result.isSuccess.shouldBeTrue()
       val branding = result.getOrThrow()
@@ -134,12 +136,12 @@ class SystemApiTest {
     )
 
     val api = SystemApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getPublicSystemInfo()
       result.isFailure.shouldBeTrue()
       val error = result.errorOrNull()
       error.shouldBe(
-        com.eygraber.jellyfin.sdk.core.JellyfinSdkError.Http(
+        JellyfinSdkError.Http(
           statusCode = 500,
           message = "Internal Server Error",
         ),
@@ -166,7 +168,7 @@ class SystemApiTest {
     )
 
     val api = SystemApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.ping()
       result.isSuccess.shouldBeTrue()
       result.getOrNull() shouldBe "Jellyfin Server"

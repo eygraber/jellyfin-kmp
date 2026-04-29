@@ -13,6 +13,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class SearchApiTest {
@@ -68,7 +69,7 @@ class SearchApiTest {
     )
 
     val api = SearchApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getSearchHints(searchTerm = "Matrix")
       result.isSuccess.shouldBeTrue()
       val hints = result.getOrThrow()
@@ -95,7 +96,7 @@ class SearchApiTest {
     )
 
     val api = SearchApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getSearchHints(searchTerm = "nonexistent")
       result.isSuccess.shouldBeTrue()
       val hints = result.getOrThrow()
@@ -128,7 +129,7 @@ class SearchApiTest {
     )
 
     val api = SearchApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getSearchHints(searchTerm = "Bohemian")
       result.isSuccess.shouldBeTrue()
       val hints = result.getOrThrow()

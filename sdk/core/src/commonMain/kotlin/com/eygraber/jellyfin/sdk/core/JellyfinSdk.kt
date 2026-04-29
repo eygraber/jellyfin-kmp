@@ -1,6 +1,7 @@
 package com.eygraber.jellyfin.sdk.core
 
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
+import io.ktor.client.engine.HttpClientEngine
 
 class JellyfinSdk(
   val clientInfo: ClientInfo,
@@ -8,7 +9,7 @@ class JellyfinSdk(
 ) {
   fun createApiClient(
     serverInfo: ServerInfo,
-    httpClientEngine: io.ktor.client.engine.HttpClientEngine? = null,
+    httpClientEngine: HttpClientEngine? = null,
   ): JellyfinApiClient = JellyfinApiClient(
     clientInfo = clientInfo,
     deviceInfo = deviceInfo,

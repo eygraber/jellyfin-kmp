@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import migrations.Server
 
 /**
  * Local data source for server persistence using SQLDelight.
@@ -73,7 +74,7 @@ class ServerLocalDataSource(
 /**
  * Maps a SQLDelight-generated `Server` row to a [ServerEntity].
  */
-private fun migrations.Server.toEntity() = ServerEntity(
+private fun Server.toEntity() = ServerEntity(
   id = id,
   name = name,
   url = url,

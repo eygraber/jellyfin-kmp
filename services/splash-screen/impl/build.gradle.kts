@@ -15,7 +15,7 @@ kotlin {
     androidNamespace = "com.eygraber.jellyfin.services.splash.screen.impl",
   )
 
-  androidLibrary {
+  android {
     androidResources.enable = true
   }
 

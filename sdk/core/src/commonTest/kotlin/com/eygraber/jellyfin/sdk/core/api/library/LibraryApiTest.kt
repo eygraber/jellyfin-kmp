@@ -15,6 +15,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class LibraryApiTest {
@@ -62,7 +63,7 @@ class LibraryApiTest {
     )
 
     val api = LibraryApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getItems(
         userId = "user-1",
         includeItemTypes = listOf("Movie"),
@@ -97,7 +98,7 @@ class LibraryApiTest {
     )
 
     val api = LibraryApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getUserViews(userId = "user-1")
       result.isSuccess.shouldBeTrue()
       val views = result.getOrThrow()
@@ -121,7 +122,7 @@ class LibraryApiTest {
     )
 
     val api = LibraryApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getLatestItems(userId = "user-1", limit = 10)
       result.isSuccess.shouldBeTrue()
       val items = result.getOrThrow()
@@ -154,7 +155,7 @@ class LibraryApiTest {
     )
 
     val api = LibraryApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getResumeItems(userId = "user-1")
       result.isSuccess.shouldBeTrue()
       val items = result.getOrThrow()

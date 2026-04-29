@@ -3,6 +3,8 @@ package com.eygraber.jellyfin.services.sdk.impl
 import com.eygraber.jellyfin.common.JellyfinResult
 import com.eygraber.jellyfin.common.isError
 import com.eygraber.jellyfin.common.isSuccess
+import com.eygraber.jellyfin.domain.validators.ServerUrlValidator
+import com.eygraber.jellyfin.domain.validators.ServerVersionValidator
 import com.eygraber.jellyfin.sdk.core.model.PublicSystemInfo
 import com.eygraber.jellyfin.sdk.core.model.ServerDiscoveryInfo
 import com.eygraber.jellyfin.sdk.core.model.SystemInfo
@@ -48,8 +50,8 @@ class DefaultJellyfinServerDiscoveryServiceTest {
   private fun createService(
     serverService: JellyfinServerService = createFakeServerService(),
   ): DefaultJellyfinServerDiscoveryService {
-    val urlValidator = com.eygraber.jellyfin.domain.validators.ServerUrlValidator()
-    val versionValidator = com.eygraber.jellyfin.domain.validators.ServerVersionValidator()
+    val urlValidator = ServerUrlValidator()
+    val versionValidator = ServerVersionValidator()
     return DefaultJellyfinServerDiscoveryService(
       serverService = serverService,
       urlValidator = urlValidator,

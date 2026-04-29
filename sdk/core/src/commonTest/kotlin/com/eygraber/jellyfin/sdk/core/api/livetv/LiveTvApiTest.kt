@@ -13,6 +13,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class LiveTvApiTest {
@@ -62,7 +63,7 @@ class LiveTvApiTest {
     )
 
     val api = LiveTvApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getChannels(userId = "user-1")
       result.isSuccess.shouldBeTrue()
       val channels = result.getOrThrow()
@@ -93,7 +94,7 @@ class LiveTvApiTest {
     )
 
     val api = LiveTvApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getPrograms(userId = "user-1", isAiring = true)
       result.isSuccess.shouldBeTrue()
       val programs = result.getOrThrow()
@@ -122,7 +123,7 @@ class LiveTvApiTest {
     )
 
     val api = LiveTvApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getRecordings(userId = "user-1")
       result.isSuccess.shouldBeTrue()
       val recordings = result.getOrThrow()
@@ -151,7 +152,7 @@ class LiveTvApiTest {
     )
 
     val api = LiveTvApi(client)
-    kotlinx.coroutines.test.runTest {
+    runTest {
       val result = api.getTimers()
       result.isSuccess.shouldBeTrue()
       val timers = result.getOrThrow()
