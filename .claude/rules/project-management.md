@@ -104,7 +104,7 @@ To find current work manually:
 **Rules:**
 - When starting work: Move to **In Progress** before writing code
 - When creating a PR: Move to **In Review**
-- When completing work: Close the issue (automatically moves to Done)
+- When a PR merges: The linked issue should land in **Done**. Closing keywords (`Closes #N`) auto-close the issue and move it to Done. If the auto-close didn't fire (no closing keyword, or the field didn't update), close the issue or move it to Done manually — agents are expected to perform this transition rather than leave merged work in In Review.
 - When work is interrupted: Leave in **In Progress** (use `/resume-work` to continue)
 - When a blocker is removed: Move unblocked issues from Backlog to **Ready**
 - **Never move issues out of Done** - if there's a problem, create a new issue
