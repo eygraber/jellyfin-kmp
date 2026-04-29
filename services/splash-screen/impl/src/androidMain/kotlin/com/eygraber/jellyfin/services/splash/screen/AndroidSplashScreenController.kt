@@ -22,7 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @SingleIn(SessionScope::class)
 @ContributesBinding(SessionScope::class)
-class AndroidSplashScreenController(
+internal class AndroidSplashScreenController(
   private val activity: AppCompatActivity,
 ) : SplashScreenController {
   private var splashScreenViewRef: WeakReference<SplashScreenViewProvider>? = null

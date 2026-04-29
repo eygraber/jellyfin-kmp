@@ -1,4 +1,5 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
+import dev.zacsweers.metro.gradle.DiagnosticSeverity
 
 plugins {
   alias(libs.plugins.buildKonfig)
@@ -97,6 +98,12 @@ kotlin {
       api(libs.vice.nav3)
     }
   }
+}
+
+// ideally we'd make this an error so that we can know that we need to clean up the input
+// but the key and navigator for screens tend to be unused, and we don't want to remove them
+metro {
+  unusedGraphInputsSeverity = DiagnosticSeverity.NONE
 }
 
 // whitelist which licenses are able to be used in the app

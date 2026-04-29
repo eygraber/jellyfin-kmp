@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultJellyfinServerDiscoveryService(
+internal class DefaultJellyfinServerDiscoveryService(
   private val serverService: JellyfinServerService,
   private val urlValidator: ServerUrlValidator,
   private val versionValidator: ServerVersionValidator,

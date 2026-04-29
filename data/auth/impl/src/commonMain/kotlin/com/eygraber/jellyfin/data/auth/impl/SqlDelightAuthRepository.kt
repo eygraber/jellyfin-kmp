@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
  * The repository is stateless and not scoped as a singleton.
  */
 @ContributesBinding(AppScope::class)
-class SqlDelightAuthRepository(
+internal class SqlDelightAuthRepository(
   private val localDataSource: AuthLocalDataSource,
   private val remoteDataSource: AuthRemoteDataSource,
   private val logger: JellyfinLogger,

@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultSessionManager(
+internal class DefaultSessionManager(
   private val authRepository: AuthRepository,
   private val serverRepository: ServerRepository,
   private val authService: JellyfinAuthService,

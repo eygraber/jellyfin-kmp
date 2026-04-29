@@ -17,7 +17,7 @@ import dev.zacsweers.metro.ContributesBinding
  * state management are handled at the screen/compositor level.
  */
 @ContributesBinding(AppScope::class)
-class DefaultItemsRepository(
+internal class DefaultItemsRepository(
   private val remoteDataSource: ItemsRemoteDataSource,
 ) : ItemsRepository {
   @Suppress("LongParameterList")

@@ -33,9 +33,8 @@ interface GetUserDetailsUseCase {
 }
 
 // impl/
-@Inject
 @ContributesBinding(AppScope::class)
-class RealGetUserDetailsUseCase(
+internal class RealGetUserDetailsUseCase(
   private val userRepository: UserRepository,
 ) : GetUserDetailsUseCase {
   override suspend fun invoke(userId: String): UserDetails {
@@ -54,9 +53,8 @@ For state-producing domain models, use VICE sources:
 interface UserProfileModel : ViceSource<ViceLoadable<UserProfile>>
 
 // impl/
-@Inject
 @ContributesBinding(AppScope::class)
-class RealUserProfileModel(
+internal class RealUserProfileModel(
   userRepository: UserRepository,
 ) : UserProfileModel, LoadableFlowSource<UserProfile>() {
   override val placeholder = UserProfile.Empty

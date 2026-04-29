@@ -29,7 +29,7 @@ Automatically binds implementation to interface:
 interface UserRepository
 
 @ContributesBinding(AppScope::class)
-class RealUserRepository(...) : UserRepository
+internal class RealUserRepository(...) : UserRepository
 ```
 
 **Equivalent manual code**:
@@ -39,16 +39,18 @@ interface UserRepositoryProviders {
 }
 ```
 
-## Visibility Requirements
+## Visibility
 
-The Gradle module containing the DependencyGraph must see types using these annotations.
+`@ContributesBinding` implementations should be `internal`. Metro's `generateContributionProviders`
+generates top-level `@Provides` declarations that expose only the bound type, so the implementation
+class doesn't need to be visible outside its module.
 
-If it can't see them, code generation fails.
+`@ContributesTo` interfaces must remain `public` - Metro needs to see them for graph aggregation.
 
 **Pattern**:
 - `public/` module has interfaces
-- `impl/` module has `@ContributesBinding` implementations
-- `app` module sees both and creates graphs
+- `impl/` module has `internal` `@ContributesBinding` implementations
+- `app` module sees interfaces; Metro handles wiring
 
 ## Gradle Module Structure
 
@@ -60,7 +62,7 @@ interface UserRepository {
 
 // data/user/impl - implementation
 @ContributesBinding(AppScope::class)
-class RealUserRepository(
+internal class RealUserRepository(
   private val api: UserApi,
   private val db: UserDatabase,
 ) : UserRepository {

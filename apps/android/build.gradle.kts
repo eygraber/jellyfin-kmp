@@ -2,6 +2,7 @@ import com.eygraber.conventions.Env
 import com.eygraber.jellyfin.gradle.configureVersionCode
 import com.eygraber.jellyfin.gradle.disableProdLocally
 import com.eygraber.jellyfin.gradle.getInternalKeystorePassword
+import dev.zacsweers.metro.gradle.DiagnosticSeverity
 
 plugins {
   alias(libs.plugins.androidApp)
@@ -151,6 +152,12 @@ dependencies {
 
   implementation(libs.kotlinx.coroutines.core)
   runtimeOnly(libs.kotlinx.coroutines.android)
+}
+
+// ideally we'd make this an error so that we can know that we need to clean up the input
+// but the key and navigator for screens tend to be unused, and we don't want to remove them
+metro {
+  unusedGraphInputsSeverity = DiagnosticSeverity.NONE
 }
 
 // credentials are set with the ANDROID_PUBLISHER_CREDENTIALS env var in nightly.yml

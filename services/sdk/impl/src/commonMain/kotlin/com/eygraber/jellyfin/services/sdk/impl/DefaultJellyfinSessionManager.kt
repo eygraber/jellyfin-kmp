@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultJellyfinSessionManager(
+internal class DefaultJellyfinSessionManager(
   private val logger: JellyfinLogger,
 ) : JellyfinSessionManager {
   private val _currentServer = MutableStateFlow<ServerInfo?>(null)

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
  * The repository is stateless and not scoped as a singleton.
  */
 @ContributesBinding(AppScope::class)
-class DefaultSearchHistoryRepository(
+internal class DefaultSearchHistoryRepository(
   private val localDataSource: SearchHistoryLocalDataSource,
   private val clock: () -> Long = { currentTimeMillis() },
 ) : SearchHistoryRepository {

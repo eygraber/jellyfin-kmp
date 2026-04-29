@@ -15,7 +15,7 @@ import dev.zacsweers.metro.SingleIn
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class KhronicleLogger(
+internal class KhronicleLogger(
   private val sanitizer: LogSanitizer,
 ) : JellyfinLogger {
   override fun verbose(tag: String, message: String) {

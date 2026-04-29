@@ -37,9 +37,9 @@ override suspend fun fetchData() = remoteDataSource.fetchData().doOnSuccess { lo
 
 ```kotlin
 // ❌ Bad: Repository directly uses API, RemoteDataSource holds state
-@ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)  // Bad: stateful singleton
-class RealAuthRepository(
+@ContributesBinding(AppScope::class)
+internal class RealAuthRepository(
   private val api: AuthApi,  // Bad: direct API access
 ) : AuthRepository {
   private val _authState = MutableStateFlow<AuthState>(AuthState.Loading)  // Bad: holding state
@@ -53,7 +53,7 @@ class AuthRemoteDataSource(private val api: AuthApi) {
 
 // ✅ Good: Repository uses DataSources, all are stateless
 @ContributesBinding(AppScope::class)
-class RealAuthRepository(
+internal class RealAuthRepository(
   private val localDataSource: AuthLocalDataSource,
   private val remoteDataSource: AuthRemoteDataSource,
 ) : AuthRepository {

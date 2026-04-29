@@ -1,3 +1,4 @@
+import dev.zacsweers.metro.gradle.DiagnosticSeverity
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -40,10 +41,8 @@ kotlin {
   }
 }
 
-// this can be removed after 2.1.10
-// https://youtrack.jetbrains.com/issue/CMP-5680
-gradleConventions {
-  kotlin {
-    allWarningsAsErrors = false
-  }
+// ideally we'd make this an error so that we can know that we need to clean up the input
+// but the key and navigator for screens tend to be unused, and we don't want to remove them
+metro {
+  unusedGraphInputsSeverity = DiagnosticSeverity.NONE
 }

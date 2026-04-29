@@ -40,9 +40,8 @@ interface GetUserDetailsUseCase {
   suspend operator fun invoke(userId: String): UserDetails
 }
 
-@Inject
 @ContributesBinding(AppScope::class)
-class RealGetUserDetailsUseCase(
+internal class RealGetUserDetailsUseCase(
   private val userRepository: UserRepository,
 ) : GetUserDetailsUseCase {
   override suspend fun invoke(userId: String): UserDetails {

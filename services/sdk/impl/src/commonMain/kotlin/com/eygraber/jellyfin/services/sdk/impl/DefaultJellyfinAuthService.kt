@@ -25,7 +25,7 @@ import dev.zacsweers.metro.SingleIn
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultJellyfinAuthService(
+internal class DefaultJellyfinAuthService(
   private val sdk: JellyfinSdk,
   private val sessionManager: JellyfinSessionManager,
   private val logger: JellyfinLogger,
