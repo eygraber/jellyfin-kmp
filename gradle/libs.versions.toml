@@ -36,6 +36,8 @@ jvmTarget = "17"
 
 khronicle = "0.5.2"
 
+vlcj = "4.11.0"
+
 kotest = "6.1.11"
 
 kotlin = "2.3.21"
@@ -178,6 +180,8 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 khronicle = { module = "com.juul.khronicle:khronicle-core", version.ref = "khronicle" }
+
+vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
 
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }

@@ -20,6 +20,10 @@ kotlin {
       implementation(libs.androidx.media3.ui.compose)
     }
 
+    jvmMain.dependencies {
+      implementation(libs.vlcj)
+    }
+
     commonMain.dependencies {
       api(projects.di)
       api(projects.services.player.public)

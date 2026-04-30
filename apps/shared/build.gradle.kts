@@ -126,4 +126,10 @@ licensee {
   allowUrl("https://opensource.org/license/mit")
 
   allowDependency(libs.jellyfinLint)
+
+  // VLCJ is GPL-3.0; required for Desktop video playback (see #59).
+  allowDependency(libs.vlcj)
+
+  // vlcj-natives ships a non-standard GPL-3.0 license URL; pulled in transitively by vlcj.
+  allowUrl("http://www.gnu.org/licenses/gpl-3.0.html")
 }
