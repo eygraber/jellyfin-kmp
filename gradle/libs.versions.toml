@@ -10,6 +10,7 @@ android-sdk-min = "28"
 androidx-activity = "1.13.0"
 androidx-core = "1.18.0"
 androidx-lifecycle = "2.10.0"
+androidx-media3 = "1.10.0"
 androidx-nav3 = "1.1.1"
 
 atomicfu = "0.32.1"
@@ -117,6 +118,9 @@ androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-
 
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
+androidx-media3-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "androidx-media3" }
 
 androidx-splash = "androidx.core:core-splashscreen:1.2.0"
 

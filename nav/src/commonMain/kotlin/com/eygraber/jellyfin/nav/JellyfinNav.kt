@@ -66,6 +66,8 @@ import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesGraph
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
 import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsGraph
 import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsKey
+import com.eygraber.jellyfin.screens.video.player.VideoPlayerGraph
+import com.eygraber.jellyfin.screens.video.player.VideoPlayerKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeGraph
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import com.eygraber.vice.nav3.LocalSharedTransitionScope
@@ -247,6 +249,10 @@ private fun jellyfinNavEntryProvider(
 
   viceEntry<TvShowEpisodesKey>(
     provideTvShowEpisodes(navGraph, backStack),
+  )
+
+  viceEntry<VideoPlayerKey>(
+    provideVideoPlayer(navGraph, backStack),
   )
 
   jellyfinDevNavGraph(
@@ -476,6 +482,16 @@ private fun provideTvShowEpisodes(
   ).navEntryProvider
 }
 
+private fun provideVideoPlayer(
+  navGraph: JellyfinNavGraph,
+  backStack: NavBackStack<NavKey>,
+) = { key: VideoPlayerKey ->
+  navGraph.videoPlayerFactory.createVideoPlayerGraph(
+    navigator = JellyfinNavigators.videoPlayer(backStack),
+    key = key,
+  ).navEntryProvider
+}
+
 private val JellyfinNavGraph.albumTracksFactory
   get() = this as AlbumTracksGraph.Factory
 
@@ -532,6 +548,9 @@ private val JellyfinNavGraph.tvShowSeasonsFactory
 
 private val JellyfinNavGraph.tvShowsLibraryFactory
   get() = this as TvShowsLibraryGraph.Factory
+
+private val JellyfinNavGraph.videoPlayerFactory
+  get() = this as VideoPlayerGraph.Factory
 
 private val JellyfinNavGraph.welcomeFactory
   get() = this as WelcomeGraph.Factory
