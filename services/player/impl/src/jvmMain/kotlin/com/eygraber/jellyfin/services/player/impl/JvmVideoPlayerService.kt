@@ -8,45 +8,186 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.graphics.Color
 import com.eygraber.jellyfin.di.scopes.ScreenScope
 import com.eygraber.jellyfin.services.player.PlaybackState
 import com.eygraber.jellyfin.services.player.VideoPlayerService
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
+import uk.co.caprica.vlcj.player.base.MediaPlayer
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
+import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
+import javax.swing.SwingUtilities
 
 /**
- * Placeholder Desktop (JVM) implementation. Replaced with a real player in #59.
+ * Desktop (JVM) implementation of [VideoPlayerService] using vlcj.
+ *
+ * Wraps [EmbeddedMediaPlayerComponent] (a Swing component) and renders it inside Compose via
+ * [SwingPanel]. Requires a libvlc installation reachable via [NativeDiscovery]; if libvlc cannot
+ * be found we fall back to an error state.
+ *
+ * Component lifecycle is owned by this service: [initialize] creates a fresh player on the EDT,
+ * [release] tears it down. UI rendering simply binds the existing component to a [SwingPanel].
  */
+@SingleIn(ScreenScope::class)
 @ContributesBinding(ScreenScope::class)
 class JvmVideoPlayerService : VideoPlayerService {
-  private val _playbackState = MutableStateFlow(
-    PlaybackState(
-      hasError = true,
-      errorMessage = "Video playback is not supported on Desktop yet",
-    ),
-  )
+  private val _playbackState = MutableStateFlow(PlaybackState.Idle)
   override val playbackState: StateFlow<PlaybackState> = _playbackState.asStateFlow()
 
-  override fun initialize(streamUrl: String, startPositionMs: Long) = Unit
-  override fun play() = Unit
-  override fun pause() = Unit
-  override fun seekTo(positionMs: Long) = Unit
-  override fun release() = Unit
+  private var component: EmbeddedMediaPlayerComponent? = null
+
+  override fun initialize(streamUrl: String, startPositionMs: Long) {
+    release()
+
+    val newComponent = createComponentOnEdt() ?: run {
+      _playbackState.value = PlaybackState(
+        hasError = true,
+        errorMessage = "VLC libraries not found. Install VLC to enable Desktop playback.",
+      )
+      return
+    }
+
+    component = newComponent
+
+    val player = newComponent.mediaPlayer()
+    player.events().addMediaPlayerEventListener(VlcEventListener())
+    player.media().play(streamUrl)
+    if(startPositionMs > 0L) {
+      player.controls().setTime(startPositionMs)
+    }
+  }
+
+  override fun play() {
+    component?.mediaPlayer()?.controls()?.play()
+  }
+
+  override fun pause() {
+    component?.mediaPlayer()?.controls()?.pause()
+  }
+
+  override fun seekTo(positionMs: Long) {
+    component?.mediaPlayer()?.controls()?.setTime(positionMs)
+  }
+
+  override fun release() {
+    val current = component ?: return
+    component = null
+    SwingUtilities.invokeLater { current.release() }
+    _playbackState.value = PlaybackState.Idle
+  }
 
   @Composable
   override fun VideoSurface(modifier: Modifier) {
-    Box(
-      modifier = modifier.fillMaxSize().background(Color.Black),
-      contentAlignment = Alignment.Center,
-    ) {
-      Text(
-        text = "Video playback not yet supported on Desktop",
-        color = Color.White,
-        style = MaterialTheme.typography.bodyMedium,
+    val current = component
+    if(current == null) {
+      Box(
+        modifier = modifier.fillMaxSize().background(Color.Black),
+        contentAlignment = Alignment.Center,
+      ) {
+        Text(
+          text = "Player not initialized",
+          color = Color.White,
+          style = MaterialTheme.typography.bodyMedium,
+        )
+      }
+      return
+    }
+
+    SwingPanel(
+      factory = { current },
+      modifier = modifier,
+      background = Color.Black,
+    )
+  }
+
+  private fun createComponentOnEdt(): EmbeddedMediaPlayerComponent? {
+    if(!isNativeDiscoverySuccessful) return null
+
+    var component: EmbeddedMediaPlayerComponent? = null
+    val task = Runnable {
+      component = runCatching { EmbeddedMediaPlayerComponent() }.getOrNull()
+    }
+    if(SwingUtilities.isEventDispatchThread()) {
+      task.run()
+    }
+    else {
+      SwingUtilities.invokeAndWait(task)
+    }
+    return component
+  }
+
+  private inner class VlcEventListener : MediaPlayerEventAdapter() {
+    override fun playing(mediaPlayer: MediaPlayer) {
+      pushState(mediaPlayer, isPlaying = true, isBuffering = false)
+    }
+
+    override fun paused(mediaPlayer: MediaPlayer) {
+      pushState(mediaPlayer, isPlaying = false, isBuffering = false)
+    }
+
+    override fun stopped(mediaPlayer: MediaPlayer) {
+      pushState(mediaPlayer, isPlaying = false, isBuffering = false)
+    }
+
+    override fun finished(mediaPlayer: MediaPlayer) {
+      pushState(
+        mediaPlayer = mediaPlayer,
+        isPlaying = false,
+        isBuffering = false,
+        isEnded = true,
       )
     }
+
+    override fun buffering(mediaPlayer: MediaPlayer, newCache: Float) {
+      pushState(
+        mediaPlayer = mediaPlayer,
+        isPlaying = mediaPlayer.status().isPlaying,
+        isBuffering = newCache < FULL_BUFFER_PERCENT,
+      )
+    }
+
+    override fun timeChanged(mediaPlayer: MediaPlayer, newTime: Long) {
+      pushState(
+        mediaPlayer = mediaPlayer,
+        isPlaying = mediaPlayer.status().isPlaying,
+        isBuffering = false,
+        currentMs = newTime,
+      )
+    }
+
+    override fun error(mediaPlayer: MediaPlayer) {
+      _playbackState.value = _playbackState.value.copy(
+        hasError = true,
+        errorMessage = "Playback error",
+      )
+    }
+
+    private fun pushState(
+      mediaPlayer: MediaPlayer,
+      isPlaying: Boolean,
+      isBuffering: Boolean,
+      isEnded: Boolean = _playbackState.value.isEnded,
+      currentMs: Long = mediaPlayer.status().time(),
+    ) {
+      _playbackState.value = PlaybackState(
+        isPlaying = isPlaying,
+        isBuffering = isBuffering,
+        isEnded = isEnded,
+        currentPositionMs = currentMs.coerceAtLeast(0L),
+        durationMs = mediaPlayer.status().length().coerceAtLeast(0L),
+        bufferedPositionMs = currentMs.coerceAtLeast(0L),
+      )
+    }
+  }
+
+  companion object {
+    private val isNativeDiscoverySuccessful: Boolean = NativeDiscovery().discover()
+    private const val FULL_BUFFER_PERCENT = 100f
   }
 }
