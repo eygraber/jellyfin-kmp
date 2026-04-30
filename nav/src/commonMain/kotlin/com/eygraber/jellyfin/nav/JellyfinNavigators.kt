@@ -39,6 +39,7 @@ import com.eygraber.jellyfin.screens.tvshow.detail.TvShowDetailNavigator
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesKey
 import com.eygraber.jellyfin.screens.tvshow.episodes.TvShowEpisodesNavigator
 import com.eygraber.jellyfin.screens.tvshow.seasons.TvShowSeasonsNavigator
+import com.eygraber.jellyfin.screens.video.player.VideoPlayerKey
 import com.eygraber.jellyfin.screens.video.player.VideoPlayerNavigator
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeNavigator
@@ -140,6 +141,9 @@ internal object JellyfinNavigators {
     onNavigateToSimilarItem = { itemId ->
       backStack.add(MovieDetailKey(movieId = itemId))
     },
+    onNavigateToPlayer = { itemId, itemName ->
+      backStack.add(VideoPlayerKey(itemId = itemId, itemName = itemName))
+    },
   )
 
   fun moviesLibrary(
@@ -191,6 +195,9 @@ internal object JellyfinNavigators {
     backStack: NavBackStack<NavKey>,
   ) = EpisodeDetailNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
+    onNavigateToPlayer = { itemId, itemName ->
+      backStack.add(VideoPlayerKey(itemId = itemId, itemName = itemName))
+    },
   )
 
   fun musicLibrary(

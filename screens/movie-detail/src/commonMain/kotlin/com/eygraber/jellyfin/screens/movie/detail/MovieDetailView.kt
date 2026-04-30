@@ -104,6 +104,9 @@ internal fun MovieDetailView(
             onSimilarItemClick = { itemId ->
               onIntent(MovieDetailIntent.SelectSimilarItem(itemId))
             },
+            onPlay = {
+              onIntent(MovieDetailIntent.PlayMovie(itemId = state.movie.id, itemName = state.movie.name))
+            },
           )
         }
       }
@@ -118,6 +121,7 @@ private fun MovieContent(
   crew: List<CrewMember>,
   similarItems: List<SimilarItem>,
   onSimilarItemClick: (itemId: String) -> Unit,
+  onPlay: () -> Unit,
 ) {
   Column(
     modifier = Modifier
@@ -144,7 +148,7 @@ private fun MovieContent(
       Spacer(modifier = Modifier.height(16.dp))
 
       Button(
-        onClick = { },
+        onClick = onPlay,
       ) {
         Icon(
           imageVector = JellyfinIcons.PlayArrow,
