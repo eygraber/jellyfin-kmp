@@ -47,6 +47,7 @@ kotlin {
       implementation(projects.screens.tvshowDetail)
       implementation(projects.screens.tvshowEpisodes)
       implementation(projects.screens.tvshowSeasons)
+      implementation(projects.screens.videoPlayer)
       implementation(projects.screens.welcome)
 
       implementation(projects.ui.icons)

@@ -74,6 +74,7 @@ kotlin {
       api(projects.screens.tvshowDetail)
       api(projects.screens.tvshowEpisodes)
       api(projects.screens.tvshowSeasons)
+      api(projects.screens.videoPlayer)
       api(projects.screens.welcome)
 
       api(projects.services.database.impl)
@@ -82,6 +83,8 @@ kotlin {
       api(projects.services.deviceSensors.public)
       api(projects.services.logging.impl)
       api(projects.services.logging.public)
+      api(projects.services.player.impl)
+      api(projects.services.player.public)
       api(projects.services.sdk.impl)
       api(projects.services.sdk.public)
       api(projects.services.splashScreen.impl)
