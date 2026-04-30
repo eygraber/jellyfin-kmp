@@ -80,7 +80,12 @@ internal fun EpisodeDetailView(
             error = state.error,
             onRetry = { onIntent(EpisodeDetailIntent.RetryLoad) },
           )
-          state.episode != null -> EpisodeContent(episode = state.episode)
+          state.episode != null -> EpisodeContent(
+            episode = state.episode,
+            onPlay = {
+              onIntent(EpisodeDetailIntent.PlayEpisode(itemId = state.episode.id, itemName = state.episode.name))
+            },
+          )
         }
       }
     }
@@ -90,6 +95,7 @@ internal fun EpisodeDetailView(
 @Composable
 private fun EpisodeContent(
   episode: EpisodeDetail,
+  onPlay: () -> Unit,
 ) {
   Column(
     modifier = Modifier
@@ -126,7 +132,7 @@ private fun EpisodeContent(
       Spacer(modifier = Modifier.height(16.dp))
 
       Button(
-        onClick = { },
+        onClick = onPlay,
       ) {
         Icon(
           imageVector = JellyfinIcons.PlayArrow,

@@ -32,6 +32,8 @@ class EpisodeDetailCompositor(
   override suspend fun onIntent(intent: EpisodeDetailIntent) {
     when(intent) {
       EpisodeDetailIntent.RetryLoad -> episodeModel.loadEpisode(key.episodeId)
+      is EpisodeDetailIntent.PlayEpisode ->
+        navigator.navigateToPlayer(itemId = intent.itemId, itemName = intent.itemName)
       EpisodeDetailIntent.NavigateBack -> navigator.navigateBack()
     }
   }

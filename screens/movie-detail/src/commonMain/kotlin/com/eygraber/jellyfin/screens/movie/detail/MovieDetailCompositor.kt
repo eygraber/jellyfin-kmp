@@ -36,6 +36,8 @@ class MovieDetailCompositor(
     when(intent) {
       MovieDetailIntent.RetryLoad -> movieModel.loadMovie(key.movieId)
       is MovieDetailIntent.SelectSimilarItem -> navigator.navigateToSimilarItem(intent.itemId)
+      is MovieDetailIntent.PlayMovie ->
+        navigator.navigateToPlayer(itemId = intent.itemId, itemName = intent.itemName)
       MovieDetailIntent.NavigateBack -> navigator.navigateBack()
     }
   }
