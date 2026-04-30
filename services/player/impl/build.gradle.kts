@@ -1,5 +1,3 @@
-import com.eygraber.jellyfin.gradle.createCmpGroup
-
 plugins {
   alias(libs.plugins.conventionsAndroidKmpLibrary)
   alias(libs.plugins.conventionsComposeMultiplatform)
@@ -15,8 +13,6 @@ kotlin {
     project = project,
     androidNamespace = "com.eygraber.jellyfin.services.player.impl",
   )
-
-  createCmpGroup()
 
   sourceSets {
     androidMain.dependencies {
