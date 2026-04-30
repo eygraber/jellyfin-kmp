@@ -18,41 +18,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * Stub [VideoPlayerService] used on iOS, Desktop (JVM), and Web (WasmJs).
- *
- * Each platform will get its own native implementation in a follow-up issue
- * (AVPlayer for iOS, VLC/JavaFX for Desktop, HTML5 Video for Web). Until then,
- * this stub reports an error state so the UI can surface "not supported" messaging.
+ * Placeholder Web (WasmJs) implementation. Replaced with a real player in #59.
  */
 @ContributesBinding(ScreenScope::class)
-class CmpVideoPlayerService : VideoPlayerService {
+class WasmJsVideoPlayerService : VideoPlayerService {
   private val _playbackState = MutableStateFlow(
     PlaybackState(
       hasError = true,
-      errorMessage = "Video playback is not supported on this platform yet",
+      errorMessage = "Video playback is not supported on Web yet",
     ),
   )
   override val playbackState: StateFlow<PlaybackState> = _playbackState.asStateFlow()
 
-  override fun initialize(streamUrl: String, startPositionMs: Long) {
-    // No-op
-  }
-
-  override fun play() {
-    // No-op
-  }
-
-  override fun pause() {
-    // No-op
-  }
-
-  override fun seekTo(positionMs: Long) {
-    // No-op
-  }
-
-  override fun release() {
-    // No-op
-  }
+  override fun initialize(streamUrl: String, startPositionMs: Long) = Unit
+  override fun play() = Unit
+  override fun pause() = Unit
+  override fun seekTo(positionMs: Long) = Unit
+  override fun release() = Unit
 
   @Composable
   override fun VideoSurface(modifier: Modifier) {
@@ -61,7 +43,7 @@ class CmpVideoPlayerService : VideoPlayerService {
       contentAlignment = Alignment.Center,
     ) {
       Text(
-        text = "Video playback not yet supported on this platform",
+        text = "Video playback not yet supported on Web",
         color = Color.White,
         style = MaterialTheme.typography.bodyMedium,
       )
