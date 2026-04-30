@@ -22,7 +22,6 @@ class HomeCompositor(
   private val recentlyAddedModel: RecentlyAddedModel,
   private val librariesModel: LibrariesModel,
 ) : ViceCompositor<HomeIntent, HomeViewState> {
-  private var isLoading by mutableStateOf(true)
   private var isRefreshing by mutableStateOf(false)
   private var error by mutableStateOf<HomeError?>(null)
 
@@ -44,7 +43,6 @@ class HomeCompositor(
 
     return HomeViewState(
       userName = userName,
-      isLoading = isLoading,
       error = error,
       isRefreshing = isRefreshing,
       continueWatchingState = continueWatchingState,
@@ -88,14 +86,11 @@ class HomeCompositor(
   }
 
   private suspend fun retryLoad() {
-    isLoading = true
     error = null
 
     val isValid = sessionManager.validateSession()
     if(!isValid) {
       error = HomeError.Network()
     }
-
-    isLoading = false
   }
 }
