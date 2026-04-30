@@ -5,18 +5,13 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class HomeViewState(
   val userName: String = "",
-  val isLoading: Boolean = true,
   val error: HomeError? = null,
   val isRefreshing: Boolean = false,
   val continueWatchingState: ContinueWatchingState = ContinueWatchingState.Loading,
   val nextUpState: NextUpState = NextUpState.Loading,
   val recentlyAddedState: RecentlyAddedState = RecentlyAddedState.Loading,
   val librariesState: LibrariesState = LibrariesState.Loading,
-) {
-  companion object {
-    val Loading = HomeViewState(isLoading = true)
-  }
-}
+)
 
 @Immutable
 sealed interface HomeError {

@@ -1,7 +1,6 @@
 package com.eygraber.jellyfin.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -81,7 +79,6 @@ internal fun HomeView(
           .padding(contentPadding),
       ) {
         when {
-          state.isLoading -> LoadingContent()
           state.error != null -> ErrorContent(
             error = state.error,
             onRetry = { onIntent(HomeIntent.RetryLoad) },
@@ -93,16 +90,6 @@ internal fun HomeView(
         }
       }
     }
-  }
-}
-
-@Composable
-private fun LoadingContent() {
-  Box(
-    modifier = Modifier.fillMaxSize(),
-    contentAlignment = Alignment.Center,
-  ) {
-    CircularProgressIndicator()
   }
 }
 
@@ -258,7 +245,7 @@ private fun LibrariesHomeSection(
 private fun HomeLoadingPreview() {
   JellyfinPreviewTheme {
     HomeView(
-      state = HomeViewState.Loading,
+      state = HomeViewState(),
       onIntent = {},
     )
   }
@@ -270,7 +257,6 @@ private fun HomeErrorPreview() {
   JellyfinPreviewTheme {
     HomeView(
       state = HomeViewState(
-        isLoading = false,
         error = HomeError.Network(),
       ),
       onIntent = {},
@@ -285,7 +271,6 @@ private fun HomeContentPreview() {
     HomeView(
       state = HomeViewState(
         userName = "TestUser",
-        isLoading = false,
       ),
       onIntent = {},
     )
@@ -299,7 +284,6 @@ private fun HomeContinueWatchingPreview() {
     HomeView(
       state = HomeViewState(
         userName = "TestUser",
-        isLoading = false,
         continueWatchingState = ContinueWatchingState.Loaded(
           items = listOf(
             ContinueWatchingItem(
@@ -353,7 +337,6 @@ private fun HomeContinueWatchingEmptyPreview() {
     HomeView(
       state = HomeViewState(
         userName = "TestUser",
-        isLoading = false,
         continueWatchingState = ContinueWatchingState.Empty,
       ),
       onIntent = {},
