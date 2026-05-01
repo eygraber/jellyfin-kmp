@@ -4,7 +4,6 @@ import app.cash.sqldelight.db.SqlDriver
 import com.eygraber.jellyfin.services.database.JellyfinDatabaseProvider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 
 /**
@@ -14,7 +13,6 @@ import dev.zacsweers.metro.SingleIn
  * generated API for all platforms. Full WasmJs support will be added in a future issue
  * using the async web worker driver.
  */
-@Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 internal class WasmJsJellyfinDatabaseProvider : JellyfinDatabaseProvider {
