@@ -21,16 +21,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
+import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import javax.swing.SwingUtilities
 import javax.swing.Timer
 
 /**
  * Desktop (JVM) implementation of [VideoPlayerService] using vlcj.
  *
- * Wraps [EmbeddedMediaPlayerComponent] (a Swing component) and renders it inside Compose via
- * [SwingPanel]. Requires a libvlc installation reachable via [NativeDiscovery]; if libvlc cannot
- * be found we fall back to an error state.
+ * Uses [CallbackMediaPlayerComponent] (a lightweight `JPanel` that paints frames into a
+ * `BufferedImage`) rather than the heavyweight `EmbeddedMediaPlayerComponent`, so the Compose
+ * controls overlay rendered on top of [SwingPanel] is actually visible — heavyweight AWT canvases
+ * always render above Compose's Skia surface and would hide the controls.
+ *
+ * Requires a libvlc installation reachable via [NativeDiscovery]; if libvlc cannot be found we
+ * fall back to an error state.
  *
  * Component lifecycle is owned by this service: [initialize] creates a fresh player on the EDT,
  * [release] tears it down. UI rendering simply binds the existing component to a [SwingPanel].
@@ -41,7 +45,7 @@ class JvmVideoPlayerService : VideoPlayerService {
   private val _playbackState = MutableStateFlow(PlaybackState.Idle)
   override val playbackState: StateFlow<PlaybackState> = _playbackState.asStateFlow()
 
-  private var component: EmbeddedMediaPlayerComponent? = null
+  private var component: CallbackMediaPlayerComponent? = null
 
   override fun initialize(streamUrl: String, startPositionMs: Long) {
     release()
@@ -111,12 +115,12 @@ class JvmVideoPlayerService : VideoPlayerService {
     )
   }
 
-  private fun createComponentOnEdt(): EmbeddedMediaPlayerComponent? {
+  private fun createComponentOnEdt(): CallbackMediaPlayerComponent? {
     if(!isNativeDiscoverySuccessful) return null
 
-    var component: EmbeddedMediaPlayerComponent? = null
+    var component: CallbackMediaPlayerComponent? = null
     val task = Runnable {
-      component = runCatching { EmbeddedMediaPlayerComponent() }.getOrNull()
+      component = runCatching { CallbackMediaPlayerComponent() }.getOrNull()
     }
     if(SwingUtilities.isEventDispatchThread()) {
       task.run()
@@ -128,7 +132,7 @@ class JvmVideoPlayerService : VideoPlayerService {
   }
 
   private fun startPlaybackWhenDisplayable(
-    component: EmbeddedMediaPlayerComponent,
+    component: CallbackMediaPlayerComponent,
     streamUrl: String,
     startPositionMs: Long,
   ) {
