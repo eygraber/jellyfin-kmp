@@ -23,6 +23,10 @@ kotlin {
     androidNamespace = pkg,
   )
 
+  android {
+    androidResources.enable = true
+  }
+
   sourceSets {
     commonMain.dependencies {
       api(projects.di)
