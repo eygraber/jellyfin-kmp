@@ -13,10 +13,8 @@ import com.eygraber.sqldelight.androidx.driver.FileProvider
 import com.eygraber.sqldelight.androidx.driver.SqliteJournalMode
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 
-@Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 internal class AndroidJellyfinDatabaseProvider(
