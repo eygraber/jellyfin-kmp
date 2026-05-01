@@ -3,28 +3,31 @@ package com.eygraber.jellyfin.services.database.impl
 import android.content.Context
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import app.cash.sqldelight.db.SqlDriver
+import com.eygraber.jellyfin.di.qualifiers.AppContext
+import com.eygraber.jellyfin.services.database.DatabaseConfig
+import com.eygraber.jellyfin.services.database.JellyfinDatabaseProvider
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteConfiguration
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteDatabaseType
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteDriver
 import com.eygraber.sqldelight.androidx.driver.FileProvider
 import com.eygraber.sqldelight.androidx.driver.SqliteJournalMode
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 
-/**
- * Holder for the Android application [Context] needed by the database driver.
- *
- * Must be initialized before any database access occurs, typically during
- * application startup.
- */
-internal object AndroidContextHolder {
-  lateinit var applicationContext: Context
-}
-
-internal actual fun createPlatformDriver(databaseName: String): SqlDriver =
-  AndroidxSqliteDriver(
+@Inject
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
+internal class AndroidJellyfinDatabaseProvider(
+  @param:AppContext private val context: Context,
+  private val config: DatabaseConfig,
+) : JellyfinDatabaseProvider {
+  override fun createDriver(): SqlDriver = AndroidxSqliteDriver(
     driver = BundledSQLiteDriver(),
     databaseType = AndroidxSqliteDatabaseType.FileProvider(
-      context = AndroidContextHolder.applicationContext,
-      name = databaseName,
+      context = context,
+      name = config.databaseName,
     ),
     schema = JellyfinDatabase.Schema,
     configuration = AndroidxSqliteConfiguration(
@@ -32,3 +35,4 @@ internal actual fun createPlatformDriver(databaseName: String): SqlDriver =
       journalMode = SqliteJournalMode.WAL,
     ),
   )
+}
