@@ -17,6 +17,11 @@ import dev.zacsweers.metro.createGraphFactory
 import java.awt.Dimension
 
 fun main() {
+  // Allow Compose UI (e.g. the video player controls overlay) to render on top of SwingPanel
+  // interop content. Without this flag the embedded Swing video surface paints above any
+  // Compose layers, hiding the controls overlay.
+  System.setProperty("compose.interop.blending", "true")
+
   val appGraph = createGraphFactory<JellyfinDesktopAppGraph.Factory>().create()
   appGraph.initializer.initialize()
 
