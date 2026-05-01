@@ -18,6 +18,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
@@ -120,7 +121,27 @@ class JvmVideoPlayerService : VideoPlayerService {
 
     var component: CallbackMediaPlayerComponent? = null
     val task = Runnable {
-      component = runCatching { CallbackMediaPlayerComponent() }.getOrNull()
+      component = runCatching {
+        // libvlc's default stereo-mode (Unset / "Original" in the standalone player) passes the
+        // source channel layout straight through, which on multichannel content like AAC 5.1
+        // routes only the surround channels to a stereo output — the user hears effects/ambient
+        // but no dialogue. Force stereo-mode=1 (the "Stereo" option in standalone VLC's GUI)
+        // so libvlc downmixes multichannel sources to stereo using the standard ITU matrix.
+        // This is the same setting standalone VLC ships with once a user picks "Stereo".
+        // 5.1 passthrough on a 5.1-capable output device is tracked separately — fixing it
+        // requires detecting the system's audio output capability.
+        val factory = MediaPlayerFactory("--stereo-mode=1")
+        CallbackMediaPlayerComponent(
+          /* mediaPlayerFactory = */ factory,
+          /* fullScreenStrategy = */ null,
+          /* inputEvents = */ null,
+          /* lockBuffers = */ true,
+          /* imagePainter = */ null,
+          /* renderCallback = */ null,
+          /* bufferFormatCallback = */ null,
+          /* videoSurfaceComponent = */ null,
+        )
+      }.getOrNull()
     }
     if(SwingUtilities.isEventDispatchThread()) {
       task.run()
