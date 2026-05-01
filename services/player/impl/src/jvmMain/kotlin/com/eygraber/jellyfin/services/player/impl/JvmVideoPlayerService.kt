@@ -18,6 +18,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
@@ -120,7 +121,21 @@ class JvmVideoPlayerService : VideoPlayerService {
 
     var component: CallbackMediaPlayerComponent? = null
     val task = Runnable {
-      component = runCatching { CallbackMediaPlayerComponent() }.getOrNull()
+      component = runCatching {
+        // Force stereo downmix on the underlying libvlc instance so 5.1 sources don't play with
+        // only the surround channels audible on stereo output.
+        val factory = MediaPlayerFactory(*libvlcArgs)
+        CallbackMediaPlayerComponent(
+          /* mediaPlayerFactory = */ factory,
+          /* fullScreenStrategy = */ null,
+          /* inputEvents = */ null,
+          /* lockBuffers = */ true,
+          /* imagePainter = */ null,
+          /* renderCallback = */ null,
+          /* bufferFormatCallback = */ null,
+          /* videoSurfaceComponent = */ null,
+        )
+      }.getOrNull()
     }
     if(SwingUtilities.isEventDispatchThread()) {
       task.run()
@@ -223,5 +238,10 @@ class JvmVideoPlayerService : VideoPlayerService {
     private val isNativeDiscoverySuccessful: Boolean = NativeDiscovery().discover()
     private const val FULL_BUFFER_PERCENT = 100f
     private const val DISPLAYABLE_POLL_INTERVAL_MS = 50
+
+    private val libvlcArgs = arrayOf(
+      "--audio-channels=2",
+      "--stereo-mode=2",
+    )
   }
 }
