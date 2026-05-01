@@ -9,6 +9,7 @@ plugins {
 android {
   namespace = "com.eygraber.jellyfin.android"
 }
+
 dependencies {
   implementation(libs.androidx.annotation)
 }
