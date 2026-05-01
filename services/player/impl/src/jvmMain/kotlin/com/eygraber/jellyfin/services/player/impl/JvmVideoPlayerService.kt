@@ -23,6 +23,7 @@ import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
 import javax.swing.SwingUtilities
+import javax.swing.Timer
 
 /**
  * Desktop (JVM) implementation of [VideoPlayerService] using vlcj.
@@ -57,10 +58,14 @@ class JvmVideoPlayerService : VideoPlayerService {
 
     val player = newComponent.mediaPlayer()
     player.events().addMediaPlayerEventListener(VlcEventListener())
-    player.media().play(streamUrl)
-    if(startPositionMs > 0L) {
-      player.controls().setTime(startPositionMs)
-    }
+    // vlcj requires the embedded Swing component to be attached to a displayable AWT hierarchy
+    // before media().play() can attach a video surface. SwingPanel mounts the component on the
+    // EDT after composition, so wait until isDisplayable() before kicking off playback.
+    startPlaybackWhenDisplayable(
+      component = newComponent,
+      streamUrl = streamUrl,
+      startPositionMs = startPositionMs,
+    )
   }
 
   override fun play() {
@@ -120,6 +125,30 @@ class JvmVideoPlayerService : VideoPlayerService {
       SwingUtilities.invokeAndWait(task)
     }
     return component
+  }
+
+  private fun startPlaybackWhenDisplayable(
+    component: EmbeddedMediaPlayerComponent,
+    streamUrl: String,
+    startPositionMs: Long,
+  ) {
+    fun attempt() {
+      if(this.component !== component) return
+      if(component.isDisplayable) {
+        val player = component.mediaPlayer()
+        player.media().play(streamUrl)
+        if(startPositionMs > 0L) {
+          player.controls().setTime(startPositionMs)
+        }
+      }
+      else {
+        Timer(DISPLAYABLE_POLL_INTERVAL_MS) { event ->
+          (event.source as? Timer)?.stop()
+          attempt()
+        }.apply { isRepeats = false }.start()
+      }
+    }
+    SwingUtilities.invokeLater(::attempt)
   }
 
   private inner class VlcEventListener : MediaPlayerEventAdapter() {
@@ -189,5 +218,6 @@ class JvmVideoPlayerService : VideoPlayerService {
   companion object {
     private val isNativeDiscoverySuccessful: Boolean = NativeDiscovery().discover()
     private const val FULL_BUFFER_PERCENT = 100f
+    private const val DISPLAYABLE_POLL_INTERVAL_MS = 50
   }
 }
