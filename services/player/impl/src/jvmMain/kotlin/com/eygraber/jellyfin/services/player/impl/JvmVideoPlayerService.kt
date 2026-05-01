@@ -1,15 +1,18 @@
 package com.eygraber.jellyfin.services.player.impl
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import com.eygraber.jellyfin.di.scopes.ScreenScope
 import com.eygraber.jellyfin.services.player.PlaybackState
 import com.eygraber.jellyfin.services.player.VideoPlayerService
@@ -18,21 +21,35 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
-import javax.swing.SwingUtilities
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCallback
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat
+import java.awt.image.BufferedImage
+import java.awt.image.DataBufferInt
+import java.nio.ByteBuffer
 
 /**
  * Desktop (JVM) implementation of [VideoPlayerService] using vlcj.
  *
- * Wraps [EmbeddedMediaPlayerComponent] (a Swing component) and renders it inside Compose via
- * [SwingPanel]. Requires a libvlc installation reachable via [NativeDiscovery]; if libvlc cannot
- * be found we fall back to an error state.
+ * Renders video by hooking libvlc's callback video surface: each decoded frame is copied into a
+ * [BufferedImage], converted to a Compose [ImageBitmap], and exposed via Compose state. The UI
+ * displays it through a regular Compose [Image]. This sidesteps `SwingPanel` entirely, which is
+ * what was causing the controls overlay to be hidden on Desktop — interop content from
+ * `SwingPanel` paints above Compose's Skia surface regardless of z-order, even with the lightweight
+ * `CallbackMediaPlayerComponent` and the `compose.interop.blending` system property.
  *
- * Component lifecycle is owned by this service: [initialize] creates a fresh player on the EDT,
- * [release] tears it down. UI rendering simply binds the existing component to a [SwingPanel].
+ * Audio uses libvlc's standard output. `--stereo-mode=1` forces a stereo downmix so multichannel
+ * sources (e.g. AAC 5.1) play correctly on stereo systems; per-output capability detection is
+ * tracked in #238.
+ *
+ * Requires a libvlc installation reachable via [NativeDiscovery]; if libvlc cannot be found we
+ * fall back to an error state.
  */
 @SingleIn(ScreenScope::class)
 @ContributesBinding(ScreenScope::class)
@@ -40,12 +57,15 @@ class JvmVideoPlayerService : VideoPlayerService {
   private val _playbackState = MutableStateFlow(PlaybackState.Idle)
   override val playbackState: StateFlow<PlaybackState> = _playbackState.asStateFlow()
 
-  private var component: EmbeddedMediaPlayerComponent? = null
+  private var factory: MediaPlayerFactory? = null
+  private var player: EmbeddedMediaPlayer? = null
+  private var frameImage: BufferedImage? = null
+  private var currentFrame by mutableStateOf<ImageBitmap?>(null)
 
   override fun initialize(streamUrl: String, startPositionMs: Long) {
     release()
 
-    val newComponent = createComponentOnEdt() ?: run {
+    if(!isNativeDiscoverySuccessful) {
       _playbackState.value = PlaybackState(
         hasError = true,
         errorMessage = "VLC libraries not found. Install VLC to enable Desktop playback.",
@@ -53,73 +73,94 @@ class JvmVideoPlayerService : VideoPlayerService {
       return
     }
 
-    component = newComponent
+    val newFactory = MediaPlayerFactory("--stereo-mode=1")
+    val newPlayer = newFactory.mediaPlayers().newEmbeddedMediaPlayer()
 
-    val player = newComponent.mediaPlayer()
-    player.events().addMediaPlayerEventListener(VlcEventListener())
-    player.media().play(streamUrl)
+    val videoSurface = newFactory.videoSurfaces().newVideoSurface(
+      ImageBufferFormatCallback(),
+      ImageRenderCallback(),
+      true,
+    )
+    newPlayer.videoSurface().set(videoSurface)
+    newPlayer.events().addMediaPlayerEventListener(VlcEventListener())
+
+    factory = newFactory
+    player = newPlayer
+
+    newPlayer.media().play(streamUrl)
     if(startPositionMs > 0L) {
-      player.controls().setTime(startPositionMs)
+      newPlayer.controls().setTime(startPositionMs)
     }
   }
 
   override fun play() {
-    component?.mediaPlayer()?.controls()?.play()
+    player?.controls()?.play()
   }
 
   override fun pause() {
-    component?.mediaPlayer()?.controls()?.pause()
+    player?.controls()?.pause()
   }
 
   override fun seekTo(positionMs: Long) {
-    component?.mediaPlayer()?.controls()?.setTime(positionMs)
+    player?.controls()?.setTime(positionMs)
   }
 
   override fun release() {
-    val current = component ?: return
-    component = null
-    SwingUtilities.invokeLater { current.release() }
+    player?.release()
+    factory?.release()
+    player = null
+    factory = null
+    frameImage = null
+    currentFrame = null
     _playbackState.value = PlaybackState.Idle
   }
 
   @Composable
   override fun VideoSurface(modifier: Modifier) {
-    val current = component
-    if(current == null) {
-      Box(
-        modifier = modifier.fillMaxSize().background(Color.Black),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = "Player not initialized",
-          color = Color.White,
-          style = MaterialTheme.typography.bodyMedium,
-        )
-      }
+    val frame = currentFrame
+    if(frame == null) {
+      Box(modifier = modifier.fillMaxSize().background(Color.Black))
       return
     }
-
-    SwingPanel(
-      factory = { current },
-      modifier = modifier,
-      background = Color.Black,
+    Image(
+      bitmap = frame,
+      contentDescription = null,
+      contentScale = ContentScale.Fit,
+      modifier = modifier.fillMaxSize().background(Color.Black),
     )
   }
 
-  private fun createComponentOnEdt(): EmbeddedMediaPlayerComponent? {
-    if(!isNativeDiscoverySuccessful) return null
+  private inner class ImageBufferFormatCallback : BufferFormatCallback {
+    override fun getBufferFormat(sourceWidth: Int, sourceHeight: Int): BufferFormat {
+      // Allocate the BufferedImage that frame data will be written into. RV32 is 32-bit packed
+      // pixels in native endian, which matches BufferedImage.TYPE_INT_ARGB on little-endian JVMs
+      // (the only platforms vlcj runs on for Desktop).
+      frameImage = BufferedImage(sourceWidth, sourceHeight, BufferedImage.TYPE_INT_ARGB)
+      return RV32BufferFormat(sourceWidth, sourceHeight)
+    }
 
-    var component: EmbeddedMediaPlayerComponent? = null
-    val task = Runnable {
-      component = runCatching { EmbeddedMediaPlayerComponent() }.getOrNull()
+    override fun newFormatSize(bufferWidth: Int, bufferHeight: Int, displayWidth: Int, displayHeight: Int) = Unit
+
+    override fun allocatedBuffers(buffers: Array<ByteBuffer>) = Unit
+  }
+
+  private inner class ImageRenderCallback : RenderCallback {
+    override fun lock(mediaPlayer: MediaPlayer) = Unit
+
+    override fun display(
+      mediaPlayer: MediaPlayer,
+      nativeBuffers: Array<ByteBuffer>,
+      bufferFormat: BufferFormat,
+      displayWidth: Int,
+      displayHeight: Int,
+    ) {
+      val image = frameImage ?: return
+      val pixels = (image.raster.dataBuffer as DataBufferInt).data
+      nativeBuffers[0].asIntBuffer().get(pixels)
+      currentFrame = image.toComposeImageBitmap()
     }
-    if(SwingUtilities.isEventDispatchThread()) {
-      task.run()
-    }
-    else {
-      SwingUtilities.invokeAndWait(task)
-    }
-    return component
+
+    override fun unlock(mediaPlayer: MediaPlayer) = Unit
   }
 
   private inner class VlcEventListener : MediaPlayerEventAdapter() {
