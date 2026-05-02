@@ -76,7 +76,7 @@ internal fun JellyfinNavigationSuiteScaffold(
  * drawer at expanded widths and a navigation rail at medium widths, so we compute the type
  * directly from [WindowSizeClass] breakpoints (600dp, 840dp).
  */
-private fun jellyfinNavigationSuiteType(
+internal fun jellyfinNavigationSuiteType(
   windowAdaptiveInfo: WindowAdaptiveInfo,
 ): NavigationSuiteType {
   val sizeClass = windowAdaptiveInfo.windowSizeClass
