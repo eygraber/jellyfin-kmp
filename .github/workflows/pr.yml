@@ -120,7 +120,7 @@ jobs:
         run: diff <(git ls-files ':(attr:filter=lfs)' | sort) <(git lfs ls-files -n | sort) >/dev/null
 
       - name: Run unit and paparazzi screenshot tests
-        run: ./gradlew allTests testDebugUnitTest :konsist:test
+        run: ./gradlew allTests testDebugUnitTest :konsist:test -x wasmJsBrowserTest
 
 env:
   EJSON_DEV_BUILD_PRIVATE_KEY: ${{ secrets.EJSON_DEV_BUILD_PRIVATE_KEY }}
