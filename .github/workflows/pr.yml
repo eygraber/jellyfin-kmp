@@ -105,7 +105,6 @@ jobs:
         run: ./gradlew :apps:shared:licensee
 
   unit_and_screenshot_tests:
-    if: false
     permissions:
       contents: read
     runs-on: ubuntu-latest
