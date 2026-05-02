@@ -23,6 +23,7 @@ kotlin {
 
   sourceSets {
     androidMain.dependencies {
+      implementation(libs.androidx.activityCompose)
       implementation(libs.androidx.media3.exoplayer)
       implementation(libs.androidx.media3.ui.compose)
     }
