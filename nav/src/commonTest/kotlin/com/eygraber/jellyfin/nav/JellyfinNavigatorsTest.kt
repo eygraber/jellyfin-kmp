@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.eygraber.jellyfin.nav.dev.devSettings
 import com.eygraber.jellyfin.screens.dev.settings.DevSettingsKey
+import com.eygraber.jellyfin.screens.login.LoginKey
 import com.eygraber.jellyfin.screens.root.RootKey
 import com.eygraber.jellyfin.screens.welcome.WelcomeKey
 import io.kotest.matchers.collections.shouldContainExactly
@@ -32,7 +33,7 @@ class JellyfinNavigatorsTest {
   }
 
   @Test
-  fun `welcomeNavigator - navigateToLogin pushes ComingSoon`() {
+  fun `welcomeNavigator - navigateToLogin pushes LoginKey`() {
     val backStack = NavBackStack<NavKey>().apply {
       push(RootKey)
       push(WelcomeKey)
@@ -44,7 +45,7 @@ class JellyfinNavigatorsTest {
     backStack shouldContainExactly listOf(
       RootKey,
       WelcomeKey,
-      JellyfinNavKeys.ComingSoon("Login"),
+      LoginKey,
     )
   }
 

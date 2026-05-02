@@ -1,6 +1,7 @@
 package com.eygraber.jellyfin.services.database.impl
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteConfiguration
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteDatabaseType
 import com.eygraber.sqldelight.androidx.driver.AndroidxSqliteDriver
 import com.eygraber.sqldelight.androidx.driver.File
@@ -34,6 +35,9 @@ class JellyfinDatabaseTest {
         file = File(tempDir, "test.db"),
       ),
       schema = JellyfinDatabase.Schema,
+      configuration = AndroidxSqliteConfiguration(
+        isForeignKeyConstraintsEnabled = true,
+      ),
     )
     database = JellyfinDatabase(driver)
   }
@@ -326,13 +330,6 @@ class JellyfinDatabaseTest {
       is_active = 0,
       created_at = now,
       last_used_at = now,
-    )
-
-    // Enable foreign keys for cascade to work
-    driver.execute(
-      identifier = null,
-      sql = "PRAGMA foreign_keys = ON",
-      parameters = 0,
     )
 
     database.serverQueries.delete(id = "server-1")
