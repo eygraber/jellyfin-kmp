@@ -45,6 +45,8 @@ internal fun VideoPlayerView(
   playerService: VideoPlayerService,
   onIntent: (VideoPlayerIntent) -> Unit,
 ) {
+  LockToLandscapeWhileVisible()
+
   Box(
     modifier = Modifier
       .fillMaxSize()
