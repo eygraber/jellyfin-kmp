@@ -4,6 +4,7 @@ import com.eygraber.jellyfin.sdk.core.ClientInfo
 import com.eygraber.jellyfin.sdk.core.DeviceInfo
 import com.eygraber.jellyfin.sdk.core.ServerInfo
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
+import com.eygraber.jellyfin.sdk.core.model.LiveTvTimerInfoDto
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -160,6 +161,173 @@ class LiveTvApiTest {
       timers[0].id shouldBe "timer-1"
       timers[0].channelName shouldBe "BBC One"
       timers[0].status shouldBe "InProgress"
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun getChannel_returns_single_channel() {
+    val client = createApiClientWithMock(
+      responseBody = """
+      {
+        "Id": "channel-1",
+        "Name": "BBC One",
+        "Type": "TvChannel",
+        "ChannelNumber": "1"
+      }
+      """.trimIndent(),
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.getChannel(channelId = "channel-1", userId = "user-1")
+      result.isSuccess.shouldBeTrue()
+      val channel = result.getOrThrow()
+      channel.id shouldBe "channel-1"
+      channel.name shouldBe "BBC One"
+      channel.channelNumber shouldBe "1"
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun getProgram_returns_single_program() {
+    val client = createApiClientWithMock(
+      responseBody = """
+      {
+        "Id": "program-1",
+        "Name": "Evening News",
+        "ChannelId": "channel-1",
+        "StartDate": "2024-01-01T18:00:00Z",
+        "EndDate": "2024-01-01T19:00:00Z"
+      }
+      """.trimIndent(),
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.getProgram(programId = "program-1", userId = "user-1")
+      result.isSuccess.shouldBeTrue()
+      val program = result.getOrThrow()
+      program.id shouldBe "program-1"
+      program.channelId shouldBe "channel-1"
+      program.startDate shouldBe "2024-01-01T18:00:00Z"
+      program.endDate shouldBe "2024-01-01T19:00:00Z"
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun getRecording_returns_single_recording() {
+    val client = createApiClientWithMock(
+      responseBody = """
+      {
+        "Id": "rec-1",
+        "Name": "Recorded Show",
+        "Status": "Completed"
+      }
+      """.trimIndent(),
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.getRecording(recordingId = "rec-1", userId = "user-1")
+      result.isSuccess.shouldBeTrue()
+      val recording = result.getOrThrow()
+      recording.id shouldBe "rec-1"
+      recording.status shouldBe "Completed"
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun deleteRecording_succeeds_on_no_content() {
+    val client = createApiClientWithMock(
+      responseBody = "",
+      statusCode = HttpStatusCode.NoContent,
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.deleteRecording(recordingId = "rec-1")
+      result.isSuccess.shouldBeTrue()
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun createTimer_succeeds_on_no_content() {
+    val client = createApiClientWithMock(
+      responseBody = "",
+      statusCode = HttpStatusCode.NoContent,
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.createTimer(
+        body = LiveTvTimerInfoDto(
+          programId = "prog-1",
+        ),
+      )
+      result.isSuccess.shouldBeTrue()
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun getSeriesTimers_returns_results() {
+    val client = createApiClientWithMock(
+      responseBody = """
+      {
+        "Items": [
+          {
+            "Id": "series-1",
+            "Name": "Doctor Who",
+            "RecordAnyChannel": true
+          }
+        ],
+        "TotalRecordCount": 1
+      }
+      """.trimIndent(),
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.getSeriesTimers()
+      result.isSuccess.shouldBeTrue()
+      val timers = result.getOrThrow()
+      timers.totalRecordCount shouldBe 1
+      timers.items[0].id shouldBe "series-1"
+      timers.items[0].recordAnyChannel.shouldBeTrue()
+    }
+
+    client.close()
+  }
+
+  @Test
+  fun getGuideInfo_returns_date_range() {
+    val client = createApiClientWithMock(
+      responseBody = """
+      {
+        "StartDate": "2024-01-01T00:00:00Z",
+        "EndDate": "2024-01-15T00:00:00Z"
+      }
+      """.trimIndent(),
+    )
+
+    val api = LiveTvApi(client)
+    runTest {
+      val result = api.getGuideInfo()
+      result.isSuccess.shouldBeTrue()
+      val info = result.getOrThrow()
+      info.startDate shouldBe "2024-01-01T00:00:00Z"
+      info.endDate shouldBe "2024-01-15T00:00:00Z"
     }
 
     client.close()
