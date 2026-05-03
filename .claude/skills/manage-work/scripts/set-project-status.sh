@@ -40,8 +40,10 @@ fi
 
 STATUS_OPTION_ID="${STATUS_IDS[$STATUS]}"
 
-# Get the project item ID for this issue
-ITEM_ID=$(gh project item-list "$PROJECT_NUMBER" --owner "$OWNER" --format json --limit 100 | \
+# Get the project item ID for this issue. Use a high page size so newly-added items don't fall
+# outside the window (the project list grows unbounded over time; the previous default of 100 was
+# silently truncating recent issues and reporting them as "not found in project").
+ITEM_ID=$(gh project item-list "$PROJECT_NUMBER" --owner "$OWNER" --format json --limit 1000 | \
   jq -r --argjson num "$ISSUE_NUMBER" '.items[] | select(.content.number == $num) | .id')
 
 if [[ -z "$ITEM_ID" ]]; then
