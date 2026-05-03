@@ -18,6 +18,12 @@ Claude Code hooks automatically run these tools after editing Kotlin files:
 - `./format` runs after editing `.kt` or `.kts` files (async)
 - `./detekt` runs after editing `.kt` source files (async, skips test files)
 
+## Formatting before commit
+
+The post-edit `./format` hook runs **asynchronously**. If you `git add` and `git commit` immediately after editing a Kotlin file, the commit can capture the **unformatted** version while format finishes after — the pre-push hook (`./check`) silently re-formats and passes, but the commit on the branch is still stale and CI ktlint fails.
+
+Before committing Kotlin changes, run `./format` synchronously yourself (or wait for the async run to finish, then `git diff` to confirm a clean working tree) so the staged version is what ktlint will see in CI.
+
 # Markdown Formatting
 
 ## Tables
