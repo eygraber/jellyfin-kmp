@@ -25,6 +25,7 @@ import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.ColorAlphaType
 import org.jetbrains.skia.ColorType
 import org.jetbrains.skia.ImageInfo
+import sun.misc.Unsafe
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
@@ -34,16 +35,20 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCallback
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat
+import java.nio.Buffer
 import java.nio.ByteBuffer
 
 /**
  * Desktop (JVM) implementation of [VideoPlayerService] using vlcj.
  *
- * Renders video by hooking libvlc's callback video surface: each decoded frame is copied into a
- * single Skia [Bitmap] whose pixel storage is reused across frames via [Bitmap.installPixels],
- * then exposed to Compose through [Bitmap.asComposeImageBitmap]. Both the pixel byte array and
- * the [Bitmap] live for the duration of a stream session, so steady-state playback only allocates
- * the cheap [ImageBitmap] wrapper per frame instead of a fresh ~8 MB Skia bitmap.
+ * Renders video by hooking libvlc's callback video surface. Allocates one Skia [Bitmap] per stream
+ * session (Skia owns the native pixel memory via [Bitmap.allocPixels]) and grabs its pixel-storage
+ * address through [Bitmap.peekPixels]. Per frame, [Unsafe.copyMemory] memcpys directly from
+ * vlcj's direct [ByteBuffer] (whose native address we read from [Buffer.address] via the field's
+ * Unsafe offset) into the bitmap's pixel storage, then [Bitmap.notifyPixelsChanged] invalidates
+ * Skia's caches and [Bitmap.asComposeImageBitmap] exposes it to Compose. Steady-state playback
+ * allocates only the cheap [ImageBitmap] wrapper plus does one native-to-native memcpy — no JVM
+ * byte-array marshalling and no per-frame Skia bitmap allocation.
  *
  * Sidesteps `SwingPanel` entirely, which was hiding the controls overlay on Desktop — interop
  * content from `SwingPanel` paints above Compose's Skia surface regardless of z-order, even with
@@ -57,6 +62,10 @@ import java.nio.ByteBuffer
  * Requires a libvlc installation reachable via [NativeDiscovery]; if libvlc cannot be found we
  * fall back to an error state.
  */
+// sun.misc.Unsafe pixel-copy methods (copyMemory/objectFieldOffset/getLong) are deprecated for
+// removal in newer JDKs, but on JDK 17 they remain the only way to memcpy native→native and read
+// a DirectByteBuffer's address without requiring --add-opens JVM flags.
+@Suppress("DEPRECATION")
 @SingleIn(ScreenScope::class)
 @ContributesBinding(ScreenScope::class)
 class JvmVideoPlayerService : VideoPlayerService {
@@ -66,7 +75,9 @@ class JvmVideoPlayerService : VideoPlayerService {
   private var factory: MediaPlayerFactory? = null
   private var player: EmbeddedMediaPlayer? = null
   private var frameBitmap: Bitmap? = null
-  private var framePixels: ByteArray? = null
+  private var bitmapPixelsAddr: Long = 0L
+  private var sourceAddr: Long = 0L
+  private var pixelByteCount: Int = 0
   private var currentFrame by mutableStateOf<ImageBitmap?>(null)
 
   override fun initialize(streamUrl: String, startPositionMs: Long) {
@@ -119,7 +130,9 @@ class JvmVideoPlayerService : VideoPlayerService {
     factory = null
     frameBitmap?.close()
     frameBitmap = null
-    framePixels = null
+    bitmapPixelsAddr = 0L
+    sourceAddr = 0L
+    pixelByteCount = 0
     currentFrame = null
     _playbackState.value = PlaybackState.Idle
   }
@@ -141,9 +154,10 @@ class JvmVideoPlayerService : VideoPlayerService {
 
   private inner class ImageBufferFormatCallback : BufferFormatCallback {
     override fun getBufferFormat(sourceWidth: Int, sourceHeight: Int): BufferFormat {
-      // Allocate a Skia bitmap whose pixel storage is reused across every decoded frame. RV32 is
-      // 32-bit native-endian BGRA (the only platforms vlcj runs on for Desktop are little-endian),
-      // which matches Skia's BGRA_8888.
+      // RV32 is 32-bit native-endian BGRA (the only platforms vlcj runs on for Desktop are
+      // little-endian), which matches Skia's BGRA_8888. allocPixels lets Skia allocate the native
+      // pixel storage so we can write to it directly via Unsafe.copyMemory and avoid the per-frame
+      // JNI byte-array marshalling that installPixels(info, ByteArray, rowBytes) incurs.
       val info = ImageInfo(
         width = sourceWidth,
         height = sourceHeight,
@@ -151,21 +165,31 @@ class JvmVideoPlayerService : VideoPlayerService {
         alphaType = ColorAlphaType.PREMUL,
       )
       val rowBytes = sourceWidth * BYTES_PER_PIXEL
-      val pixels = ByteArray(rowBytes * sourceHeight)
+      val byteCount = rowBytes * sourceHeight
       val bitmap = Bitmap().apply {
-        // installPixels is the no-copy variant: the bitmap reads directly from `pixels` on every
-        // draw, so refreshing the byte array in `display` reflects in the next composition.
-        installPixels(info, pixels, rowBytes)
+        check(allocPixels(info)) { "Failed to allocate Skia bitmap pixels for ${sourceWidth}x$sourceHeight" }
       }
+      // peekPixels returns a non-owning Pixmap pointing at the bitmap's pixel storage; the addr
+      // stays valid as long as the bitmap doesn't reallocate.
+      val pixmap = bitmap.peekPixels() ?: error("Bitmap.peekPixels returned null after allocPixels")
+      val addr = pixmap.addr
+      pixmap.close()
+
       frameBitmap?.close()
       frameBitmap = bitmap
-      framePixels = pixels
+      bitmapPixelsAddr = addr
+      pixelByteCount = byteCount
+      // sourceAddr will be cached when allocatedBuffers fires (or lazily on the first display call).
+      sourceAddr = 0L
+
       return RV32BufferFormat(sourceWidth, sourceHeight)
     }
 
     override fun newFormatSize(bufferWidth: Int, bufferHeight: Int, displayWidth: Int, displayHeight: Int) = Unit
 
-    override fun allocatedBuffers(buffers: Array<ByteBuffer>) = Unit
+    override fun allocatedBuffers(buffers: Array<ByteBuffer>) {
+      sourceAddr = directBufferAddress(buffers[0])
+    }
   }
 
   private inner class ImageRenderCallback : RenderCallback {
@@ -178,14 +202,17 @@ class JvmVideoPlayerService : VideoPlayerService {
       displayWidth: Int,
       displayHeight: Int,
     ) {
-      val pixels = framePixels ?: return
       val bitmap = frameBitmap ?: return
-      val src = nativeBuffers[0]
-      src.position(0)
-      src.get(pixels)
-      // The bitmap's pixel storage is `pixels`, so it now reflects the new frame. Wrap it in a
-      // fresh ImageBitmap each frame so Compose sees a state change and recomposes; the wrapper
-      // is a thin object — no pixel copy.
+      val dst = bitmapPixelsAddr
+      val len = pixelByteCount
+      if(dst == 0L || len == 0) return
+      val src = sourceAddr.takeIf { it != 0L } ?: directBufferAddress(nativeBuffers[0]).also { sourceAddr = it }
+      // Native-to-native memcpy straight from libvlc's render buffer into the Skia bitmap's pixel
+      // storage. notifyPixelsChanged invalidates Skia's GPU/raster caches so the next draw picks
+      // up the new bytes; asComposeImageBitmap wraps the same Bitmap in a fresh thin ImageBitmap
+      // so Compose sees a state change and recomposes.
+      UNSAFE.copyMemory(src, dst, len.toLong())
+      bitmap.notifyPixelsChanged()
       currentFrame = bitmap.asComposeImageBitmap()
     }
 
@@ -260,5 +287,25 @@ class JvmVideoPlayerService : VideoPlayerService {
     private val isNativeDiscoverySuccessful: Boolean = NativeDiscovery().discover()
     private const val FULL_BUFFER_PERCENT = 100f
     private const val BYTES_PER_PIXEL = 4
+
+    // sun.misc.Unsafe lives in the jdk.unsupported module which `opens sun.misc` to all unnamed
+    // modules by default in JDK 17+, so reflective access to `theUnsafe` works without any
+    // --add-opens flag.
+    private val UNSAFE: Unsafe = run {
+      val field = Unsafe::class.java.getDeclaredField("theUnsafe")
+      field.isAccessible = true
+      field.get(null) as Unsafe
+    }
+
+    // Buffer.address is package-private and lives in java.base/java.nio. getDeclaredField is
+    // metadata-only (no module check), and Unsafe.objectFieldOffset doesn't go through
+    // setAccessible, so reading the field this way needs no --add-opens either.
+    private val bufferAddressOffset: Long =
+      UNSAFE.objectFieldOffset(Buffer::class.java.getDeclaredField("address"))
+
+    private fun directBufferAddress(buffer: ByteBuffer): Long {
+      check(buffer.isDirect) { "vlcj video frame buffer is unexpectedly non-direct" }
+      return UNSAFE.getLong(buffer, bufferAddressOffset)
+    }
   }
 }
