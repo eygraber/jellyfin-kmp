@@ -5,9 +5,12 @@ import com.eygraber.jellyfin.sdk.core.api.BaseApi
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
 import com.eygraber.jellyfin.sdk.core.model.AuthenticateByNameRequest
 import com.eygraber.jellyfin.sdk.core.model.AuthenticationResult
+import com.eygraber.jellyfin.sdk.core.model.CreateUserRequest
 import com.eygraber.jellyfin.sdk.core.model.QuickConnectResult
 import com.eygraber.jellyfin.sdk.core.model.SessionCapabilities
+import com.eygraber.jellyfin.sdk.core.model.UpdateUserPasswordRequest
 import com.eygraber.jellyfin.sdk.core.model.UserDto
+import com.eygraber.jellyfin.sdk.core.model.UserPolicy
 
 class UserApi(
   apiClient: JellyfinApiClient,
@@ -97,4 +100,83 @@ class UserApi(
     path = "QuickConnect/Authorize",
     queryParams = mapOf("code" to code),
   )
+
+  /**
+   * Lists all users on the server. Requires administrator privileges.
+   *
+   * @param isHidden Filter to hidden / non-hidden users when set.
+   * @param isDisabled Filter to disabled / enabled users when set.
+   */
+  suspend fun getUsers(
+    isHidden: Boolean? = null,
+    isDisabled: Boolean? = null,
+  ): SdkResult<List<UserDto>> = get(
+    path = "Users",
+    queryParams = mapOf(
+      "isHidden" to isHidden,
+      "isDisabled" to isDisabled,
+    ),
+  )
+
+  /**
+   * Creates a new user. Requires administrator privileges.
+   */
+  suspend fun createUser(
+    name: String,
+    password: String? = null,
+  ): SdkResult<UserDto> = post(
+    path = "Users/New",
+    body = CreateUserRequest(name = name, password = password),
+  )
+
+  /**
+   * Updates a user's profile fields. Requires administrator privileges (or
+   * the user themselves for non-admin fields).
+   *
+   * The body is a full [UserDto] - the server merges it with the existing user.
+   */
+  suspend fun updateUser(
+    userId: String,
+    user: UserDto,
+  ): SdkResult<Unit> = post<Unit, UserDto>(
+    path = "Users/$userId",
+    body = user,
+  )
+
+  /**
+   * Updates a user's permissions/policy. Requires administrator privileges.
+   */
+  suspend fun updateUserPolicy(
+    userId: String,
+    policy: UserPolicy,
+  ): SdkResult<Unit> = post<Unit, UserPolicy>(
+    path = "Users/$userId/Policy",
+    body = policy,
+  )
+
+  /**
+   * Updates a user's password.
+   *
+   * Pass [resetPassword] = true to clear the password (admin-only). Otherwise
+   * [currentPassword] is required when changing your own password.
+   */
+  suspend fun updateUserPassword(
+    userId: String,
+    newPassword: String,
+    currentPassword: String? = null,
+    resetPassword: Boolean = false,
+  ): SdkResult<Unit> = post<Unit, UpdateUserPasswordRequest>(
+    path = "Users/$userId/Password",
+    body = UpdateUserPasswordRequest(
+      currentPassword = currentPassword,
+      newPassword = newPassword,
+      resetPassword = resetPassword,
+    ),
+  )
+
+  /**
+   * Deletes a user. Requires administrator privileges.
+   */
+  suspend fun deleteUser(userId: String): SdkResult<Unit> =
+    delete(path = "Users/$userId")
 }
