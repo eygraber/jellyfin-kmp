@@ -34,12 +34,15 @@ if [[ "$DETAILS" == "true" ]]; then
           number
           title
           blockedBy(first: 10) {
-            nodes { number title }
+            nodes { number title state }
           }
         }
       }
     }
-  }' | jq '[.data.repository.issues.nodes[] | select(.blockedBy.nodes | length > 0) | {number, title, blockedBy: [.blockedBy.nodes[] | {number, title}]}]'
+  }' | jq '[.data.repository.issues.nodes[]
+    | .blockedBy.nodes |= map(select(.state == "OPEN"))
+    | select(.blockedBy.nodes | length > 0)
+    | {number, title, blockedBy: [.blockedBy.nodes[] | {number, title}]}]'
 else
   gh api graphql -f query='
   {
@@ -48,10 +51,13 @@ else
         nodes {
           number
           blockedBy(first: 5) {
-            nodes { number }
+            nodes { number state }
           }
         }
       }
     }
-  }' | jq '[.data.repository.issues.nodes[] | select(.blockedBy.nodes | length > 0) | .number]'
+  }' | jq '[.data.repository.issues.nodes[]
+    | .blockedBy.nodes |= map(select(.state == "OPEN"))
+    | select(.blockedBy.nodes | length > 0)
+    | .number]'
 fi

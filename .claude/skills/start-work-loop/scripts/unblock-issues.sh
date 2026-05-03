@@ -8,7 +8,7 @@
 #
 # Output: List of issues that were unblocked (or would be with --dry-run)
 
-set -e
+set -eo pipefail
 
 OWNER="eygraber"
 REPO="jellyfin-kmp"
@@ -35,7 +35,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Get all blocked issues with details
+# Get all open issues that have at least one OPEN blocker. Closed blockers are pre-filtered out
+# here — once a blocker closes, the issue is no longer blocked by it (whether it closed via PR
+# merge, manual close, or anything else).
 BLOCKED_ISSUES=$(gh api graphql -f query='
 {
   repository(owner: "'"$OWNER"'", name: "'"$REPO"'") {
@@ -53,33 +55,18 @@ BLOCKED_ISSUES=$(gh api graphql -f query='
       }
     }
   }
-}' | jq '[.data.repository.issues.nodes[] | select(.blockedBy.nodes | length > 0)]')
+}' | jq '[.data.repository.issues.nodes[]
+  | .blockedBy.nodes |= map(select(.state == "OPEN"))
+  | select(.blockedBy.nodes | length > 0)]')
 
-# Get issues that are In Review or Done (have PRs)
-ISSUES_WITH_PRS=$(gh api graphql -f query='
-{
-  repository(owner: "'"$OWNER"'", name: "'"$REPO"'") {
-    issues(first: 100) {
-      nodes {
-        number
-        state
-        linkedPullRequests(first: 1) {
-          nodes { number }
-        }
-      }
-    }
-  }
-}' | jq '[.data.repository.issues.nodes[] | select(.linkedPullRequests.nodes | length > 0) | .number]')
-
-# Also check project board status for In Review items
+# An open blocker counts as "resolved enough to unblock" if its PR is up — which on this project
+# is reflected by the board status sitting in In Review. (Done issues are CLOSED and were already
+# filtered out above.)
 IN_REVIEW_ITEMS=$("$START_WORK_SCRIPTS/list-project-items.sh" --status in-review 2>/dev/null | jq '[.[].number]' || echo "[]")
-DONE_ITEMS=$("$START_WORK_SCRIPTS/list-project-items.sh" --status done 2>/dev/null | jq '[.[].number]' || echo "[]")
 
-# Combine: issues with PRs OR in review/done status
-RESOLVED_ISSUES=$(echo "[$ISSUES_WITH_PRS, $IN_REVIEW_ITEMS, $DONE_ITEMS]" | jq 'flatten | unique')
+RESOLVED_ISSUES="$IN_REVIEW_ITEMS"
 
-# Find issues that can be unblocked
-# An issue can be unblocked if ALL its blockers are in RESOLVED_ISSUES
+# An issue can be unblocked if every remaining (OPEN) blocker has its PR up (In Review).
 UNBLOCKABLE=$(echo "$BLOCKED_ISSUES" | jq --argjson resolved "$RESOLVED_ISSUES" '
   [.[] | select(
     .blockedBy.nodes | all(.number as $n | $resolved | index($n))

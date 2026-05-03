@@ -34,8 +34,9 @@ done
 result=$(gh project item-list "$PROJECT_NUMBER" --owner "$OWNER" --format json --limit "$LIMIT")
 
 if [[ -n "$STATUS" ]]; then
-  # Case-insensitive match and normalize "in-progress" to "In Progress"
-  echo "$result" | jq --arg status "$STATUS" '[.items[] | select(.status | ascii_downcase == ($status | ascii_downcase | gsub("-"; " ")))]'
+  # Case-insensitive match and normalize "in-progress" to "In Progress". `(.status // "")` guards
+  # against project items whose Status field is unset — those would otherwise crash ascii_downcase.
+  echo "$result" | jq --arg status "$STATUS" '[.items[] | select((.status // "") | ascii_downcase == ($status | ascii_downcase | gsub("-"; " ")))]'
 else
   echo "$result" | jq '.items'
 fi
