@@ -50,9 +50,42 @@ data class BaseItemDto(
   @SerialName("Status") val status: String? = null,
   @SerialName("AirDays") val airDays: List<String> = emptyList(),
   @SerialName("EndDate") val endDate: String? = null,
+  /**
+   * ISO-8601 start time. For Live TV programs, this is the program's airing start.
+   */
+  @SerialName("StartDate") val startDate: String? = null,
   @SerialName("AlbumArtist") val albumArtist: String? = null,
   @SerialName("AlbumId") val albumId: String? = null,
   @SerialName("ArtistItems") val artistItems: List<NameIdPair> = emptyList(),
+  /**
+   * For Live TV programs and recordings: the ID of the channel they belong to.
+   */
+  @SerialName("ChannelId") val channelId: String? = null,
+  /**
+   * For Live TV programs and recordings: the human-readable channel name.
+   */
+  @SerialName("ChannelName") val channelName: String? = null,
+  /**
+   * For Live TV channels: the channel type (e.g. "Tv", "Radio").
+   */
+  @SerialName("ChannelType") val channelType: String? = null,
+  /**
+   * For Live TV channels: the channel number as exposed by the tuner (e.g. "5.1", "201").
+   */
+  @SerialName("ChannelNumber") val channelNumber: String? = null,
+  /**
+   * For Live TV channels: an alternate channel-number field returned by some
+   * server versions. Prefer [channelNumber] when both are present.
+   */
+  @SerialName("Number") val number: String? = null,
+  /**
+   * For Live TV recordings: the ID of the program that produced the recording.
+   */
+  @SerialName("ProgramId") val programId: String? = null,
+  /**
+   * For TV episodes (and Live TV programs that are episodes): the episode title.
+   */
+  @SerialName("EpisodeTitle") val episodeTitle: String? = null,
 )
 
 @Serializable

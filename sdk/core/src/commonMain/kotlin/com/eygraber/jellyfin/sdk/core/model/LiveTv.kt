@@ -39,3 +39,38 @@ data class LiveTvTimerInfoDto(
   @SerialName("PrePaddingSeconds") val prePaddingSeconds: Int = 0,
   @SerialName("PostPaddingSeconds") val postPaddingSeconds: Int = 0,
 )
+
+@Serializable
+data class LiveTvTimerInfoResult(
+  @SerialName("Items") val items: List<LiveTvTimerInfoDto> = emptyList(),
+  @SerialName("TotalRecordCount") val totalRecordCount: Int = 0,
+)
+
+@Serializable
+data class LiveTvSeriesTimerInfoDto(
+  @SerialName("Id") val id: String? = null,
+  @SerialName("ChannelId") val channelId: String? = null,
+  @SerialName("ChannelName") val channelName: String? = null,
+  @SerialName("Name") val name: String? = null,
+  @SerialName("Overview") val overview: String? = null,
+  @SerialName("RecordAnyChannel") val recordAnyChannel: Boolean = false,
+  @SerialName("RecordAnyTime") val recordAnyTime: Boolean = false,
+  @SerialName("RecordNewOnly") val recordNewOnly: Boolean = false,
+  @SerialName("Days") val days: List<String> = emptyList(),
+  @SerialName("KeepUpTo") val keepUpTo: Int = 0,
+  @SerialName("KeepUntil") val keepUntil: String? = null,
+  @SerialName("StartDate") val startDate: String? = null,
+  @SerialName("EndDate") val endDate: String? = null,
+)
+
+@Serializable
+data class LiveTvSeriesTimerInfoResult(
+  @SerialName("Items") val items: List<LiveTvSeriesTimerInfoDto> = emptyList(),
+  @SerialName("TotalRecordCount") val totalRecordCount: Int = 0,
+)
+
+@Serializable
+data class LiveTvGuideInfo(
+  @SerialName("StartDate") val startDate: String? = null,
+  @SerialName("EndDate") val endDate: String? = null,
+)

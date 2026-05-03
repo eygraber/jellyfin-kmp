@@ -37,6 +37,8 @@ kotlin {
       api(projects.data.auth.public)
       api(projects.data.items.impl)
       api(projects.data.items.public)
+      api(projects.data.liveTv.impl)
+      api(projects.data.liveTv.public)
       api(projects.data.playback.impl)
       api(projects.data.playback.public)
       api(projects.data.search.impl)
