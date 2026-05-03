@@ -5,6 +5,7 @@ import com.eygraber.jellyfin.sdk.core.api.BaseApi
 import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
 import com.eygraber.jellyfin.sdk.core.model.BrandingConfiguration
 import com.eygraber.jellyfin.sdk.core.model.PublicSystemInfo
+import com.eygraber.jellyfin.sdk.core.model.ServerConfigurationDto
 import com.eygraber.jellyfin.sdk.core.model.SystemInfo
 
 class SystemApi(
@@ -38,4 +39,32 @@ class SystemApi(
    */
   suspend fun getBrandingConfiguration(): SdkResult<BrandingConfiguration> =
     get(path = "Branding/Configuration")
+
+  /**
+   * Gets the server configuration. Requires administrator privileges.
+   */
+  suspend fun getConfiguration(): SdkResult<ServerConfigurationDto> =
+    get(path = "System/Configuration")
+
+  /**
+   * Updates the server configuration. Requires administrator privileges.
+   */
+  suspend fun updateConfiguration(
+    configuration: ServerConfigurationDto,
+  ): SdkResult<Unit> = post<Unit, ServerConfigurationDto>(
+    path = "System/Configuration",
+    body = configuration,
+  )
+
+  /**
+   * Restarts the server. Requires administrator privileges.
+   */
+  suspend fun restartServer(): SdkResult<Unit> =
+    post<Unit, Unit>(path = "System/Restart")
+
+  /**
+   * Shuts the server down. Requires administrator privileges.
+   */
+  suspend fun shutdownServer(): SdkResult<Unit> =
+    post<Unit, Unit>(path = "System/Shutdown")
 }

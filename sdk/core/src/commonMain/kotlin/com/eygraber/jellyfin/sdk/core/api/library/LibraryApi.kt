@@ -6,6 +6,7 @@ import com.eygraber.jellyfin.sdk.core.api.JellyfinApiClient
 import com.eygraber.jellyfin.sdk.core.model.BaseItemDto
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.sdk.core.model.ItemsResult
+import com.eygraber.jellyfin.sdk.core.model.VirtualFolderInfo
 
 class LibraryApi(
   apiClient: JellyfinApiClient,
@@ -184,6 +185,19 @@ class LibraryApi(
       append(params.joinToString("&"))
     }
   }
+
+  /**
+   * Gets the virtual folders ("libraries") configured on the server.
+   * Requires administrator privileges.
+   */
+  suspend fun getVirtualFolders(): SdkResult<List<VirtualFolderInfo>> =
+    get(path = "Library/VirtualFolders")
+
+  /**
+   * Triggers a server-wide library scan. Requires administrator privileges.
+   */
+  suspend fun refreshLibrary(): SdkResult<Unit> =
+    post<Unit, Unit>(path = "Library/Refresh")
 
   @Suppress("LongParameterList")
   private fun buildItemsQueryParams(
