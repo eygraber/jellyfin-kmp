@@ -87,6 +87,7 @@ private fun BaseItemDto.toLibraryItem(): LibraryItem? {
     childCount = childCount,
     runTimeTicks = runTimeTicks,
     indexNumber = indexNumber,
+    parentIndexNumber = parentIndexNumber,
     people = people.mapNotNull { it.toPersonItem() },
   )
 }

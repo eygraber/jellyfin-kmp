@@ -194,7 +194,7 @@ private fun MetadataRow(
     horizontalArrangement = Arrangement.spacedBy(12.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    episode.seasonEpisodeLabel?.let { label ->
+    formatSeasonEpisodeYear(episode)?.let { label ->
       Text(
         text = label,
         style = MaterialTheme.typography.bodyMedium,
@@ -210,6 +210,15 @@ private fun MetadataRow(
       )
     }
   }
+}
+
+private fun formatSeasonEpisodeYear(episode: EpisodeDetail): String? {
+  val parts = buildList {
+    episode.seasonNumber?.let { add("S$it") }
+    episode.episodeNumber?.let { add("E$it") }
+    episode.year?.let { add(it.toString()) }
+  }
+  return parts.takeIf { it.isNotEmpty() }?.joinToString(separator = " · ")
 }
 
 private fun formatRuntime(minutes: Int): String {
@@ -294,7 +303,9 @@ private fun EpisodeDetailContentPreview() {
           id = "1",
           name = "Pilot",
           seriesName = "Breaking Bad",
-          seasonEpisodeLabel = "Episode 1",
+          seasonNumber = 1,
+          episodeNumber = 1,
+          year = 2008,
           overview = "Diagnosed with terminal lung cancer, chemistry teacher Walter White " +
             "teams up with former student Jesse Pinkman to cook and sell crystal meth.",
           runtimeMinutes = 58,
