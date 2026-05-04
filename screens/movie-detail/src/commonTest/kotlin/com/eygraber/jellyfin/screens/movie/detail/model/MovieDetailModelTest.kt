@@ -314,6 +314,7 @@ class MovieDetailModelTest {
     seriesId = null,
     childCount = null,
     runTimeTicks = runTimeTicks,
+    indexNumber = null,
     people = people,
   )
 }

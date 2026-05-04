@@ -168,6 +168,7 @@ class MusicLibraryModelTest {
     seriesId = null,
     childCount = childCount,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

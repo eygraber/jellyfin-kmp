@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.library.music.ArtistItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val LOAD_MORE_THRESHOLD = 10
 
@@ -108,18 +109,20 @@ private fun ArtistCard(
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-      Box(
+      JellyfinAsyncImage(
+        model = artist.imageUrl,
+        contentDescription = artist.name,
         modifier = Modifier
           .size(artistImageSize)
           .clip(CircleShape),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = artist.name.take(1).uppercase(),
-          style = MaterialTheme.typography.titleLarge,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = artist.name.take(1).uppercase(),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.weight(1F),

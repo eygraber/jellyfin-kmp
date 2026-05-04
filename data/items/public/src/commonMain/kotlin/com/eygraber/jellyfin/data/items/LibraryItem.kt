@@ -21,6 +21,7 @@ data class LibraryItem(
   val seriesId: String?,
   val childCount: Int?,
   val runTimeTicks: Long?,
+  val indexNumber: Int?,
   val people: List<PersonItem> = emptyList(),
 )
 

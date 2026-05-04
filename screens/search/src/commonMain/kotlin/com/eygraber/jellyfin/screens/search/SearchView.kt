@@ -47,6 +47,7 @@ import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.Close
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 import com.eygraber.jellyfin.ui.icons.Search
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -235,18 +236,20 @@ private fun SearchResultCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = item.imageUrl,
+        contentDescription = item.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = item.name.take(1),
-          style = MaterialTheme.typography.headlineSmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = item.name.take(1),
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

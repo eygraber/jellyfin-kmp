@@ -214,6 +214,7 @@ class AlbumTracksModelTest {
     seriesId = seriesId,
     childCount = null,
     runTimeTicks = runTimeTicks,
+    indexNumber = null,
   )
 }
 

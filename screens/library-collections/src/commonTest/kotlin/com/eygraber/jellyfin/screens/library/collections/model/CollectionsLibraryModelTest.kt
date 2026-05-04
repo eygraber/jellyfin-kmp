@@ -124,6 +124,7 @@ class CollectionsLibraryModelTest {
     seriesId = null,
     childCount = childCount,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

@@ -2,7 +2,6 @@ package com.eygraber.jellyfin.screens.music.artist.albums.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,13 +16,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistAlbumItem
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistDetail
 import com.eygraber.jellyfin.screens.music.artist.albums.ArtistHeader
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val GRID_COLUMNS = 2
 
@@ -71,18 +70,20 @@ private fun ArtistAlbumCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = album.imageUrl,
+        contentDescription = album.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(1F),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = album.name.take(1),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = album.name.take(1),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

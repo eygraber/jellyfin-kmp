@@ -55,7 +55,7 @@ class EpisodeDetailModel(
   }
 
   private fun LibraryItem.toEpisodeDetail(): EpisodeDetail {
-    val episodeNumber = productionYear
+    val episodeNumber = indexNumber
     val seasonEpisodeLabel = episodeNumber?.let { ep ->
       "Episode $ep"
     }

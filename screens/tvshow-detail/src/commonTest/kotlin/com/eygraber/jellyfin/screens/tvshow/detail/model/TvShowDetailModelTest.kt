@@ -186,6 +186,7 @@ class TvShowDetailModelTest {
     seriesId = null,
     childCount = childCount,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

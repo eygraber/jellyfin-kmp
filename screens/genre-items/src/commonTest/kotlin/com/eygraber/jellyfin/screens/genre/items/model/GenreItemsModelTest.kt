@@ -120,6 +120,7 @@ class GenreItemsModelTest {
     seriesId = null,
     childCount = null,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

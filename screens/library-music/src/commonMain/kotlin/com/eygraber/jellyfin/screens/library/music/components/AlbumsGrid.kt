@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.library.music.AlbumItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val LOAD_MORE_THRESHOLD = 10
 
@@ -105,18 +106,20 @@ private fun AlbumCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = album.imageUrl,
+        contentDescription = album.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(1F),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = album.name.take(1),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = album.name.take(1),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

@@ -43,7 +43,7 @@ class TvShowEpisodesModelTest {
             createLibraryItem(
               id = "ep-1",
               name = "Pilot",
-              productionYear = 1,
+              indexNumber = 1,
               overview = "The first episode",
               runTimeTicks = 34_800_000_000L,
               primaryImageTag = "tag1",
@@ -167,6 +167,7 @@ class TvShowEpisodesModelTest {
     overview: String? = null,
     runTimeTicks: Long? = null,
     primaryImageTag: String? = null,
+    indexNumber: Int? = null,
   ) = LibraryItem(
     id = id,
     name = name,
@@ -182,6 +183,7 @@ class TvShowEpisodesModelTest {
     seriesId = null,
     childCount = null,
     runTimeTicks = runTimeTicks,
+    indexNumber = indexNumber,
   )
 }
 

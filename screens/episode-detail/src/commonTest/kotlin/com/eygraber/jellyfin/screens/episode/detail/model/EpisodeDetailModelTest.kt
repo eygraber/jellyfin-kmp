@@ -41,7 +41,7 @@ class EpisodeDetailModelTest {
           name = "Pilot",
           overview = "Walter White turns to crime",
           seriesName = "Breaking Bad",
-          productionYear = 1,
+          indexNumber = 1,
           runTimeTicks = 34_800_000_000L,
           primaryImageTag = "thumb-tag",
         ),
@@ -163,6 +163,7 @@ class EpisodeDetailModelTest {
     productionYear: Int? = null,
     runTimeTicks: Long? = null,
     primaryImageTag: String? = null,
+    indexNumber: Int? = null,
   ) = LibraryItem(
     id = id,
     name = name,
@@ -178,6 +179,7 @@ class EpisodeDetailModelTest {
     seriesId = null,
     childCount = null,
     runTimeTicks = runTimeTicks,
+    indexNumber = indexNumber,
   )
 }
 

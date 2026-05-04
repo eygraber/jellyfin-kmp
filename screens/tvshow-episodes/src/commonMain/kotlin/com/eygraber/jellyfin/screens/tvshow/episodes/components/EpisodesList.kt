@@ -2,7 +2,6 @@ package com.eygraber.jellyfin.screens.tvshow.episodes.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.tvshow.episodes.EpisodeItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val THUMBNAIL_ASPECT_RATIO = 16F / 9F
 
@@ -62,18 +62,20 @@ private fun EpisodeCard(
       modifier = Modifier.fillMaxWidth(),
       verticalAlignment = Alignment.Top,
     ) {
-      Box(
+      JellyfinAsyncImage(
+        model = episode.imageUrl,
+        contentDescription = episode.name,
         modifier = Modifier
           .width(episodeThumbnailWidth)
           .aspectRatio(THUMBNAIL_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = episode.episodeNumber?.toString() ?: "?",
-          style = MaterialTheme.typography.headlineSmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = episode.episodeNumber?.toString() ?: "?",
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier

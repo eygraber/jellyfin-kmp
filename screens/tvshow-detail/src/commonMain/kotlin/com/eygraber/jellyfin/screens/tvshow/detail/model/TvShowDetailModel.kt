@@ -106,7 +106,7 @@ class TvShowDetailModel(
   private fun LibraryItem.toSeasonSummary(): TvShowSeasonSummary = TvShowSeasonSummary(
     id = id,
     name = name,
-    seasonNumber = productionYear,
+    seasonNumber = indexNumber,
     episodeCount = childCount,
     imageUrl = primaryImageTag?.let { tag ->
       libraryService.getImageUrl(

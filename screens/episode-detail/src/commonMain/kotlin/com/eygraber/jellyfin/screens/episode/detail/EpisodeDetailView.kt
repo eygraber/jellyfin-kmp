@@ -1,6 +1,5 @@
 package com.eygraber.jellyfin.screens.episode.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 import com.eygraber.jellyfin.ui.icons.PlayArrow
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -170,24 +170,20 @@ private fun EpisodeContent(
 private fun ThumbnailSection(
   episode: EpisodeDetail,
 ) {
-  Box(
+  JellyfinAsyncImage(
+    model = episode.thumbnailImageUrl,
+    contentDescription = episode.name,
     modifier = Modifier
       .fillMaxWidth()
       .aspectRatio(THUMBNAIL_ASPECT_RATIO),
-  ) {
-    Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surfaceVariant),
-      contentAlignment = Alignment.Center,
-    ) {
+    fallback = {
       Text(
         text = episode.name.take(1),
         style = MaterialTheme.typography.displayLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )
-    }
-  }
+    },
+  )
 }
 
 @Composable

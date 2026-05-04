@@ -1,7 +1,5 @@
 package com.eygraber.jellyfin.screens.home.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,12 +10,12 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.home.ContinueWatchingItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 @Composable
 internal fun MediaCardWithProgress(
@@ -30,21 +28,21 @@ internal fun MediaCardWithProgress(
     modifier = modifier.width(cardWidth),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = item.imageUrl,
+        contentDescription = item.name,
         modifier = Modifier
           .fillMaxWidth()
           .height(cardImageHeight)
-          .clip(MaterialTheme.shapes.medium)
-          .background(MaterialTheme.colorScheme.surfaceVariant),
-        contentAlignment = Alignment.Center,
-      ) {
-        // Placeholder for image loading (Coil integration pending)
-        Text(
-          text = item.name.take(1).uppercase(),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+          .clip(MaterialTheme.shapes.medium),
+        fallback = {
+          Text(
+            text = item.name.take(1).uppercase(),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       LinearProgressIndicator(
         progress = { item.progressPercent },
