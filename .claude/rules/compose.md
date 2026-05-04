@@ -52,8 +52,15 @@ The legacy `value`/`onValueChange` API races with async state updates, causing t
 ❌ Bad: OutlinedTextField(value = state.query, onValueChange = { onIntent(QueryChanged(it)) })
 ✅ Good: OutlinedTextField(state = state.fields.query)
 
-Hold the `TextFieldState` in a model (e.g. `FieldsModel : ViceSource<FieldsState>`) and expose it via `ViewState`
-Observe text changes from the Compositor with `snapshotFlow { state.text.toString() }` or `TextFieldState.UpdateEffect { ... }` from `:ui:material`
+Hold the `TextFieldState` in a model (e.g. `FieldsModel : ViceSource<FieldsState>`) and create it inside `currentState()` with `rememberTextFieldState()` so the text survives config changes / process death. Never store the `TextFieldState` as a class property (a plain field, `lateinit var`, or nullable cache) — DI-scoped objects don't participate in Compose's saved-state registry, and caching a Compose-owned instance back into the model creates lifecycle-leak and ordering hazards.
+
+If the model needs to mutate the field externally (e.g. populate from a history click), expose `suspend` mutators that send through a rendezvous `Channel<TextFieldState.() -> Unit>`, drained inside `currentState()` with `LaunchedEffect(query) { for (mutate in mutations) query.mutate() }`. Prefer `mutations.send { ... }` over `trySend { ... }` — it gives natural backpressure and waits for composition rather than dropping or buffering blindly.
+
+❌ Bad: `private val state = SearchFieldsState(query = TextFieldState())` as a property — text is lost on process death
+❌ Bad: `private lateinit var queryState: TextFieldState` cached from `currentState()` — leaks Compose-owned state into the model and throws if a mutator fires before first composition
+✅ Good: `rememberTextFieldState()` inside `currentState()`, mutations routed through a `Channel<TextFieldState.() -> Unit>` drained by a `LaunchedEffect`
+
+Observe text changes from the Compositor with `TextFieldState.UpdateEffect { ... }` (or `UpdateEffectLatest { ... }` when the callback is suspending and earlier in-flight work should be cancelled on each keystroke) from `:ui:material`. Avoid inlining `LaunchedEffect { snapshotFlow { ... }.collect/collectLatest { ... } }` in compositors when one of these helpers fits.
 Mutate from `onIntent` with `setTextAndPlaceCursorAtEnd(...)` / `clearText()`; do not echo strings back through Intents
 
 For complete patterns: .docs/compose/state-management.md (the `Prefer Specialized Types` section)

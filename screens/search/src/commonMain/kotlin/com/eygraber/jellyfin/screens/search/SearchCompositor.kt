@@ -1,15 +1,13 @@
 package com.eygraber.jellyfin.screens.search
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import com.eygraber.jellyfin.screens.search.model.SearchFieldsModel
 import com.eygraber.jellyfin.screens.search.model.SearchHistoryModel
 import com.eygraber.jellyfin.screens.search.model.SearchModel
 import com.eygraber.jellyfin.screens.search.model.SearchModelError
+import com.eygraber.jellyfin.ui.material.text.UpdateEffectLatest
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
-import kotlinx.coroutines.flow.collectLatest
 
 @Inject
 class SearchCompositor(
@@ -25,11 +23,8 @@ class SearchCompositor(
     val modelState = searchModel.currentState()
     val historyState = searchHistoryModel.currentState()
 
-    LaunchedEffect(fields.query) {
-      snapshotFlow { fields.query.text.toString() }
-        .collectLatest { text ->
-          searchModel.search(text)
-        }
+    fields.query.UpdateEffectLatest { text ->
+      searchModel.search(text.toString())
     }
 
     return SearchViewState(

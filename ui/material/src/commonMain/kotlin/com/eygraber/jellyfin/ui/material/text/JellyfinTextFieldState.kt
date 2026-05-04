@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun TextFieldState.UpdateEffect(
@@ -12,6 +13,17 @@ fun TextFieldState.UpdateEffect(
 ) {
   LaunchedEffect(this, onUpdate) {
     snapshotFlow { text }.collect { name ->
+      onUpdate(name)
+    }
+  }
+}
+
+@Composable
+fun TextFieldState.UpdateEffectLatest(
+  onUpdate: suspend (CharSequence) -> Unit,
+) {
+  LaunchedEffect(this, onUpdate) {
+    snapshotFlow { text }.collectLatest { name ->
       onUpdate(name)
     }
   }
