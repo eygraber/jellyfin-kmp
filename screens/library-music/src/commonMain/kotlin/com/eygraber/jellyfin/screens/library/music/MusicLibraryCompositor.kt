@@ -3,6 +3,8 @@ package com.eygraber.jellyfin.screens.library.music
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.screens.library.music.model.MusicLibraryModel
 import com.eygraber.jellyfin.screens.library.music.model.MusicLibraryModelError
@@ -25,12 +27,20 @@ class MusicLibraryCompositor(
   private val sortMutations = Channel<LibrarySortConfig>(Channel.CONFLATED)
   @Volatile private var currentSortConfig: LibrarySortConfig = LibrarySortConfig()
 
+  // Rendezvous so SelectArtist/SelectAlbum waits for the saveable id to be committed before
+  // navigating. See MoviesLibraryCompositor for full rationale.
+  private val selectionMutations = Channel<String?>()
+
   @Composable
   override fun composite(): MusicLibraryViewState {
     var sortConfig by rememberLibrarySortConfig()
+    var lastSelectedItemId by rememberSaveable { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
       for(next in sortMutations) sortConfig = next
+    }
+    LaunchedEffect(Unit) {
+      for(next in selectionMutations) lastSelectedItemId = next
     }
 
     val modelState = musicModel.currentState()
@@ -53,6 +63,7 @@ class MusicLibraryCompositor(
         modelState.artists.isEmpty() &&
         modelState.albums.isEmpty(),
       sortConfig = sortConfig,
+      selectedItemId = lastSelectedItemId,
     )
   }
 
@@ -62,8 +73,15 @@ class MusicLibraryCompositor(
       MusicLibraryIntent.Refresh -> musicModel.loadInitial(key.libraryId, currentSortConfig)
       MusicLibraryIntent.RetryLoad -> musicModel.loadInitial(key.libraryId, currentSortConfig)
       is MusicLibraryIntent.SelectTab -> musicModel.switchTab(key.libraryId, intent.tab, currentSortConfig)
-      is MusicLibraryIntent.SelectArtist -> navigator.navigateToArtistAlbums(intent.artistId)
-      is MusicLibraryIntent.SelectAlbum -> navigator.navigateToAlbumTracks(intent.albumId)
+      is MusicLibraryIntent.SelectArtist -> {
+        // Send-then-navigate so the saveable id is committed before composition disposes.
+        selectionMutations.send(intent.artistId)
+        navigator.navigateToArtistAlbums(intent.artistId)
+      }
+      is MusicLibraryIntent.SelectAlbum -> {
+        selectionMutations.send(intent.albumId)
+        navigator.navigateToAlbumTracks(intent.albumId)
+      }
 
       is MusicLibraryIntent.ChangeSortOption ->
         sortMutations.send(LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder))

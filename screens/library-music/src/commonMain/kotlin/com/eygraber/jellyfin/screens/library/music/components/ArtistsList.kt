@@ -39,6 +39,7 @@ internal fun ArtistsList(
   artists: List<ArtistItem>,
   isLoadingMore: Boolean,
   hasMore: Boolean,
+  selectedItemId: String?,
   onArtistClick: (artistId: String) -> Unit,
   onLoadMore: () -> Unit,
   modifier: Modifier = Modifier,
@@ -58,6 +59,17 @@ internal fun ArtistsList(
   LaunchedEffect(shouldLoadMore) {
     if(shouldLoadMore) {
       currentOnLoadMore()
+    }
+  }
+
+  LaunchedEffect(artists, selectedItemId) {
+    if(selectedItemId != null &&
+      artists.isNotEmpty() &&
+      listState.firstVisibleItemIndex == 0 &&
+      listState.firstVisibleItemScrollOffset == 0
+    ) {
+      val index = artists.indexOfFirst { it.id == selectedItemId }
+      if(index >= 0) listState.scrollToItem(index)
     }
   }
 

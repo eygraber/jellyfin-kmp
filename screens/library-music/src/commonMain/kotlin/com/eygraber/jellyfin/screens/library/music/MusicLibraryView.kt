@@ -97,6 +97,7 @@ internal fun MusicLibraryView(
               artists = state.artists,
               isLoadingMore = state.isLoadingMore,
               hasMore = state.hasMore,
+              selectedItemId = state.selectedItemId,
               onArtistClick = { artistId ->
                 onIntent(MusicLibraryIntent.SelectArtist(artistId))
               },
@@ -106,6 +107,7 @@ internal fun MusicLibraryView(
               albums = state.albums,
               isLoadingMore = state.isLoadingMore,
               hasMore = state.hasMore,
+              selectedItemId = state.selectedItemId,
               onAlbumClick = { albumId ->
                 onIntent(MusicLibraryIntent.SelectAlbum(albumId))
               },

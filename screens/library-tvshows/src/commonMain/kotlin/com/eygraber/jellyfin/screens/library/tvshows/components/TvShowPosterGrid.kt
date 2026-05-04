@@ -40,6 +40,7 @@ internal fun TvShowPosterGrid(
   items: List<TvShowItem>,
   isLoadingMore: Boolean,
   hasMore: Boolean,
+  selectedItemId: String?,
   onShowClick: (showId: String) -> Unit,
   onLoadMore: () -> Unit,
   modifier: Modifier = Modifier,
@@ -59,6 +60,17 @@ internal fun TvShowPosterGrid(
   LaunchedEffect(shouldLoadMore) {
     if(shouldLoadMore) {
       currentOnLoadMore()
+    }
+  }
+
+  LaunchedEffect(items, selectedItemId) {
+    if(selectedItemId != null &&
+      items.isNotEmpty() &&
+      gridState.firstVisibleItemIndex == 0 &&
+      gridState.firstVisibleItemScrollOffset == 0
+    ) {
+      val index = items.indexOfFirst { it.id == selectedItemId }
+      if(index >= 0) gridState.scrollToItem(index)
     }
   }
 

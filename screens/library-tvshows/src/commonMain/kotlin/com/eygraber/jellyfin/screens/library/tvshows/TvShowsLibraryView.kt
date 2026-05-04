@@ -118,6 +118,7 @@ internal fun TvShowsLibraryView(
               items = state.items,
               isLoadingMore = state.isLoadingMore,
               hasMore = state.hasMore,
+              selectedItemId = state.selectedItemId,
               onShowClick = { showId -> onIntent(TvShowsLibraryIntent.SelectShow(showId)) },
               onLoadMore = { onIntent(TvShowsLibraryIntent.LoadMore) },
             )

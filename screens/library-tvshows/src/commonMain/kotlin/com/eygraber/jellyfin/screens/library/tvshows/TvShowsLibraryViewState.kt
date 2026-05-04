@@ -19,6 +19,7 @@ data class TvShowsLibraryViewState(
   val availableGenres: List<String> = emptyList(),
   val availableYears: List<Int> = emptyList(),
   val isFilterSheetVisible: Boolean = false,
+  val selectedItemId: String? = null,
 ) {
   companion object {
     val Loading = TvShowsLibraryViewState(isLoading = true)

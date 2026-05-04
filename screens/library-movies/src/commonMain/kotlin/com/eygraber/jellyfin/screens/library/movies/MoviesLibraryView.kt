@@ -118,6 +118,7 @@ internal fun MoviesLibraryView(
               items = state.items,
               isLoadingMore = state.isLoadingMore,
               hasMore = state.hasMore,
+              selectedItemId = state.selectedItemId,
               onMovieClick = { movieId -> onIntent(MoviesLibraryIntent.SelectMovie(movieId)) },
               onLoadMore = { onIntent(MoviesLibraryIntent.LoadMore) },
             )

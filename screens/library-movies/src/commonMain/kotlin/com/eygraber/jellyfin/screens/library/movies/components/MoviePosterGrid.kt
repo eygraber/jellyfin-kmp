@@ -43,6 +43,7 @@ internal fun MoviePosterGrid(
   items: List<MovieItem>,
   isLoadingMore: Boolean,
   hasMore: Boolean,
+  selectedItemId: String?,
   onMovieClick: (movieId: String) -> Unit,
   onLoadMore: () -> Unit,
   modifier: Modifier = Modifier,
@@ -62,6 +63,20 @@ internal fun MoviePosterGrid(
   LaunchedEffect(shouldLoadMore) {
     if(shouldLoadMore) {
       currentOnLoadMore()
+    }
+  }
+
+  // Best-effort scroll-restore: when the screen is recomposed with a remembered last-selected id,
+  // jump to that item once it lands in the loaded set. Skip if the user has already scrolled away
+  // (avoids snapping back when loadMore appends pages).
+  LaunchedEffect(items, selectedItemId) {
+    if(selectedItemId != null &&
+      items.isNotEmpty() &&
+      gridState.firstVisibleItemIndex == 0 &&
+      gridState.firstVisibleItemScrollOffset == 0
+    ) {
+      val index = items.indexOfFirst { it.id == selectedItemId }
+      if(index >= 0) gridState.scrollToItem(index)
     }
   }
 
