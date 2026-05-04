@@ -37,6 +37,8 @@ kotlin {
       implementation(projects.di)
 
       api(libs.kotlinx.coroutines.core)
+
+      implementation(libs.sqldelight.androidx.driver)
     }
 
     commonTest.dependencies {
@@ -48,26 +50,23 @@ kotlin {
 
     jvmTest.dependencies {
       implementation(libs.androidx.sqliteBundled)
-      implementation(libs.sqldelight.androidx.driver)
     }
 
     androidMain.dependencies {
       implementation(libs.androidx.sqliteBundled)
-      implementation(libs.sqldelight.androidx.driver)
     }
 
     iosMain.dependencies {
       implementation(libs.androidx.sqliteBundled)
-      implementation(libs.sqldelight.androidx.driver)
     }
 
     jvmMain.dependencies {
       implementation(libs.androidx.sqliteBundled)
-      implementation(libs.sqldelight.androidx.driver)
     }
 
-    // WasmJs database support requires SQLDelight's async web worker driver
-    // which needs generateAsync=true. This will be implemented in a future issue.
-    // For now, WasmJs uses a stub driver.
+    webMain.dependencies {
+      implementation(libs.androidx.sqliteWeb)
+      implementation(libs.sqldelight.androidx.driverOpfs)
+    }
   }
 }
