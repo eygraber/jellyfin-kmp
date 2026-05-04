@@ -1,12 +1,14 @@
 package com.eygraber.jellyfin.domain.session.impl
 
 import com.eygraber.jellyfin.common.JellyfinResult
+import com.eygraber.jellyfin.common.errorDetailOrNull
 import com.eygraber.jellyfin.common.isSuccess
 import com.eygraber.jellyfin.common.successOrNull
 import com.eygraber.jellyfin.data.auth.AuthRepository
 import com.eygraber.jellyfin.data.server.ServerRepository
 import com.eygraber.jellyfin.domain.session.SessionManager
 import com.eygraber.jellyfin.domain.session.SessionState
+import com.eygraber.jellyfin.sdk.core.JellyfinSdkError
 import com.eygraber.jellyfin.services.logging.JellyfinLogger
 import com.eygraber.jellyfin.services.sdk.JellyfinAuthService
 import com.eygraber.jellyfin.services.sdk.JellyfinSessionManager
@@ -90,28 +92,59 @@ internal class DefaultSessionManager(
       return state
     }
 
-    // Token is invalid/expired
-    logger.warn(tag = TAG, message = "Session token invalid for user: ${session.username}")
-    sdkSessionManager.clearAuthentication()
-    val state = SessionState.SessionExpired(session = session)
+    // The token check failed. Only treat unambiguous authentication failures (HTTP 401 or
+    // an explicit Authentication error from the SDK) as expiry — transient network errors,
+    // 5xx responses, etc. should leave the user authenticated so they aren't bounced to
+    // login every time the server is briefly unreachable.
+    if(userResult.isAuthenticationFailure()) {
+      logger.warn(tag = TAG, message = "Session token rejected by server for user: ${session.username}")
+      sdkSessionManager.clearAuthentication()
+      val state = SessionState.SessionExpired(session = session)
+      _sessionState.value = state
+      return state
+    }
+
+    logger.warn(
+      tag = TAG,
+      message = "Session validation could not reach server; keeping cached session for user: ${session.username}",
+    )
+    val state = SessionState.Authenticated(session = session)
     _sessionState.value = state
     return state
   }
 
+  @Suppress("ReturnCount")
   override suspend fun validateSession(): Boolean {
     val current = _sessionState.value
     if(current !is SessionState.Authenticated) {
       return false
     }
 
-    val isValid = authService.getCurrentUser().isSuccess()
-    if(!isValid) {
-      logger.warn(tag = TAG, message = "Session validation failed")
-      sdkSessionManager.clearAuthentication()
-      _sessionState.value = SessionState.SessionExpired(session = current.session)
+    val result = authService.getCurrentUser()
+    if(result.isSuccess()) {
+      return true
     }
 
-    return isValid
+    if(result.isAuthenticationFailure()) {
+      logger.warn(tag = TAG, message = "Session validation failed: token rejected")
+      sdkSessionManager.clearAuthentication()
+      _sessionState.value = SessionState.SessionExpired(session = current.session)
+      return false
+    }
+
+    // Transient failure (network, 5xx, etc.) — keep the session authenticated and let the
+    // caller surface whatever load error they got from their own API call.
+    logger.warn(tag = TAG, message = "Session validation could not reach server; keeping session")
+    return true
+  }
+
+  private fun JellyfinResult<*>.isAuthenticationFailure(): Boolean {
+    if(this !is JellyfinResult.Error) return false
+    return when(val detail = errorDetailOrNull) {
+      is JellyfinSdkError.Authentication -> true
+      is JellyfinSdkError.Http -> detail.statusCode == HTTP_UNAUTHORIZED
+      else -> false
+    }
   }
 
   override suspend fun onLoginSuccess(
@@ -155,5 +188,6 @@ internal class DefaultSessionManager(
 
   companion object {
     private const val TAG = "SessionManager"
+    private const val HTTP_UNAUTHORIZED = 401
   }
 }

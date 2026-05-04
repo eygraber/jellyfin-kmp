@@ -10,6 +10,7 @@ import com.eygraber.jellyfin.data.auth.UserSessionEntity
 import com.eygraber.jellyfin.data.server.ServerEntity
 import com.eygraber.jellyfin.data.server.ServerRepository
 import com.eygraber.jellyfin.domain.session.SessionState
+import com.eygraber.jellyfin.sdk.core.JellyfinSdkError
 import com.eygraber.jellyfin.sdk.core.ServerInfo
 import com.eygraber.jellyfin.sdk.core.model.AuthenticationResult
 import com.eygraber.jellyfin.sdk.core.model.UserDto
@@ -105,16 +106,40 @@ class DefaultSessionManagerTest {
     runTest {
       fakeAuthRepository.activeSession = testSession
       fakeServerRepository.servers["server-1"] = testServer
-      fakeAuthService.currentUserResult = JellyfinResult.Error(
-        message = "Unauthorized",
-        isEphemeral = false,
-      )
+      fakeAuthService.currentUserResult = unauthorizedError()
 
       val result = sessionManager.restoreSession()
 
       result.shouldBeInstanceOf<SessionState.SessionExpired>()
       result.session.userId shouldBe "user-1"
       sessionManager.sessionState.value.shouldBeInstanceOf<SessionState.SessionExpired>()
+    }
+  }
+
+  @Test
+  fun restore_session_keeps_authenticated_on_transient_failure() {
+    runTest {
+      fakeAuthRepository.activeSession = testSession
+      fakeServerRepository.servers["server-1"] = testServer
+      fakeAuthService.currentUserResult = networkError()
+
+      val result = sessionManager.restoreSession()
+
+      result.shouldBeInstanceOf<SessionState.Authenticated>()
+      sessionManager.sessionState.value.shouldBeInstanceOf<SessionState.Authenticated>()
+    }
+  }
+
+  @Test
+  fun restore_session_keeps_authenticated_on_5xx_error() {
+    runTest {
+      fakeAuthRepository.activeSession = testSession
+      fakeServerRepository.servers["server-1"] = testServer
+      fakeAuthService.currentUserResult = httpError(statusCode = 503)
+
+      val result = sessionManager.restoreSession()
+
+      result.shouldBeInstanceOf<SessionState.Authenticated>()
     }
   }
 
@@ -176,15 +201,31 @@ class DefaultSessionManagerTest {
       )
       sessionManager.restoreSession()
 
-      // Then make validate fail
-      fakeAuthService.currentUserResult = JellyfinResult.Error(
-        message = "Token expired",
-        isEphemeral = false,
-      )
+      // Then make validate fail with a true 401
+      fakeAuthService.currentUserResult = unauthorizedError()
       val isValid = sessionManager.validateSession()
 
       isValid shouldBe false
       sessionManager.sessionState.value.shouldBeInstanceOf<SessionState.SessionExpired>()
+    }
+  }
+
+  @Test
+  fun validate_session_stays_authenticated_on_transient_failure() {
+    runTest {
+      fakeAuthRepository.activeSession = testSession
+      fakeServerRepository.servers["server-1"] = testServer
+
+      fakeAuthService.currentUserResult = JellyfinResult.Success(
+        UserDto(id = "user-1", name = "testuser"),
+      )
+      sessionManager.restoreSession()
+
+      fakeAuthService.currentUserResult = networkError()
+      val isValid = sessionManager.validateSession()
+
+      isValid shouldBe true
+      sessionManager.sessionState.value.shouldBeInstanceOf<SessionState.Authenticated>()
     }
   }
 
@@ -221,6 +262,24 @@ class DefaultSessionManagerTest {
       sessionManager.sessionState.value.shouldBeInstanceOf<SessionState.Authenticated>()
     }
   }
+
+  private fun unauthorizedError(): JellyfinResult<UserDto> = JellyfinResult.Error.Detailed(
+    details = JellyfinSdkError.Http(statusCode = 401, message = "Unauthorized"),
+    message = "Unauthorized",
+    isEphemeral = false,
+  )
+
+  private fun networkError(): JellyfinResult<UserDto> = JellyfinResult.Error.Detailed(
+    details = JellyfinSdkError.Network(cause = RuntimeException("connection failed")),
+    message = "connection failed",
+    isEphemeral = true,
+  )
+
+  private fun httpError(statusCode: Int): JellyfinResult<UserDto> = JellyfinResult.Error.Detailed(
+    details = JellyfinSdkError.Http(statusCode = statusCode, message = "Server error"),
+    message = "Server error",
+    isEphemeral = statusCode in 500..599,
+  )
 
   @Test
   fun session_state_flow_emits_transitions() {
