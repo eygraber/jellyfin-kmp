@@ -4,7 +4,7 @@ Run Android lint on app module for performance: ./gradlew :app:lintRelease
 Use Detekt for static analysis (both with and without type resolution)
 Never modify detekt.yml files without permission
 detekt.yml files can be read to provide context on why a violation may be occurring
-Use Dependency Analysis Plugin to verify correct dependency configurations
+Do not run DAGP tasks (`buildHealth`, `projectHealth`) — they don't currently work with KMP modules in this project. Skip until validated with KMP.
 Use Konsist tests to enforce architectural rules
 Format violations should be fixed automatically with ./format script
 Detekt runs in two modes: no type resolution and with type resolution
