@@ -4,13 +4,19 @@ import android.content.Context
 import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.PlayerSurface
@@ -46,6 +52,11 @@ class AndroidVideoPlayerService(
   override val playbackState: StateFlow<PlaybackState> = _playbackState.asStateFlow()
 
   private var player: ExoPlayer? = null
+
+  // Compose-observable so VideoSurface recomposes with the right aspectRatio modifier as soon as
+  // ExoPlayer reports the video's intrinsic size. Without this, PlayerSurface stretches to fill
+  // whatever bounds it's given (visibly wrong in landscape).
+  private var videoSize: VideoSize by mutableStateOf(VideoSize.UNKNOWN)
 
   private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
   private var positionPollJob: Job? = null
@@ -89,6 +100,7 @@ class AndroidVideoPlayerService(
     positionPollJob = null
     player?.release()
     player = null
+    videoSize = VideoSize.UNKNOWN
     _playbackState.value = PlaybackState.Idle
   }
 
@@ -116,14 +128,31 @@ class AndroidVideoPlayerService(
   @Composable
   override fun VideoSurface(modifier: Modifier) {
     val currentPlayer = player
-    if(currentPlayer != null) {
+    if(currentPlayer == null) {
+      Box(modifier = modifier.fillMaxSize().background(Color.Black))
+      return
+    }
+
+    // Use the source's display aspect (intrinsic width × pixel-aspect-ratio ÷ height) so anamorphic
+    // sources (e.g. 720x480 stored anamorphically as 16:9) render correctly. Until ExoPlayer reports
+    // the video size, fall back to fillMaxSize — the placeholder surface won't be visible long.
+    val aspect = videoSize
+      .takeIf { it.width > 0 && it.height > 0 }
+      ?.let { it.width * it.pixelWidthHeightRatio / it.height }
+
+    Box(
+      modifier = modifier.fillMaxSize().background(Color.Black),
+      contentAlignment = Alignment.Center,
+    ) {
       PlayerSurface(
         player = currentPlayer,
-        modifier = modifier,
+        modifier = if(aspect != null) {
+          Modifier.fillMaxSize().aspectRatio(aspect)
+        }
+        else {
+          Modifier.fillMaxSize()
+        },
       )
-    }
-    else {
-      Box(modifier = modifier.fillMaxSize().background(Color.Black))
     }
   }
 
@@ -144,6 +173,10 @@ class AndroidVideoPlayerService(
       else {
         stopPositionPolling()
       }
+    }
+
+    override fun onVideoSizeChanged(newVideoSize: VideoSize) {
+      videoSize = newVideoSize
     }
 
     override fun onPlayerError(error: PlaybackException) {
