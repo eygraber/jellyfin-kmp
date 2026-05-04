@@ -14,7 +14,6 @@ Run snapshot tests: ./gradlew verifyPaparazziDebug
 Format code: ./format
 Run detekt: ./detekt
 Run Android lint: ./gradlew :app:lintRelease
-Check dependency usage: ./gradlew buildHealth
 Check licenses: ./gradlew licenseeAndroidRelease
 Run full checks: ./check
 If Compose Resources are used in a module, Android resources needs to be enabled (see .claude/rules/examples/android-resources.gradle.kts for an example)

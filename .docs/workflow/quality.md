@@ -69,13 +69,11 @@ Tests in `:konsist` module enforce patterns like:
 
 ## Dependency Analysis
 
-[DAGP](https://github.com/autonomousapps/dependency-analysis-gradle-plugin) checks:
+[DAGP](https://github.com/autonomousapps/dependency-analysis-gradle-plugin) is configured but its tasks
+(`buildHealth`, `projectHealth`) do not currently work with this project's KMP modules. Do not run them
+until they are validated against KMP.
 
-```bash
-./gradlew buildHealth
-```
-
-Verifies:
+When working, DAGP verifies:
 - Correct configurations (`implementation` vs `api`)
 - No unused dependencies
 - No transitive API leaks

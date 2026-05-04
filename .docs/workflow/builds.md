@@ -59,8 +59,8 @@ Gradle commands for Jellyfin.
 # Konsist
 ./gradlew :konsist:test
 
-# Dependency analysis
-./gradlew buildHealth
+# Dependency analysis (DAGP) — currently broken on KMP modules; do not run until validated.
+# ./gradlew buildHealth
 
 # All checks
 ./check

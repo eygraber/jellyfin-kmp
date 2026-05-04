@@ -30,7 +30,6 @@ Runs: formatting, detekt, lint, unit tests, screenshot tests, konsist.
 | Module Tests      | `./gradlew :module:testDebugUnitTest` | Single module                      |
 | Screenshots       | `./gradlew verifyPaparazziDebug`      | Screenshot tests                   |
 | Konsist           | `./gradlew :konsist:test`             | Structural and architectural tests |
-| Build Health      | `./gradlew buildHealth`               | Dependency analysis                |
 
 #### Formatting
 
