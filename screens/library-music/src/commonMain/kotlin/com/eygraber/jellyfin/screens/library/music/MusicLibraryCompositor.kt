@@ -11,6 +11,7 @@ import com.eygraber.jellyfin.ui.library.controls.rememberLibrarySortConfig
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.channels.Channel
+import kotlin.concurrent.Volatile
 
 @Inject
 class MusicLibraryCompositor(
