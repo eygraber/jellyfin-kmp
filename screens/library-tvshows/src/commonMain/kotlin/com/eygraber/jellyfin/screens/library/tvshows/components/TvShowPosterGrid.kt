@@ -33,6 +33,7 @@ import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val POSTER_ASPECT_RATIO = 2F / 3F
 private const val LOAD_MORE_THRESHOLD = 10
+private const val TITLE_LINES = 2
 
 @Composable
 internal fun TvShowPosterGrid(
@@ -128,26 +129,26 @@ private fun TvShowPosterCard(
         Text(
           text = show.name,
           style = MaterialTheme.typography.bodySmall,
-          maxLines = 2,
+          minLines = TITLE_LINES,
+          maxLines = TITLE_LINES,
           overflow = TextOverflow.Ellipsis,
         )
 
-        val yearText = show.productionYear?.toString().orEmpty()
-        if(yearText.isNotEmpty()) {
-          Text(
-            text = yearText,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        }
+        // Reserve a fixed line for the year so cards stay the same height regardless of metadata.
+        Text(
+          text = show.productionYear?.toString() ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+        )
 
-        show.seasonCount?.let { count ->
-          Text(
-            text = "$count season${if(count != 1) "s" else ""}",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary,
-          )
-        }
+        // Reserve a fixed line for the season count so cards stay the same height regardless of metadata.
+        Text(
+          text = show.seasonCount?.let { count -> "$count season${if(count != 1) "s" else ""}" } ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.primary,
+          maxLines = 1,
+        )
       }
     }
   }

@@ -100,13 +100,14 @@ private fun ArtistAlbumCard(
           album.trackCount?.let { "$it tracks" },
         ).joinToString(" \u00B7 ")
 
-        if(details.isNotEmpty()) {
-          Text(
-            text = details,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        }
+        // Reserve a fixed line for the metadata so cards stay the same height regardless of content.
+        Text(
+          text = details.ifEmpty { " " },
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
       }
     }
   }

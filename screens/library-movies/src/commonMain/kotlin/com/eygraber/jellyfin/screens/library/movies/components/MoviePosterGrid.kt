@@ -36,6 +36,7 @@ import kotlin.math.roundToInt
 private const val POSTER_ASPECT_RATIO = 2F / 3F
 private const val LOAD_MORE_THRESHOLD = 10
 private const val RATING_DECIMAL_FACTOR = 10
+private const val TITLE_LINES = 2
 
 @Composable
 internal fun MoviePosterGrid(
@@ -131,28 +132,28 @@ private fun MoviePosterCard(
         Text(
           text = movie.name,
           style = MaterialTheme.typography.bodySmall,
-          maxLines = 2,
+          minLines = TITLE_LINES,
+          maxLines = TITLE_LINES,
           overflow = TextOverflow.Ellipsis,
         )
 
-        val yearText = movie.productionYear?.toString().orEmpty()
-        if(yearText.isNotEmpty()) {
-          Text(
-            text = yearText,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        }
+        // Reserve a fixed line for the year so cards stay the same height regardless of metadata.
+        Text(
+          text = movie.productionYear?.toString() ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+        )
 
-        movie.communityRating?.let { rating ->
-          Text(
-            text = rating.formatRating(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.End,
-            modifier = Modifier.fillMaxWidth(),
-          )
-        }
+        // Reserve a fixed line for the rating so cards stay the same height regardless of metadata.
+        Text(
+          text = movie.communityRating?.formatRating() ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.primary,
+          textAlign = TextAlign.End,
+          maxLines = 1,
+          modifier = Modifier.fillMaxWidth(),
+        )
       }
     }
   }
