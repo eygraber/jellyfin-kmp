@@ -18,6 +18,11 @@ data class VideoPlayerModelState(
   val playbackState: PlaybackState = PlaybackState.Idle,
   val isLoading: Boolean = true,
   val isControlsVisible: Boolean = true,
+  /**
+   * Increments whenever the user interacts with the controls overlay or the overlay is
+   * (re)shown. The compositor uses this as a key to restart its auto-dismiss timer.
+   */
+  val controlsInteractionEpoch: Int = 0,
   val error: VideoPlayerModelError? = null,
 )
 
@@ -85,18 +90,41 @@ class VideoPlayerModel(
 
   fun play() {
     playerService.play()
+    bumpControlsInteraction()
   }
 
   fun pause() {
     playerService.pause()
+    bumpControlsInteraction()
   }
 
   fun seekTo(positionMs: Long) {
     playerService.seekTo(positionMs)
+    bumpControlsInteraction()
   }
 
   fun toggleControls() {
-    state = state.copy(isControlsVisible = !state.isControlsVisible)
+    state = state.copy(
+      isControlsVisible = !state.isControlsVisible,
+      controlsInteractionEpoch = state.controlsInteractionEpoch + 1,
+    )
+  }
+
+  /**
+   * Hides the controls overlay. Used by the compositor's auto-dismiss timer.
+   */
+  fun hideControls() {
+    if(state.isControlsVisible) {
+      state = state.copy(isControlsVisible = false)
+    }
+  }
+
+  /**
+   * Resets the auto-dismiss timer without changing visibility. Called whenever the user
+   * interacts with the controls.
+   */
+  fun bumpControlsInteraction() {
+    state = state.copy(controlsInteractionEpoch = state.controlsInteractionEpoch + 1)
   }
 
   /**

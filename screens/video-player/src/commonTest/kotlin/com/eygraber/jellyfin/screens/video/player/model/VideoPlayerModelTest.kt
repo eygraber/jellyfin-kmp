@@ -132,6 +132,58 @@ class VideoPlayerModelTest {
   }
 
   @Test
+  fun toggle_controls_bumps_interaction_epoch() {
+    val before = model.stateForTest.controlsInteractionEpoch
+
+    model.toggleControls()
+
+    model.stateForTest.controlsInteractionEpoch shouldBe before + 1
+  }
+
+  @Test
+  fun hide_controls_hides_overlay_without_bumping_epoch() {
+    model.stateForTest.isControlsVisible shouldBe true
+    val before = model.stateForTest.controlsInteractionEpoch
+
+    model.hideControls()
+
+    model.stateForTest.isControlsVisible shouldBe false
+    model.stateForTest.controlsInteractionEpoch shouldBe before
+  }
+
+  @Test
+  fun hide_controls_when_already_hidden_is_a_no_op() {
+    model.toggleControls()
+    model.stateForTest.isControlsVisible shouldBe false
+    val before = model.stateForTest.controlsInteractionEpoch
+
+    model.hideControls()
+
+    model.stateForTest.isControlsVisible shouldBe false
+    model.stateForTest.controlsInteractionEpoch shouldBe before
+  }
+
+  @Test
+  fun play_pause_seek_bump_interaction_epoch() {
+    val start = model.stateForTest.controlsInteractionEpoch
+
+    model.play()
+    model.pause()
+    model.seekTo(1_000L)
+
+    model.stateForTest.controlsInteractionEpoch shouldBe start + 3
+  }
+
+  @Test
+  fun bump_controls_interaction_increments_epoch() {
+    val before = model.stateForTest.controlsInteractionEpoch
+
+    model.bumpControlsInteraction()
+
+    model.stateForTest.controlsInteractionEpoch shouldBe before + 1
+  }
+
+  @Test
   fun stop_reports_stopped_and_releases_player() {
     runTest {
       fakeRepository.getPlaybackSessionResult = JellyfinResult.Success(createSession())
