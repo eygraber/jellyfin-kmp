@@ -131,7 +131,9 @@ private fun HomeContent(
 
     ContinueWatchingSection(
       state = state.continueWatchingState,
-      onItemClick = { itemId -> onIntent(HomeIntent.ContinueWatchingItemClicked(itemId)) },
+      onItemClick = { itemId, itemType ->
+        onIntent(HomeIntent.ContinueWatchingItemClicked(itemId = itemId, itemType = itemType))
+      },
     )
 
     NextUpSection(
@@ -148,7 +150,9 @@ private fun HomeContent(
 
     RecentlyAddedHomeSection(
       state = state.recentlyAddedState,
-      onItemClick = { itemId -> onIntent(HomeIntent.RecentlyAddedItemClicked(itemId)) },
+      onItemClick = { itemId, itemType ->
+        onIntent(HomeIntent.RecentlyAddedItemClicked(itemId = itemId, itemType = itemType))
+      },
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -158,7 +162,7 @@ private fun HomeContent(
 @Composable
 private fun ContinueWatchingSection(
   state: ContinueWatchingState,
-  onItemClick: (itemId: String) -> Unit,
+  onItemClick: (itemId: String, itemType: String) -> Unit,
 ) {
   when(state) {
     is ContinueWatchingState.Loading -> ContinueWatchingLoading()
@@ -199,7 +203,7 @@ private fun NextUpSection(
 @Composable
 private fun RecentlyAddedHomeSection(
   state: RecentlyAddedState,
-  onItemClick: (itemId: String) -> Unit,
+  onItemClick: (itemId: String, itemType: String) -> Unit,
 ) {
   when(state) {
     is RecentlyAddedState.Loading -> Unit

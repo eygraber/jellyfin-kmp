@@ -74,8 +74,13 @@ internal object JellyfinNavigators {
     backStack: NavBackStack<NavKey>,
   ) = HomeNavigator(
     onNavigateBack = { backStack.removeLastOrNull() },
-    onNavigateToItemDetail = { itemId ->
-      backStack.add(JellyfinNavKeys.ComingSoon("Item Detail ($itemId)"))
+    onNavigateToItemDetail = { itemId, itemType ->
+      when(itemType) {
+        "Movie" -> backStack.add(MovieDetailKey(movieId = itemId))
+        "Series" -> backStack.add(TvShowDetailKey(seriesId = itemId))
+        "Episode" -> backStack.add(EpisodeDetailKey(episodeId = itemId))
+        else -> backStack.add(JellyfinNavKeys.ComingSoon("$itemType Detail ($itemId)"))
+      }
     },
     onNavigateToLibrary = { libraryId, collectionType ->
       when(collectionType) {

@@ -25,7 +25,7 @@ import com.eygraber.jellyfin.screens.home.RecentlyAddedItem
 @Composable
 internal fun RecentlyAddedSection(
   items: List<RecentlyAddedItem>,
-  onItemClick: (itemId: String) -> Unit,
+  onItemClick: (itemId: String, itemType: String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(modifier = modifier) {
@@ -47,7 +47,7 @@ internal fun RecentlyAddedSection(
       ) { item ->
         RecentlyAddedCard(
           item = item,
-          onClick = { onItemClick(item.id) },
+          onClick = { onItemClick(item.id, item.type) },
         )
       }
     }

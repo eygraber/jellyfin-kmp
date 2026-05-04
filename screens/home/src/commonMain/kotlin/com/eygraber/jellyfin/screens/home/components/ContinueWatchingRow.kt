@@ -18,7 +18,7 @@ import com.eygraber.jellyfin.screens.home.ContinueWatchingItem
 @Composable
 internal fun ContinueWatchingRow(
   items: List<ContinueWatchingItem>,
-  onItemClick: (itemId: String) -> Unit,
+  onItemClick: (itemId: String, itemType: String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(modifier = modifier) {
@@ -40,7 +40,7 @@ internal fun ContinueWatchingRow(
       ) { item ->
         MediaCardWithProgress(
           item = item,
-          onClick = { onItemClick(item.id) },
+          onClick = { onItemClick(item.id, item.type) },
         )
       }
     }

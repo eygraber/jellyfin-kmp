@@ -58,9 +58,18 @@ class HomeCompositor(
       HomeIntent.RetryLoad -> retryLoad()
       HomeIntent.SearchClicked -> navigator.navigateToSearch()
       HomeIntent.SettingsClicked -> navigator.navigateToSettings()
-      is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(intent.itemId)
-      is HomeIntent.NextUpItemClicked -> navigator.navigateToItemDetail(intent.itemId)
-      is HomeIntent.RecentlyAddedItemClicked -> navigator.navigateToItemDetail(intent.itemId)
+      is HomeIntent.ContinueWatchingItemClicked -> navigator.navigateToItemDetail(
+        itemId = intent.itemId,
+        itemType = intent.itemType,
+      )
+      is HomeIntent.NextUpItemClicked -> navigator.navigateToItemDetail(
+        itemId = intent.itemId,
+        itemType = NEXT_UP_ITEM_TYPE,
+      )
+      is HomeIntent.RecentlyAddedItemClicked -> navigator.navigateToItemDetail(
+        itemId = intent.itemId,
+        itemType = intent.itemType,
+      )
       is HomeIntent.LibraryClicked -> navigator.navigateToLibrary(
         libraryId = intent.libraryId,
         collectionType = intent.collectionType,
@@ -92,5 +101,10 @@ class HomeCompositor(
     if(!isValid) {
       error = HomeError.Network()
     }
+  }
+
+  private companion object {
+    // Next Up rows always come from getNextUpEpisodes, so the item type is fixed.
+    const val NEXT_UP_ITEM_TYPE = "Episode"
   }
 }
