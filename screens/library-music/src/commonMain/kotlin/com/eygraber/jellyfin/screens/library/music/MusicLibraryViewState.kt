@@ -14,6 +14,7 @@ data class MusicLibraryViewState(
   val hasMore: Boolean = false,
   val isEmpty: Boolean = false,
   val sortConfig: LibrarySortConfig = LibrarySortConfig(),
+  val selectedItemId: String? = null,
 ) {
   companion object {
     val Loading = MusicLibraryViewState(isLoading = true)

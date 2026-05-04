@@ -38,6 +38,7 @@ internal fun AlbumsGrid(
   albums: List<AlbumItem>,
   isLoadingMore: Boolean,
   hasMore: Boolean,
+  selectedItemId: String?,
   onAlbumClick: (albumId: String) -> Unit,
   onLoadMore: () -> Unit,
   modifier: Modifier = Modifier,
@@ -57,6 +58,17 @@ internal fun AlbumsGrid(
   LaunchedEffect(shouldLoadMore) {
     if(shouldLoadMore) {
       currentOnLoadMore()
+    }
+  }
+
+  LaunchedEffect(albums, selectedItemId) {
+    if(selectedItemId != null &&
+      albums.isNotEmpty() &&
+      gridState.firstVisibleItemIndex == 0 &&
+      gridState.firstVisibleItemScrollOffset == 0
+    ) {
+      val index = albums.indexOfFirst { it.id == selectedItemId }
+      if(index >= 0) gridState.scrollToItem(index)
     }
   }
 

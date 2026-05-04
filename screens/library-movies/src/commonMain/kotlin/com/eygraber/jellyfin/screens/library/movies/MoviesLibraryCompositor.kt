@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.screens.library.movies.model.MoviesLibraryModel
 import com.eygraber.jellyfin.screens.library.movies.model.MoviesLibraryModelError
@@ -32,6 +33,11 @@ class MoviesLibraryCompositor(
   private val sortMutations = Channel<LibrarySortConfig>(Channel.CONFLATED)
   private val filterMutations = Channel<LibraryFilters>(Channel.CONFLATED)
 
+  // Rendezvous so `SelectMovie` waits for the saveable id to be committed before navigating —
+  // otherwise the composition can be torn down before the drain assigns, and the back-nav restore
+  // would have no last-selected id to scroll to.
+  private val selectionMutations = Channel<String?>()
+
   // Plain mirrors of the latest sort/filter, kept in sync from within `composite()` so non-Compose
   // callers (Refresh / RetryLoad / LoadMore intents) can read the current values without observers.
   @Volatile private var currentSortConfig: LibrarySortConfig = LibrarySortConfig()
@@ -41,12 +47,16 @@ class MoviesLibraryCompositor(
   override fun composite(): MoviesLibraryViewState {
     var sortConfig by rememberLibrarySortConfig()
     var filters by rememberLibraryFilters()
+    var lastSelectedItemId by rememberSaveable { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
       for(next in sortMutations) sortConfig = next
     }
     LaunchedEffect(Unit) {
       for(next in filterMutations) filters = next
+    }
+    LaunchedEffect(Unit) {
+      for(next in selectionMutations) lastSelectedItemId = next
     }
 
     val modelState = moviesModel.currentState()
@@ -73,6 +83,7 @@ class MoviesLibraryCompositor(
       availableGenres = modelState.availableGenres,
       availableYears = modelState.availableYears,
       isFilterSheetVisible = isFilterSheetVisible,
+      selectedItemId = lastSelectedItemId,
     )
   }
 
@@ -96,7 +107,13 @@ class MoviesLibraryCompositor(
         filters = currentFilters,
       )
 
-      is MoviesLibraryIntent.SelectMovie -> navigator.navigateToMovieDetail(intent.movieId)
+      is MoviesLibraryIntent.SelectMovie -> {
+        // Send-then-navigate: with a rendezvous channel, send() suspends until the drain commits
+        // the id to rememberSaveable. Once that's done, navigation can disposable composition
+        // without losing the last-selected id needed to scroll-restore on back-nav.
+        selectionMutations.send(intent.movieId)
+        navigator.navigateToMovieDetail(intent.movieId)
+      }
 
       is MoviesLibraryIntent.ChangeSortOption ->
         sortMutations.send(LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder))

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.screens.library.tvshows.model.TvShowsLibraryModel
 import com.eygraber.jellyfin.screens.library.tvshows.model.TvShowsLibraryModelError
@@ -32,6 +33,11 @@ class TvShowsLibraryCompositor(
   private val sortMutations = Channel<LibrarySortConfig>(Channel.CONFLATED)
   private val filterMutations = Channel<LibraryFilters>(Channel.CONFLATED)
 
+  // Rendezvous so SelectShow waits for the saveable id to be committed before navigating —
+  // otherwise the composition can be torn down before the drain assigns, and the back-nav restore
+  // would have no last-selected id to scroll to.
+  private val selectionMutations = Channel<String?>()
+
   @Volatile private var currentSortConfig: LibrarySortConfig = LibrarySortConfig()
   @Volatile private var currentFilters: LibraryFilters = LibraryFilters()
 
@@ -39,12 +45,16 @@ class TvShowsLibraryCompositor(
   override fun composite(): TvShowsLibraryViewState {
     var sortConfig by rememberLibrarySortConfig()
     var filters by rememberLibraryFilters()
+    var lastSelectedItemId by rememberSaveable { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
       for(next in sortMutations) sortConfig = next
     }
     LaunchedEffect(Unit) {
       for(next in filterMutations) filters = next
+    }
+    LaunchedEffect(Unit) {
+      for(next in selectionMutations) lastSelectedItemId = next
     }
 
     val modelState = tvShowsModel.currentState()
@@ -71,6 +81,7 @@ class TvShowsLibraryCompositor(
       availableGenres = modelState.availableGenres,
       availableYears = modelState.availableYears,
       isFilterSheetVisible = isFilterSheetVisible,
+      selectedItemId = lastSelectedItemId,
     )
   }
 
@@ -94,7 +105,12 @@ class TvShowsLibraryCompositor(
         filters = currentFilters,
       )
 
-      is TvShowsLibraryIntent.SelectShow -> navigator.navigateToShowSeasons(intent.showId)
+      is TvShowsLibraryIntent.SelectShow -> {
+        // Send-then-navigate so the saveable id is committed before composition disposes. See
+        // MoviesLibraryCompositor for full rationale.
+        selectionMutations.send(intent.showId)
+        navigator.navigateToShowSeasons(intent.showId)
+      }
 
       is TvShowsLibraryIntent.ChangeSortOption ->
         sortMutations.send(LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder))
