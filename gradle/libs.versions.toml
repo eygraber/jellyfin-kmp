@@ -59,9 +59,9 @@ publish = "0.36.0"
 
 robolectric = "4.16.1"
 
-androidx-sqlite = "2.6.2"
+androidx-sqlite = "2.7.0-alpha03"
 
-sqldelight-androidx-driver = "0.1.1"
+sqldelight-androidx-driver = "0.5.0-alpha.6"
 
 square-sqldelight = "2.3.2"
 
@@ -127,6 +127,7 @@ androidx-media3-ui-compose = { module = "androidx.media3:media3-ui-compose", ver
 androidx-splash = "androidx.core:core-splashscreen:1.2.0"
 
 androidx-sqliteBundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
+androidx-sqliteWeb = { module = "androidx.sqlite:sqlite-web", version.ref = "androidx-sqlite" }
 
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 
@@ -207,6 +208,7 @@ libphonenumber = "io.github.luca992.libphonenumber-kotlin:libphonenumber:0.1.9"
 square-molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 square-seismic = "com.squareup:seismic:1.0.3"
 sqldelight-androidx-driver = { module = "com.eygraber:sqldelight-androidx-driver", version.ref = "sqldelight-androidx-driver" }
+sqldelight-androidx-driverOpfs = { module = "com.eygraber:sqldelight-androidx-driver-opfs", version.ref = "sqldelight-androidx-driver" }
 
 square-sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "square-sqldelight" }
 square-sqldelight-dialect = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "square-sqldelight" }

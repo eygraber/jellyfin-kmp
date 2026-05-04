@@ -3,5 +3,5 @@ if(config.devServer) {
     rewrites: [
       { from: /.*jellyfin-wasm.wasm/, to: '/jellyfin-wasm.wasm' },
     ]
-  }
+  };
 }
