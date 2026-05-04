@@ -44,6 +44,20 @@ class VideoPlayerCompositor(
       }
     }
 
+    // Auto-dismiss the controls overlay after a period of inactivity while playing. Each
+    // user interaction bumps controlsInteractionEpoch in the model, which restarts this
+    // effect. The overlay never auto-dismisses while paused or while loading/buffering.
+    LaunchedEffect(
+      modelState.isControlsVisible,
+      modelState.controlsInteractionEpoch,
+      playerState.isPlaying,
+    ) {
+      if(modelState.isControlsVisible && playerState.isPlaying) {
+        delay(CONTROLS_AUTO_DISMISS_MS)
+        playerModel.hideControls()
+      }
+    }
+
     // Always release the underlying player when leaving composition, even if the user
     // navigated away via system back / gesture (which bypasses the NavigateBack intent and
     // therefore the suspending stop() call). The synchronous release matches ExoPlayer's
@@ -93,5 +107,6 @@ class VideoPlayerCompositor(
 
   companion object {
     private const val PROGRESS_REPORT_INTERVAL_MS = 10_000L
+    private const val CONTROLS_AUTO_DISMISS_MS = 4_000L
   }
 }
