@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
@@ -55,7 +56,6 @@ internal typealias TvShowDetailView = ViceView<TvShowDetailIntent, TvShowDetailV
 private const val BACKDROP_ASPECT_RATIO = 16F / 9F
 private const val SEASON_POSTER_ASPECT_RATIO = 2F / 3F
 private const val RATING_DECIMAL_FACTOR = 10
-private val expandedWidthBreakpoint = 840.dp
 private val expandedBackdropMaxWidth = 640.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,22 +111,20 @@ private fun ShowContent(
   seasons: List<TvShowSeasonSummary>,
   onSeasonClick: (seasonId: String) -> Unit,
 ) {
-  BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-    val isExpanded = maxWidth >= expandedWidthBreakpoint
-    if(isExpanded) {
-      ExpandedShowContent(
-        show = show,
-        seasons = seasons,
-        onSeasonClick = onSeasonClick,
-      )
-    }
-    else {
-      CompactShowContent(
-        show = show,
-        seasons = seasons,
-        onSeasonClick = onSeasonClick,
-      )
-    }
+  val sizeClass = currentWindowAdaptiveInfo().windowSizeClass
+  if(sizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)) {
+    ExpandedShowContent(
+      show = show,
+      seasons = seasons,
+      onSeasonClick = onSeasonClick,
+    )
+  }
+  else {
+    CompactShowContent(
+      show = show,
+      seasons = seasons,
+      onSeasonClick = onSeasonClick,
+    )
   }
 }
 
@@ -313,11 +311,10 @@ private fun BackdropSection(
         .fillMaxSize()
         .background(
           Brush.verticalGradient(
-            colors = listOf(
-              Color.Transparent,
-              MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+            colorStops = arrayOf(
+              0.5f to Color.Transparent,
+              1f to MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
             ),
-            startY = Float.POSITIVE_INFINITY / 2,
           ),
         ),
     )
