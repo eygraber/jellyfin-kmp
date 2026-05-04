@@ -1,9 +1,11 @@
 package com.eygraber.jellyfin.screens.search
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
 
 @Immutable
 data class SearchViewState(
+  val fields: SearchFieldsState = SearchFieldsState(),
   val query: String = "",
   val movieResults: List<SearchViewItem> = emptyList(),
   val seriesResults: List<SearchViewItem> = emptyList(),
@@ -28,6 +30,10 @@ data class SearchViewState(
     val Initial = SearchViewState()
   }
 }
+
+data class SearchFieldsState(
+  val query: TextFieldState = TextFieldState(),
+)
 
 @Immutable
 sealed interface SearchError {
