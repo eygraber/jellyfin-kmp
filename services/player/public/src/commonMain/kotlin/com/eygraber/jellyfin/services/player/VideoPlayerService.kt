@@ -55,9 +55,14 @@ interface VideoPlayerService {
    * On Android this binds to ExoPlayer's `PlayerSurface`. Platforms without a native
    * implementation render a placeholder (the player will already be reporting an error state
    * via [playbackState]).
+   *
+   * Note: `modifier` intentionally has no default. Composable members on an interface that carry a
+   * default argument trigger an `IrLinkageError` in the Kotlin/Wasm IR linker — the Compose
+   * compiler emits a `$default` synthetic that the wasmJs linker reads as missing on the
+   * implementing class. The single call site already passes a modifier explicitly.
    */
   @Composable
-  fun VideoSurface(modifier: Modifier = Modifier)
+  fun VideoSurface(modifier: Modifier)
 }
 
 /**
