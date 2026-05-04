@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.library.collections.CollectionItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 @Composable
 internal fun CollectionPosterGrid(
@@ -97,18 +98,20 @@ private fun CollectionCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = collection.imageUrl,
+        contentDescription = collection.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = collection.name.take(1),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = collection.name.take(1),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

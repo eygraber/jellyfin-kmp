@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.genre.items.GenreContentItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 @Composable
 internal fun GenreItemsGrid(
@@ -97,18 +98,20 @@ private fun GenreContentItemCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = item.imageUrl,
+        contentDescription = item.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = item.name.take(1),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = item.name.take(1),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

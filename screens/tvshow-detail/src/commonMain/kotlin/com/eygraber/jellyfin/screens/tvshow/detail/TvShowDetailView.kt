@@ -42,6 +42,7 @@ import com.eygraber.jellyfin.ui.compose.PreviewJellyfinScreen
 import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 import com.eygraber.jellyfin.ui.icons.Star
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -178,18 +179,18 @@ private fun BackdropSection(
       .fillMaxWidth()
       .aspectRatio(BACKDROP_ASPECT_RATIO),
   ) {
-    Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surfaceVariant),
-      contentAlignment = Alignment.Center,
-    ) {
-      Text(
-        text = show.name.take(1),
-        style = MaterialTheme.typography.displayLarge,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-    }
+    JellyfinAsyncImage(
+      model = show.backdropImageUrl ?: show.posterImageUrl,
+      contentDescription = show.name,
+      modifier = Modifier.fillMaxSize(),
+      fallback = {
+        Text(
+          text = show.name.take(1),
+          style = MaterialTheme.typography.displayLarge,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      },
+    )
 
     Box(
       modifier = Modifier
@@ -294,18 +295,20 @@ private fun SeasonCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = season.imageUrl,
+        contentDescription = season.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(SEASON_POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = season.name.take(2),
-          style = MaterialTheme.typography.headlineSmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = season.seasonNumber?.toString() ?: season.name.take(2),
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

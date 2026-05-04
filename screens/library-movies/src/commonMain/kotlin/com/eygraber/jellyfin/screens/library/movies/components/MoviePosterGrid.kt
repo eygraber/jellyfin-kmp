@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.library.movies.MovieItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 import kotlin.math.roundToInt
 
 private const val POSTER_ASPECT_RATIO = 2F / 3F
@@ -109,18 +110,20 @@ private fun MoviePosterCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = movie.imageUrl,
+        contentDescription = movie.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = movie.name.take(1),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = movie.name.take(1),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

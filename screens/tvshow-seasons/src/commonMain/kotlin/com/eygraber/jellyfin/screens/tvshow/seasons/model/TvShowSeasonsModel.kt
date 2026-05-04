@@ -74,7 +74,7 @@ class TvShowSeasonsModel(
   private fun LibraryItem.toSeasonItem(): SeasonItem = SeasonItem(
     id = id,
     name = name,
-    seasonNumber = productionYear,
+    seasonNumber = indexNumber,
     episodeCount = childCount,
     imageUrl = primaryImageTag?.let { tag ->
       libraryService.getImageUrl(

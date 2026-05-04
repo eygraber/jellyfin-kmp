@@ -2,7 +2,6 @@ package com.eygraber.jellyfin.screens.tvshow.seasons.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.tvshow.seasons.SeasonItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val POSTER_ASPECT_RATIO = 2F / 3F
 
@@ -62,18 +62,20 @@ private fun SeasonCard(
       modifier = Modifier.fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      Box(
+      JellyfinAsyncImage(
+        model = season.imageUrl,
+        contentDescription = season.name,
         modifier = Modifier
           .width(seasonPosterWidth)
           .aspectRatio(POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = season.seasonNumber?.toString() ?: "?",
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = season.seasonNumber?.toString() ?: "?",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier

@@ -47,6 +47,7 @@ import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 import com.eygraber.jellyfin.ui.icons.Person
 import com.eygraber.jellyfin.ui.icons.PlayArrow
 import com.eygraber.jellyfin.ui.icons.Star
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -239,18 +240,18 @@ private fun BackdropSection(
       .fillMaxWidth()
       .aspectRatio(BACKDROP_ASPECT_RATIO),
   ) {
-    Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surfaceVariant),
-      contentAlignment = Alignment.Center,
-    ) {
-      Text(
-        text = movie.name.take(1),
-        style = MaterialTheme.typography.displayLarge,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-    }
+    JellyfinAsyncImage(
+      model = movie.backdropImageUrl ?: movie.posterImageUrl,
+      contentDescription = movie.name,
+      modifier = Modifier.fillMaxSize(),
+      fallback = {
+        Text(
+          text = movie.name.take(1),
+          style = MaterialTheme.typography.displayLarge,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      },
+    )
 
     Box(
       modifier = Modifier
@@ -349,6 +350,7 @@ private fun CastRow(
       PersonCard(
         name = member.name,
         subtitle = member.role,
+        imageUrl = member.imageUrl,
       )
     }
   }
@@ -369,6 +371,7 @@ private fun CrewRow(
       PersonCard(
         name = member.name,
         subtitle = member.job,
+        imageUrl = member.imageUrl,
       )
     }
   }
@@ -378,25 +381,27 @@ private fun CrewRow(
 private fun PersonCard(
   name: String,
   subtitle: String?,
+  imageUrl: String?,
 ) {
   Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     modifier = Modifier.width(PERSON_IMAGE_SIZE.dp),
   ) {
-    Box(
+    JellyfinAsyncImage(
+      model = imageUrl,
+      contentDescription = name,
       modifier = Modifier
         .size(PERSON_IMAGE_SIZE.dp)
-        .clip(CircleShape)
-        .background(MaterialTheme.colorScheme.surfaceVariant),
-      contentAlignment = Alignment.Center,
-    ) {
-      Icon(
-        imageVector = JellyfinIcons.Person,
-        contentDescription = null,
-        modifier = Modifier.size((PERSON_IMAGE_SIZE / 2).dp),
-        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-    }
+        .clip(CircleShape),
+      fallback = {
+        Icon(
+          imageVector = JellyfinIcons.Person,
+          contentDescription = null,
+          modifier = Modifier.size((PERSON_IMAGE_SIZE / 2).dp),
+          tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      },
+    )
 
     Spacer(modifier = Modifier.height(4.dp))
 
@@ -453,18 +458,20 @@ private fun SimilarItemCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = item.imageUrl,
+        contentDescription = item.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(SIMILAR_POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = item.name.take(1),
-          style = MaterialTheme.typography.headlineSmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = item.name.take(1),
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

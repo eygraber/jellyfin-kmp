@@ -43,14 +43,14 @@ class TvShowSeasonsModelTest {
             createLibraryItem(
               id = "season-1",
               name = "Season 1",
-              productionYear = 1,
+              indexNumber = 1,
               childCount = 7,
               primaryImageTag = "tag1",
             ),
             createLibraryItem(
               id = "season-2",
               name = "Season 2",
-              productionYear = 2,
+              indexNumber = 2,
               childCount = 13,
               primaryImageTag = "tag2",
             ),
@@ -148,6 +148,7 @@ class TvShowSeasonsModelTest {
     productionYear: Int? = null,
     childCount: Int? = null,
     primaryImageTag: String? = null,
+    indexNumber: Int? = null,
   ) = LibraryItem(
     id = id,
     name = name,
@@ -163,6 +164,7 @@ class TvShowSeasonsModelTest {
     seriesId = null,
     childCount = childCount,
     runTimeTicks = null,
+    indexNumber = indexNumber,
   )
 }
 

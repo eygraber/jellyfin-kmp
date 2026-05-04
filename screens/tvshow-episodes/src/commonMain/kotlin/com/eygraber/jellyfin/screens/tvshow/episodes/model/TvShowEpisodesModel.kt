@@ -74,7 +74,7 @@ class TvShowEpisodesModel(
   private fun LibraryItem.toEpisodeItem(): EpisodeItem = EpisodeItem(
     id = id,
     name = name,
-    episodeNumber = productionYear,
+    episodeNumber = indexNumber,
     overview = overview,
     runtimeMinutes = runTimeTicks?.let { ticks -> (ticks / TICKS_PER_MINUTE).toInt() },
     imageUrl = primaryImageTag?.let { tag ->

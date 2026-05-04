@@ -308,6 +308,7 @@ class MoviesLibraryModelTest {
     seriesId = null,
     childCount = null,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

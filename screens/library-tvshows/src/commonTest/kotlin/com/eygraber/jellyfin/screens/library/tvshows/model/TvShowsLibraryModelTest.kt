@@ -232,6 +232,7 @@ class TvShowsLibraryModelTest {
     seriesId = null,
     childCount = childCount,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.library.tvshows.TvShowItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 private const val POSTER_ASPECT_RATIO = 2F / 3F
 private const val LOAD_MORE_THRESHOLD = 10
@@ -106,18 +107,20 @@ private fun TvShowPosterCard(
       .clickable(onClick = onClick),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = show.imageUrl,
+        contentDescription = show.name,
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(POSTER_ASPECT_RATIO),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = show.name.take(1),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+        fallback = {
+          Text(
+            text = show.name.take(1),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

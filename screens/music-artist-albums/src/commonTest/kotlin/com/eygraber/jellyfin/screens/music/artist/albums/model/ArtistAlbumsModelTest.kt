@@ -217,6 +217,7 @@ class ArtistAlbumsModelTest {
     seriesId = null,
     childCount = childCount,
     runTimeTicks = null,
+    indexNumber = null,
   )
 }
 

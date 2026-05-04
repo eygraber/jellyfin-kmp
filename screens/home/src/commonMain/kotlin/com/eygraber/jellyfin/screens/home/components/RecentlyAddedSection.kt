@@ -1,8 +1,6 @@
 package com.eygraber.jellyfin.screens.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,12 +13,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eygraber.jellyfin.screens.home.RecentlyAddedItem
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 
 @Composable
 internal fun RecentlyAddedSection(
@@ -65,20 +63,21 @@ private fun RecentlyAddedCard(
     modifier = modifier.width(recentlyAddedCardWidth),
   ) {
     Column {
-      Box(
+      JellyfinAsyncImage(
+        model = item.imageUrl,
+        contentDescription = item.name,
         modifier = Modifier
           .width(recentlyAddedCardWidth)
           .height(recentlyAddedImageHeight)
-          .clip(MaterialTheme.shapes.medium)
-          .background(MaterialTheme.colorScheme.surfaceVariant),
-        contentAlignment = Alignment.Center,
-      ) {
-        Text(
-          text = item.name.take(1).uppercase(),
-          style = MaterialTheme.typography.headlineMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+          .clip(MaterialTheme.shapes.medium),
+        fallback = {
+          Text(
+            text = item.name.take(1).uppercase(),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+      )
 
       Column(
         modifier = Modifier.padding(8.dp),

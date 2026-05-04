@@ -1,6 +1,5 @@
 package com.eygraber.jellyfin.screens.music.artist.albums
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import com.eygraber.jellyfin.ui.icons.ArrowBack
 import com.eygraber.jellyfin.ui.icons.FavoriteBorder
 import com.eygraber.jellyfin.ui.icons.JellyfinIcons
 import com.eygraber.jellyfin.ui.icons.MusicNote
+import com.eygraber.jellyfin.ui.material.image.JellyfinAsyncImage
 import com.eygraber.jellyfin.ui.material.theme.JellyfinPreviewTheme
 import com.eygraber.jellyfin.ui.material.theme.JellyfinTheme
 import com.eygraber.vice.ViceView
@@ -110,20 +110,21 @@ internal fun ArtistHeader(
       .padding(horizontal = 16.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
-    Box(
+    JellyfinAsyncImage(
+      model = artist?.imageUrl,
+      contentDescription = artist?.name,
       modifier = Modifier
         .size(ARTIST_IMAGE_SIZE.dp)
-        .clip(CircleShape)
-        .background(MaterialTheme.colorScheme.surfaceVariant),
-      contentAlignment = Alignment.Center,
-    ) {
-      Icon(
-        imageVector = JellyfinIcons.MusicNote,
-        contentDescription = null,
-        modifier = Modifier.size(48.dp),
-        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-    }
+        .clip(CircleShape),
+      fallback = {
+        Icon(
+          imageVector = JellyfinIcons.MusicNote,
+          contentDescription = null,
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      },
+    )
 
     Spacer(modifier = Modifier.height(16.dp))
 
