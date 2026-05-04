@@ -138,6 +138,51 @@ class TvShowEpisodesModelTest {
   }
 
   @Test
+  fun loadEpisodes_deduplicates_episodes_by_id() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(id = "season-1", name = "Season 1"),
+      )
+      fakeRepository.getItemsResult = JellyfinResult.Success(
+        PaginatedResult(
+          items = listOf(
+            createLibraryItem(id = "ep-1", name = "Pilot", indexNumber = 1),
+            createLibraryItem(id = "ep-2", name = "Episode Two", indexNumber = 2),
+            createLibraryItem(id = "ep-1", name = "Pilot (dup)", indexNumber = 1),
+          ),
+          totalRecordCount = 3,
+          startIndex = 0,
+        ),
+      )
+
+      model.loadEpisodes("season-1")
+
+      val state = model.stateForTest
+      state.episodes.size shouldBe 2
+      state.episodes[0].id shouldBe "ep-1"
+      state.episodes[0].name shouldBe "Pilot"
+      state.episodes[1].id shouldBe "ep-2"
+    }
+  }
+
+  @Test
+  fun loadEpisodes_uses_index_number_sort_order() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(id = "season-1", name = "Season 1"),
+      )
+      fakeRepository.getItemsResult = JellyfinResult.Success(
+        PaginatedResult(items = emptyList(), totalRecordCount = 0, startIndex = 0),
+      )
+
+      model.loadEpisodes("season-1")
+
+      fakeRepository.lastGetItemsSortBy shouldBe ItemSortBy.IndexNumber
+      fakeRepository.lastGetItemsSortOrder shouldBe SortOrder.Ascending
+    }
+  }
+
+  @Test
   fun episode_without_runtime_has_null_minutes() {
     runTest {
       fakeRepository.getItemResult = JellyfinResult.Success(
@@ -200,6 +245,9 @@ private class FakeItemsRepository : ItemsRepository {
 
   var getSimilarItemsResult: JellyfinResult<List<LibraryItem>> = JellyfinResult.Success(emptyList())
 
+  var lastGetItemsSortBy: ItemSortBy? = null
+  var lastGetItemsSortOrder: SortOrder? = null
+
   override suspend fun getItems(
     parentId: String,
     includeItemTypes: List<String>?,
@@ -211,7 +259,11 @@ private class FakeItemsRepository : ItemsRepository {
     years: List<Int>?,
     searchTerm: String?,
     fields: List<String>?,
-  ): JellyfinResult<PaginatedResult<LibraryItem>> = getItemsResult
+  ): JellyfinResult<PaginatedResult<LibraryItem>> {
+    lastGetItemsSortBy = sortBy
+    lastGetItemsSortOrder = sortOrder
+    return getItemsResult
+  }
 
   override suspend fun getItem(itemId: String): JellyfinResult<LibraryItem> = getItemResult
 
