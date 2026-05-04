@@ -9,6 +9,7 @@ import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.screens.library.music.MusicTab
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -51,7 +52,7 @@ class MusicLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitial("lib-1", LibrarySortConfig())
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -74,7 +75,7 @@ class MusicLibraryModelTest {
           startIndex = 0,
         ),
       )
-      model.loadInitial("lib-1")
+      model.loadInitial("lib-1", LibrarySortConfig())
 
       fakeRepository.getItemsResult = JellyfinResult.Success(
         PaginatedResult(
@@ -92,7 +93,7 @@ class MusicLibraryModelTest {
         ),
       )
 
-      model.switchTab("lib-1", MusicTab.Albums)
+      model.switchTab("lib-1", MusicTab.Albums, LibrarySortConfig())
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -112,7 +113,7 @@ class MusicLibraryModelTest {
         isEphemeral = true,
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitial("lib-1", LibrarySortConfig())
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -138,7 +139,7 @@ class MusicLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitial("lib-1", LibrarySortConfig())
 
       val state = model.stateForTest
       state.artists[0].imageUrl.shouldBeNull()

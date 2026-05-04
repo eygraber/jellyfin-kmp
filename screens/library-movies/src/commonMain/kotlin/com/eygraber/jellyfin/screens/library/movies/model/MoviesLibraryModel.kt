@@ -23,8 +23,6 @@ data class MoviesLibraryState(
   val isLoadingMore: Boolean = false,
   val hasMore: Boolean = false,
   val error: MoviesLibraryModelError? = null,
-  val sortConfig: LibrarySortConfig = LibrarySortConfig(),
-  val filters: LibraryFilters = LibraryFilters(),
   val availableGenres: List<String> = emptyList(),
   val availableYears: List<Int> = emptyList(),
 )
@@ -46,19 +44,23 @@ class MoviesLibraryModel(
   @Composable
   override fun currentState(): MoviesLibraryState = state
 
-  suspend fun loadInitial(libraryId: String) {
+  suspend fun loadInitial(
+    libraryId: String,
+    sortConfig: LibrarySortConfig,
+    filters: LibraryFilters,
+  ) {
     currentStartIndex = 0
     state = state.copy(isLoading = true, error = null, items = emptyList())
 
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("Movie"),
-      sortBy = state.sortConfig.sortBy,
-      sortOrder = state.sortConfig.sortOrder,
+      sortBy = sortConfig.sortBy,
+      sortOrder = sortConfig.sortOrder,
       startIndex = 0,
       limit = PAGE_SIZE,
-      genres = state.filters.genres.ifEmpty { null },
-      years = state.filters.years.ifEmpty { null },
+      genres = filters.genres.ifEmpty { null },
+      years = filters.years.ifEmpty { null },
     )
 
     state = if(result.isSuccess()) {
@@ -81,7 +83,11 @@ class MoviesLibraryModel(
     }
   }
 
-  suspend fun loadMore(libraryId: String) {
+  suspend fun loadMore(
+    libraryId: String,
+    sortConfig: LibrarySortConfig,
+    filters: LibraryFilters,
+  ) {
     if(state.isLoadingMore || !state.hasMore) return
 
     state = state.copy(isLoadingMore = true)
@@ -89,12 +95,12 @@ class MoviesLibraryModel(
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("Movie"),
-      sortBy = state.sortConfig.sortBy,
-      sortOrder = state.sortConfig.sortOrder,
+      sortBy = sortConfig.sortBy,
+      sortOrder = sortConfig.sortOrder,
       startIndex = currentStartIndex,
       limit = PAGE_SIZE,
-      genres = state.filters.genres.ifEmpty { null },
-      years = state.filters.years.ifEmpty { null },
+      genres = filters.genres.ifEmpty { null },
+      years = filters.years.ifEmpty { null },
     )
 
     state = if(result.isSuccess()) {
@@ -111,18 +117,6 @@ class MoviesLibraryModel(
     else {
       state.copy(isLoadingMore = false)
     }
-  }
-
-  suspend fun refresh(libraryId: String) {
-    loadInitial(libraryId)
-  }
-
-  fun updateSortConfig(sortConfig: LibrarySortConfig) {
-    state = state.copy(sortConfig = sortConfig)
-  }
-
-  fun updateFilters(filters: LibraryFilters) {
-    state = state.copy(filters = filters)
   }
 
   suspend fun loadAvailableFilters(libraryId: String) {

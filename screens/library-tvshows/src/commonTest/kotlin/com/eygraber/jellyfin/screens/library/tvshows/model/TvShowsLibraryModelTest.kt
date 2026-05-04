@@ -8,6 +8,8 @@ import com.eygraber.jellyfin.data.items.PaginatedResult
 import com.eygraber.jellyfin.data.items.SortOrder
 import com.eygraber.jellyfin.sdk.core.model.ImageType
 import com.eygraber.jellyfin.services.sdk.JellyfinLibraryService
+import com.eygraber.jellyfin.ui.library.controls.LibraryFilters
+import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -52,7 +54,7 @@ class TvShowsLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -78,7 +80,7 @@ class TvShowsLibraryModelTest {
         isEphemeral = true,
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -98,7 +100,7 @@ class TvShowsLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -119,7 +121,7 @@ class TvShowsLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       fakeRepository.getItemsResult = JellyfinResult.Success(
         PaginatedResult(
@@ -129,7 +131,7 @@ class TvShowsLibraryModelTest {
         ),
       )
 
-      model.loadMore("lib-1")
+      model.loadMoreDefault()
 
       val state = model.stateForTest
       state.items.size shouldBe 2
@@ -150,9 +152,9 @@ class TvShowsLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
-      model.loadMore("lib-1")
+      model.loadMoreDefault()
 
       val state = model.stateForTest
       state.items.size shouldBe 1
@@ -171,42 +173,27 @@ class TvShowsLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.items[0].imageUrl.shouldBeNull()
     }
   }
 
-  @Test
-  fun refresh_reloads_items_from_beginning() {
-    runTest {
-      fakeRepository.getItemsResult = JellyfinResult.Success(
-        PaginatedResult(
-          items = listOf(createLibraryItem(id = "show-1", name = "Show 1")),
-          totalRecordCount = 1,
-          startIndex = 0,
-        ),
-      )
+  private suspend fun TvShowsLibraryModel.loadInitialDefault() {
+    loadInitial(
+      libraryId = "lib-1",
+      sortConfig = LibrarySortConfig(),
+      filters = LibraryFilters(),
+    )
+  }
 
-      model.loadInitial("lib-1")
-
-      fakeRepository.getItemsResult = JellyfinResult.Success(
-        PaginatedResult(
-          items = listOf(
-            createLibraryItem(id = "show-1", name = "Show 1"),
-            createLibraryItem(id = "show-2", name = "Show 2"),
-          ),
-          totalRecordCount = 2,
-          startIndex = 0,
-        ),
-      )
-
-      model.refresh("lib-1")
-
-      val state = model.stateForTest
-      state.items.size shouldBe 2
-    }
+  private suspend fun TvShowsLibraryModel.loadMoreDefault() {
+    loadMore(
+      libraryId = "lib-1",
+      sortConfig = LibrarySortConfig(),
+      filters = LibraryFilters(),
+    )
   }
 
   private fun createLibraryItem(

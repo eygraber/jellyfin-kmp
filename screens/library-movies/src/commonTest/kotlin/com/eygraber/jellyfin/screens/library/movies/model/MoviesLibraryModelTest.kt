@@ -55,7 +55,7 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -80,7 +80,7 @@ class MoviesLibraryModelTest {
         isEphemeral = true,
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -100,7 +100,7 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.isLoading.shouldBeFalse()
@@ -123,7 +123,7 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.hasMore.shouldBeTrue()
@@ -142,7 +142,7 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       fakeRepository.getItemsResult = JellyfinResult.Success(
         PaginatedResult(
@@ -152,7 +152,7 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadMore("lib-1")
+      model.loadMoreDefault()
 
       val state = model.stateForTest
       state.items.size shouldBe 2
@@ -173,9 +173,9 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
-      model.loadMore("lib-1")
+      model.loadMoreDefault()
 
       val state = model.stateForTest
       state.items.size shouldBe 1
@@ -194,7 +194,7 @@ class MoviesLibraryModelTest {
         ),
       )
 
-      model.loadInitial("lib-1")
+      model.loadInitialDefault()
 
       val state = model.stateForTest
       state.items[0].imageUrl.shouldBeNull()
@@ -202,34 +202,23 @@ class MoviesLibraryModelTest {
   }
 
   @Test
-  fun updateSortConfig_changes_sort_configuration() {
+  fun loadInitial_passes_sort_and_filters_to_repository() {
     runTest {
-      val newConfig = LibrarySortConfig(
+      val sortConfig = LibrarySortConfig(
         sortBy = ItemSortBy.CommunityRating,
         sortOrder = SortOrder.Descending,
       )
-
-      model.updateSortConfig(newConfig)
-
-      val state = model.stateForTest
-      state.sortConfig.sortBy shouldBe ItemSortBy.CommunityRating
-      state.sortConfig.sortOrder shouldBe SortOrder.Descending
-    }
-  }
-
-  @Test
-  fun updateFilters_changes_active_filters() {
-    runTest {
-      val newFilters = LibraryFilters(
+      val filters = LibraryFilters(
         genres = listOf("Action", "Comedy"),
         years = listOf(2020, 2021),
       )
 
-      model.updateFilters(newFilters)
+      model.loadInitial(libraryId = "lib-1", sortConfig = sortConfig, filters = filters)
 
-      val state = model.stateForTest
-      state.filters.genres shouldBe listOf("Action", "Comedy")
-      state.filters.years shouldBe listOf(2020, 2021)
+      fakeRepository.lastSortBy shouldBe ItemSortBy.CommunityRating
+      fakeRepository.lastSortOrder shouldBe SortOrder.Descending
+      fakeRepository.lastGenres shouldBe listOf("Action", "Comedy")
+      fakeRepository.lastYears shouldBe listOf(2020, 2021)
     }
   }
 
@@ -255,35 +244,12 @@ class MoviesLibraryModelTest {
     }
   }
 
-  @Test
-  fun refresh_reloads_items_from_beginning() {
-    runTest {
-      fakeRepository.getItemsResult = JellyfinResult.Success(
-        PaginatedResult(
-          items = listOf(createLibraryItem(id = "movie-1", name = "Movie 1")),
-          totalRecordCount = 1,
-          startIndex = 0,
-        ),
-      )
+  private suspend fun MoviesLibraryModel.loadInitialDefault() {
+    loadInitial(libraryId = "lib-1", sortConfig = LibrarySortConfig(), filters = LibraryFilters())
+  }
 
-      model.loadInitial("lib-1")
-
-      fakeRepository.getItemsResult = JellyfinResult.Success(
-        PaginatedResult(
-          items = listOf(
-            createLibraryItem(id = "movie-1", name = "Movie 1"),
-            createLibraryItem(id = "movie-2", name = "Movie 2"),
-          ),
-          totalRecordCount = 2,
-          startIndex = 0,
-        ),
-      )
-
-      model.refresh("lib-1")
-
-      val state = model.stateForTest
-      state.items.size shouldBe 2
-    }
+  private suspend fun MoviesLibraryModel.loadMoreDefault() {
+    loadMore(libraryId = "lib-1", sortConfig = LibrarySortConfig(), filters = LibraryFilters())
   }
 
   private fun createLibraryItem(
@@ -325,6 +291,11 @@ private class FakeItemsRepository : ItemsRepository {
 
   var getSimilarItemsResult: JellyfinResult<List<LibraryItem>> = JellyfinResult.Success(emptyList())
 
+  var lastSortBy: ItemSortBy? = null
+  var lastSortOrder: SortOrder? = null
+  var lastGenres: List<String>? = null
+  var lastYears: List<Int>? = null
+
   override suspend fun getItems(
     parentId: String,
     includeItemTypes: List<String>?,
@@ -336,7 +307,13 @@ private class FakeItemsRepository : ItemsRepository {
     years: List<Int>?,
     searchTerm: String?,
     fields: List<String>?,
-  ): JellyfinResult<PaginatedResult<LibraryItem>> = getItemsResult
+  ): JellyfinResult<PaginatedResult<LibraryItem>> {
+    lastSortBy = sortBy
+    lastSortOrder = sortOrder
+    lastGenres = genres
+    lastYears = years
+    return getItemsResult
+  }
 
   override suspend fun getItem(itemId: String): JellyfinResult<LibraryItem> = getItemResult
 
