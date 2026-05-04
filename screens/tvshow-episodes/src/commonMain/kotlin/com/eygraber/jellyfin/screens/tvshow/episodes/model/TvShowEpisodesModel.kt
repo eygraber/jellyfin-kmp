@@ -47,14 +47,16 @@ class TvShowEpisodesModel(
     val result = itemsRepository.getItems(
       parentId = seasonId,
       includeItemTypes = listOf("Episode"),
-      sortBy = ItemSortBy.SortName,
+      sortBy = ItemSortBy.IndexNumber,
       sortOrder = SortOrder.Ascending,
       startIndex = 0,
       limit = MAX_EPISODES,
     )
 
     state = if(result.isSuccess()) {
-      val episodes = result.value.items.map { item -> item.toEpisodeItem() }
+      val episodes = result.value.items
+        .distinctBy { it.id }
+        .map { item -> item.toEpisodeItem() }
 
       TvShowEpisodesState(
         seasonName = seasonName,
