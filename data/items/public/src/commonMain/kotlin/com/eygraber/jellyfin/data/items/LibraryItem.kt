@@ -22,6 +22,10 @@ data class LibraryItem(
   val childCount: Int?,
   val runTimeTicks: Long?,
   val indexNumber: Int?,
+  /**
+   * For an Episode, the season number it belongs to (BaseItemDto.ParentIndexNumber).
+   */
+  val parentIndexNumber: Int? = null,
   val people: List<PersonItem> = emptyList(),
 )
 

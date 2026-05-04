@@ -54,17 +54,14 @@ class EpisodeDetailModel(
     }
   }
 
-  private fun LibraryItem.toEpisodeDetail(): EpisodeDetail {
-    val episodeNumber = indexNumber
-    val seasonEpisodeLabel = episodeNumber?.let { ep ->
-      "Episode $ep"
-    }
-
-    return EpisodeDetail(
+  private fun LibraryItem.toEpisodeDetail(): EpisodeDetail =
+    EpisodeDetail(
       id = id,
       name = name,
       seriesName = seriesName,
-      seasonEpisodeLabel = seasonEpisodeLabel,
+      seasonNumber = parentIndexNumber,
+      episodeNumber = indexNumber,
+      year = productionYear,
       overview = overview,
       runtimeMinutes = runTimeTicks?.let { ticks -> (ticks / TICKS_PER_MINUTE).toInt() },
       thumbnailImageUrl = primaryImageTag?.let { tag ->
@@ -76,7 +73,6 @@ class EpisodeDetailModel(
         )
       },
     )
-  }
 
   companion object {
     private const val TICKS_PER_MINUTE = 600_000_000L

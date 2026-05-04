@@ -41,7 +41,9 @@ class EpisodeDetailModelTest {
           name = "Pilot",
           overview = "Walter White turns to crime",
           seriesName = "Breaking Bad",
+          productionYear = 2008,
           indexNumber = 1,
+          parentIndexNumber = 1,
           runTimeTicks = 34_800_000_000L,
           primaryImageTag = "thumb-tag",
         ),
@@ -58,10 +60,35 @@ class EpisodeDetailModelTest {
       episode.id shouldBe "ep-1"
       episode.name shouldBe "Pilot"
       episode.seriesName shouldBe "Breaking Bad"
-      episode.seasonEpisodeLabel shouldBe "Episode 1"
+      episode.seasonNumber shouldBe 1
+      episode.episodeNumber shouldBe 1
+      episode.year shouldBe 2008
       episode.overview shouldBe "Walter White turns to crime"
       episode.runtimeMinutes shouldBe 58
       episode.thumbnailImageUrl.shouldNotBeNull()
+    }
+  }
+
+  @Test
+  fun loadEpisode_keeps_year_separate_from_episode_number() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "ep-1",
+          name = "Pilot",
+          productionYear = 2008,
+          indexNumber = 3,
+          parentIndexNumber = 2,
+        ),
+      )
+
+      model.loadEpisode(episodeId = "ep-1")
+
+      val episode = model.stateForTest.episode
+      episode.shouldNotBeNull()
+      episode.episodeNumber shouldBe 3
+      episode.year shouldBe 2008
+      episode.seasonNumber shouldBe 2
     }
   }
 
@@ -164,6 +191,7 @@ class EpisodeDetailModelTest {
     runTimeTicks: Long? = null,
     primaryImageTag: String? = null,
     indexNumber: Int? = null,
+    parentIndexNumber: Int? = null,
   ) = LibraryItem(
     id = id,
     name = name,
@@ -180,6 +208,7 @@ class EpisodeDetailModelTest {
     childCount = null,
     runTimeTicks = runTimeTicks,
     indexNumber = indexNumber,
+    parentIndexNumber = parentIndexNumber,
   )
 }
 
