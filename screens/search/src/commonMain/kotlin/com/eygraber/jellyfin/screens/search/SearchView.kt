@@ -17,6 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -76,9 +79,7 @@ internal fun SearchView(
           .padding(contentPadding),
       ) {
         SearchField(
-          query = state.query,
-          onQueryChange = { onIntent(SearchIntent.QueryChanged(it)) },
-          onClear = { onIntent(SearchIntent.ClearQuery) },
+          state = state.fields.query,
         )
 
         when {
@@ -109,21 +110,18 @@ internal fun SearchView(
 
 @Composable
 private fun SearchField(
-  query: String,
-  onQueryChange: (String) -> Unit,
-  onClear: () -> Unit,
+  state: TextFieldState,
 ) {
   OutlinedTextField(
-    value = query,
-    onValueChange = onQueryChange,
+    state = state,
     modifier = Modifier
       .fillMaxWidth()
       .padding(horizontal = 16.dp, vertical = 8.dp),
     placeholder = { Text("Search movies, shows, music...") },
-    singleLine = true,
+    lineLimits = TextFieldLineLimits.SingleLine,
     trailingIcon = {
-      if(query.isNotEmpty()) {
-        IconButton(onClick = onClear) {
+      if(state.text.isNotEmpty()) {
+        IconButton(onClick = { state.clearText() }) {
           Icon(
             imageVector = JellyfinIcons.Close,
             contentDescription = "Clear search",
@@ -445,6 +443,7 @@ private fun SearchResultsPreview() {
   JellyfinPreviewTheme {
     SearchView(
       state = SearchViewState(
+        fields = SearchFieldsState(query = TextFieldState("inception")),
         query = "inception",
         movieResults = listOf(
           SearchViewItem(

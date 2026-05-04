@@ -46,6 +46,18 @@ State survival: Prefer specialized types (TextFieldState, LazyListState) that ha
 For other state that must survive composition removal: use rememberSaveable (primitives) or rememberSerializable (data classes)
 Only save user-facing state, not derived values or transient UI state (animations, dialog visibility)
 
+# Text Input
+🔴 CRITICAL: Use the `TextFieldState` API for all text inputs - never the legacy `value: String` / `onValueChange: (String) -> Unit` API
+The legacy `value`/`onValueChange` API races with async state updates, causing typed text to be lost or duplicated
+❌ Bad: OutlinedTextField(value = state.query, onValueChange = { onIntent(QueryChanged(it)) })
+✅ Good: OutlinedTextField(state = state.fields.query)
+
+Hold the `TextFieldState` in a model (e.g. `FieldsModel : ViceSource<FieldsState>`) and expose it via `ViewState`
+Observe text changes from the Compositor with `snapshotFlow { state.text.toString() }` or `TextFieldState.UpdateEffect { ... }` from `:ui:material`
+Mutate from `onIntent` with `setTextAndPlaceCursorAtEnd(...)` / `clearText()`; do not echo strings back through Intents
+
+For complete patterns: .docs/compose/state-management.md (the `Prefer Specialized Types` section)
+
 LocalContext.current is OK in View composables for simple UI needs
 Never use LocalContext.current in Models or business logic - inject Context via DI with @AppContext instead
 ❌ Bad: val context = LocalContext.current in Model
