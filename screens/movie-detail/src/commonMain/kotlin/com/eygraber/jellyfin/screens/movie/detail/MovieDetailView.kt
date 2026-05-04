@@ -414,12 +414,12 @@ private fun PersonCard(
     )
 
     subtitle?.let { subtitleText ->
+      // Each distinct role/job is on its own line (joined with '\n' in the model). Render all
+      // lines so users can see every credit, matching the official Jellyfin web layout.
       Text(
         text = subtitleText,
         style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
         textAlign = TextAlign.Center,
       )
     }

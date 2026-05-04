@@ -50,12 +50,17 @@ class MovieDetailModel(
     if(result.isSuccess()) {
       val item = result.value
       val movieDetail = item.toMovieDetail()
+      // Jellyfin's people array can list the same person multiple times — most commonly a crew
+      // member credited under several jobs, but also actors with multiple roles. Collapse to one
+      // entry per person, joining all of their distinct roles/jobs into the displayed subtitle.
       val cast = item.people
         .filter { it.type == PERSON_TYPE_ACTOR }
-        .map { it.toCastMember() }
+        .groupBy { it.id }
+        .map { (_, credits) -> credits.toCastMember() }
       val crew = item.people
         .filter { it.type != PERSON_TYPE_ACTOR }
-        .map { it.toCrewMember() }
+        .groupBy { it.id }
+        .map { (_, credits) -> credits.toCrewMember() }
 
       state = MovieDetailState(
         movie = movieDetail,
@@ -113,33 +118,41 @@ class MovieDetailModel(
     },
   )
 
-  private fun PersonItem.toCastMember(): CastMember = CastMember(
-    id = id,
-    name = name,
-    role = role,
-    imageUrl = primaryImageTag?.let { tag ->
-      libraryService.getImageUrl(
-        itemId = id,
-        imageType = ImageType.Primary,
-        maxWidth = PERSON_IMAGE_MAX_WIDTH,
-        tag = tag,
-      )
-    },
-  )
+  private fun List<PersonItem>.toCastMember(): CastMember {
+    val canonical = first()
+    return CastMember(
+      id = canonical.id,
+      name = canonical.name,
+      role = combinedRoles(),
+      imageUrl = canonical.personImageUrl(),
+    )
+  }
 
-  private fun PersonItem.toCrewMember(): CrewMember = CrewMember(
-    id = id,
-    name = name,
-    job = role,
-    imageUrl = primaryImageTag?.let { tag ->
-      libraryService.getImageUrl(
-        itemId = id,
-        imageType = ImageType.Primary,
-        maxWidth = PERSON_IMAGE_MAX_WIDTH,
-        tag = tag,
-      )
-    },
-  )
+  private fun List<PersonItem>.toCrewMember(): CrewMember {
+    val canonical = first()
+    return CrewMember(
+      id = canonical.id,
+      name = canonical.name,
+      job = combinedRoles(),
+      imageUrl = canonical.personImageUrl(),
+    )
+  }
+
+  // Each distinct role/job goes on its own line, matching the official Jellyfin web layout.
+  private fun List<PersonItem>.combinedRoles(): String? = asSequence()
+    .mapNotNull { it.role?.takeIf(String::isNotBlank) }
+    .distinct()
+    .joinToString("\n")
+    .takeIf(String::isNotEmpty)
+
+  private fun PersonItem.personImageUrl(): String? = primaryImageTag?.let { tag ->
+    libraryService.getImageUrl(
+      itemId = id,
+      imageType = ImageType.Primary,
+      maxWidth = PERSON_IMAGE_MAX_WIDTH,
+      tag = tag,
+    )
+  }
 
   private fun LibraryItem.toSimilarItem(): SimilarItem = SimilarItem(
     id = id,
