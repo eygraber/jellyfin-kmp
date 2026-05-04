@@ -240,6 +240,79 @@ class MovieDetailModelTest {
   }
 
   @Test
+  fun loadMovie_collapses_cast_with_multiple_roles_into_one_entry() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "movie-1",
+          name = "Movie",
+          people = listOf(
+            PersonItem(id = "p1", name = "Actor One", role = "Lead", type = "Actor", primaryImageTag = null),
+            PersonItem(id = "p1", name = "Actor One", role = "Lead", type = "Actor", primaryImageTag = null),
+            PersonItem(id = "p1", name = "Actor One", role = "Cameo", type = "Actor", primaryImageTag = null),
+          ),
+        ),
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val cast = model.stateForTest.cast
+      cast shouldHaveSize 1
+      cast[0].id shouldBe "p1"
+      cast[0].name shouldBe "Actor One"
+      cast[0].role shouldBe "Lead\nCameo"
+    }
+  }
+
+  @Test
+  fun loadMovie_collapses_crew_with_multiple_jobs_into_one_entry() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "movie-1",
+          name = "Movie",
+          people = listOf(
+            PersonItem(id = "p1", name = "Person", role = "Director", type = "Director", primaryImageTag = null),
+            PersonItem(id = "p1", name = "Person", role = "Director", type = "Director", primaryImageTag = null),
+            PersonItem(id = "p1", name = "Person", role = "Producer", type = "Producer", primaryImageTag = null),
+            PersonItem(id = "p1", name = "Person", role = "Writer", type = "Writer", primaryImageTag = null),
+          ),
+        ),
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val crew = model.stateForTest.crew
+      crew shouldHaveSize 1
+      crew[0].id shouldBe "p1"
+      crew[0].name shouldBe "Person"
+      crew[0].job shouldBe "Director\nProducer\nWriter"
+    }
+  }
+
+  @Test
+  fun loadMovie_crew_entry_has_null_job_when_all_roles_blank() {
+    runTest {
+      fakeRepository.getItemResult = JellyfinResult.Success(
+        createLibraryItem(
+          id = "movie-1",
+          name = "Movie",
+          people = listOf(
+            PersonItem(id = "p1", name = "Person", role = null, type = "Director", primaryImageTag = null),
+            PersonItem(id = "p1", name = "Person", role = "", type = "Director", primaryImageTag = null),
+          ),
+        ),
+      )
+
+      model.loadMovie(movieId = "movie-1")
+
+      val crew = model.stateForTest.crew
+      crew shouldHaveSize 1
+      crew[0].job.shouldBeNull()
+    }
+  }
+
+  @Test
   fun loadMovie_loads_similar_items() {
     runTest {
       fakeRepository.getItemResult = JellyfinResult.Success(
