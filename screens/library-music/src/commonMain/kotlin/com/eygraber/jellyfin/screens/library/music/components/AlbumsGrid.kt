@@ -131,23 +131,22 @@ private fun AlbumCard(
           overflow = TextOverflow.Ellipsis,
         )
 
-        album.artistName?.let { artist ->
-          Text(
-            text = artist,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-          )
-        }
+        // Reserve a fixed line for the artist so cards stay the same height regardless of metadata.
+        Text(
+          text = album.artistName ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
 
-        album.productionYear?.let { year ->
-          Text(
-            text = year.toString(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        }
+        // Reserve a fixed line for the year so cards stay the same height regardless of metadata.
+        Text(
+          text = album.productionYear?.toString() ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+        )
       }
     }
   }

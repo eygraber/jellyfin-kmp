@@ -123,13 +123,13 @@ private fun GenreContentItemCard(
           overflow = TextOverflow.Ellipsis,
         )
 
-        item.productionYear?.let { year ->
-          Text(
-            text = year.toString(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        }
+        // Reserve a fixed line for the year so cards stay the same height regardless of metadata.
+        Text(
+          text = item.productionYear?.toString() ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+        )
       }
     }
   }

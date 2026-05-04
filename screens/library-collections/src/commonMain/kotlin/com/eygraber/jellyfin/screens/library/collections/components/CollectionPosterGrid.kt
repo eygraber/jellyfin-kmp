@@ -123,13 +123,13 @@ private fun CollectionCard(
           overflow = TextOverflow.Ellipsis,
         )
 
-        collection.itemCount?.let { count ->
-          Text(
-            text = "$count items",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        }
+        // Reserve a fixed line for the item count so cards stay the same height regardless of metadata.
+        Text(
+          text = collection.itemCount?.let { count -> "$count items" } ?: " ",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+        )
       }
     }
   }
