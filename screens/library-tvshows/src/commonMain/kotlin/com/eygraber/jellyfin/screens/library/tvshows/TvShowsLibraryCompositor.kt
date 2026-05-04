@@ -7,10 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.eygraber.jellyfin.screens.library.tvshows.model.TvShowsLibraryModel
 import com.eygraber.jellyfin.screens.library.tvshows.model.TvShowsLibraryModelError
+import com.eygraber.jellyfin.ui.library.controls.LibraryFilters
 import com.eygraber.jellyfin.ui.library.controls.LibrarySortConfig
 import com.eygraber.jellyfin.ui.library.controls.LibraryViewMode
+import com.eygraber.jellyfin.ui.library.controls.rememberLibraryFilters
+import com.eygraber.jellyfin.ui.library.controls.rememberLibrarySortConfig
 import com.eygraber.vice.ViceCompositor
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.channels.Channel
 
 @Inject
 class TvShowsLibraryCompositor(
@@ -21,13 +25,36 @@ class TvShowsLibraryCompositor(
   private var isFilterSheetVisible by mutableStateOf(false)
   private var viewMode by mutableStateOf(LibraryViewMode.Grid)
 
+  // Sort/filter live in `composite()` via rememberSaveable so they survive composition disposal
+  // when the user navigates into an item and back. `onIntent` writes through these channels and
+  // the drain coroutines update the saved state inside the composition.
+  private val sortMutations = Channel<LibrarySortConfig>(Channel.CONFLATED)
+  private val filterMutations = Channel<LibraryFilters>(Channel.CONFLATED)
+
+  @Volatile private var currentSortConfig: LibrarySortConfig = LibrarySortConfig()
+  @Volatile private var currentFilters: LibraryFilters = LibraryFilters()
+
   @Composable
   override fun composite(): TvShowsLibraryViewState {
+    var sortConfig by rememberLibrarySortConfig()
+    var filters by rememberLibraryFilters()
+
+    LaunchedEffect(Unit) {
+      for(next in sortMutations) sortConfig = next
+    }
+    LaunchedEffect(Unit) {
+      for(next in filterMutations) filters = next
+    }
+
     val modelState = tvShowsModel.currentState()
 
     LaunchedEffect(Unit) {
-      tvShowsModel.loadInitial(key.libraryId)
       tvShowsModel.loadAvailableFilters(key.libraryId)
+    }
+    LaunchedEffect(sortConfig, filters) {
+      currentSortConfig = sortConfig
+      currentFilters = filters
+      tvShowsModel.loadInitial(key.libraryId, sortConfig, filters)
     }
 
     return TvShowsLibraryViewState(
@@ -37,8 +64,8 @@ class TvShowsLibraryCompositor(
       error = modelState.error?.toViewError(),
       hasMore = modelState.hasMore,
       isEmpty = !modelState.isLoading && modelState.error == null && modelState.items.isEmpty(),
-      sortConfig = modelState.sortConfig,
-      filters = modelState.filters,
+      sortConfig = sortConfig,
+      filters = filters,
       viewMode = viewMode,
       availableGenres = modelState.availableGenres,
       availableYears = modelState.availableYears,
@@ -48,22 +75,31 @@ class TvShowsLibraryCompositor(
 
   override suspend fun onIntent(intent: TvShowsLibraryIntent) {
     when(intent) {
-      TvShowsLibraryIntent.LoadMore -> tvShowsModel.loadMore(key.libraryId)
-      TvShowsLibraryIntent.Refresh -> tvShowsModel.refresh(key.libraryId)
-      TvShowsLibraryIntent.RetryLoad -> tvShowsModel.loadInitial(key.libraryId)
+      TvShowsLibraryIntent.LoadMore -> tvShowsModel.loadMore(
+        libraryId = key.libraryId,
+        sortConfig = currentSortConfig,
+        filters = currentFilters,
+      )
+
+      TvShowsLibraryIntent.Refresh -> tvShowsModel.loadInitial(
+        libraryId = key.libraryId,
+        sortConfig = currentSortConfig,
+        filters = currentFilters,
+      )
+
+      TvShowsLibraryIntent.RetryLoad -> tvShowsModel.loadInitial(
+        libraryId = key.libraryId,
+        sortConfig = currentSortConfig,
+        filters = currentFilters,
+      )
+
       is TvShowsLibraryIntent.SelectShow -> navigator.navigateToShowSeasons(intent.showId)
 
-      is TvShowsLibraryIntent.ChangeSortOption -> {
-        tvShowsModel.updateSortConfig(
-          LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder),
-        )
-        tvShowsModel.loadInitial(key.libraryId)
-      }
+      is TvShowsLibraryIntent.ChangeSortOption ->
+        sortMutations.send(LibrarySortConfig(sortBy = intent.sortBy, sortOrder = intent.sortOrder))
 
-      is TvShowsLibraryIntent.ChangeFilters -> {
-        tvShowsModel.updateFilters(intent.filters)
-        tvShowsModel.loadInitial(key.libraryId)
-      }
+      is TvShowsLibraryIntent.ChangeFilters ->
+        filterMutations.send(intent.filters)
 
       is TvShowsLibraryIntent.ChangeViewMode ->
         viewMode = intent.viewMode

@@ -24,7 +24,6 @@ data class MusicLibraryState(
   val isLoadingMore: Boolean = false,
   val hasMore: Boolean = false,
   val error: MusicLibraryModelError? = null,
-  val sortConfig: LibrarySortConfig = LibrarySortConfig(),
 )
 
 enum class MusicLibraryModelError {
@@ -44,53 +43,45 @@ class MusicLibraryModel(
   @Composable
   override fun currentState(): MusicLibraryState = state
 
-  suspend fun loadInitial(libraryId: String) {
+  suspend fun loadInitial(libraryId: String, sortConfig: LibrarySortConfig) {
     currentStartIndex = 0
     state = state.copy(isLoading = true, error = null, artists = emptyList(), albums = emptyList())
 
     when(state.selectedTab) {
-      MusicTab.Artists -> loadArtists(libraryId, isInitial = true)
-      MusicTab.Albums -> loadAlbums(libraryId, isInitial = true)
+      MusicTab.Artists -> loadArtists(libraryId, sortConfig, isInitial = true)
+      MusicTab.Albums -> loadAlbums(libraryId, sortConfig, isInitial = true)
     }
   }
 
-  suspend fun loadMore(libraryId: String) {
+  suspend fun loadMore(libraryId: String, sortConfig: LibrarySortConfig) {
     if(state.isLoadingMore || !state.hasMore) return
 
     state = state.copy(isLoadingMore = true)
 
     when(state.selectedTab) {
-      MusicTab.Artists -> loadArtists(libraryId, isInitial = false)
-      MusicTab.Albums -> loadAlbums(libraryId, isInitial = false)
+      MusicTab.Artists -> loadArtists(libraryId, sortConfig, isInitial = false)
+      MusicTab.Albums -> loadAlbums(libraryId, sortConfig, isInitial = false)
     }
   }
 
-  suspend fun switchTab(libraryId: String, tab: MusicTab) {
+  suspend fun switchTab(libraryId: String, tab: MusicTab, sortConfig: LibrarySortConfig) {
     if(state.selectedTab == tab) return
 
     currentStartIndex = 0
     state = MusicLibraryState(selectedTab = tab, isLoading = true)
 
     when(tab) {
-      MusicTab.Artists -> loadArtists(libraryId, isInitial = true)
-      MusicTab.Albums -> loadAlbums(libraryId, isInitial = true)
+      MusicTab.Artists -> loadArtists(libraryId, sortConfig, isInitial = true)
+      MusicTab.Albums -> loadAlbums(libraryId, sortConfig, isInitial = true)
     }
   }
 
-  suspend fun refresh(libraryId: String) {
-    loadInitial(libraryId)
-  }
-
-  fun updateSortConfig(sortConfig: LibrarySortConfig) {
-    state = state.copy(sortConfig = sortConfig)
-  }
-
-  private suspend fun loadArtists(libraryId: String, isInitial: Boolean) {
+  private suspend fun loadArtists(libraryId: String, sortConfig: LibrarySortConfig, isInitial: Boolean) {
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("MusicArtist"),
-      sortBy = state.sortConfig.sortBy,
-      sortOrder = state.sortConfig.sortOrder,
+      sortBy = sortConfig.sortBy,
+      sortOrder = sortConfig.sortOrder,
       startIndex = if(isInitial) 0 else currentStartIndex,
       limit = PAGE_SIZE,
     )
@@ -118,12 +109,12 @@ class MusicLibraryModel(
     }
   }
 
-  private suspend fun loadAlbums(libraryId: String, isInitial: Boolean) {
+  private suspend fun loadAlbums(libraryId: String, sortConfig: LibrarySortConfig, isInitial: Boolean) {
     val result = itemsRepository.getItems(
       parentId = libraryId,
       includeItemTypes = listOf("MusicAlbum"),
-      sortBy = state.sortConfig.sortBy,
-      sortOrder = state.sortConfig.sortOrder,
+      sortBy = sortConfig.sortBy,
+      sortOrder = sortConfig.sortOrder,
       startIndex = if(isInitial) 0 else currentStartIndex,
       limit = PAGE_SIZE,
     )

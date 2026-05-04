@@ -24,6 +24,7 @@ kotlin {
       implementation(libs.compose.material3)
       api(libs.compose.runtime)
       implementation(libs.compose.runtimeAnnotation)
+      implementation(libs.compose.runtimeSaveable)
       implementation(libs.compose.ui)
     }
   }
