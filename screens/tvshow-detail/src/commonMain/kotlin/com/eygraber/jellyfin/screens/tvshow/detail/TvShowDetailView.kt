@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -53,6 +55,8 @@ internal typealias TvShowDetailView = ViceView<TvShowDetailIntent, TvShowDetailV
 private const val BACKDROP_ASPECT_RATIO = 16F / 9F
 private const val SEASON_POSTER_ASPECT_RATIO = 2F / 3F
 private const val RATING_DECIMAL_FACTOR = 10
+private val expandedWidthBreakpoint = 840.dp
+private val expandedBackdropMaxWidth = 640.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,6 +111,31 @@ private fun ShowContent(
   seasons: List<TvShowSeasonSummary>,
   onSeasonClick: (seasonId: String) -> Unit,
 ) {
+  BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+    val isExpanded = maxWidth >= expandedWidthBreakpoint
+    if(isExpanded) {
+      ExpandedShowContent(
+        show = show,
+        seasons = seasons,
+        onSeasonClick = onSeasonClick,
+      )
+    }
+    else {
+      CompactShowContent(
+        show = show,
+        seasons = seasons,
+        onSeasonClick = onSeasonClick,
+      )
+    }
+  }
+}
+
+@Composable
+private fun CompactShowContent(
+  show: TvShowDetail,
+  seasons: List<TvShowSeasonSummary>,
+  onSeasonClick: (seasonId: String) -> Unit,
+) {
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -114,53 +143,10 @@ private fun ShowContent(
   ) {
     BackdropSection(show = show)
 
-    Column(
-      modifier = Modifier.padding(horizontal = 16.dp),
-    ) {
-      Spacer(modifier = Modifier.height(16.dp))
-
-      Text(
-        text = show.name,
-        style = MaterialTheme.typography.headlineMedium,
-        fontWeight = FontWeight.Bold,
-      )
-
-      Spacer(modifier = Modifier.height(8.dp))
-
-      MetadataRow(show = show)
-
-      show.overview?.let { overview ->
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-          text = "Overview",
-          style = MaterialTheme.typography.titleMedium,
-          fontWeight = FontWeight.SemiBold,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-          text = overview,
-          style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
-    }
+    ShowMetaSection(show = show)
 
     if(seasons.isNotEmpty()) {
-      Spacer(modifier = Modifier.height(24.dp))
-
-      Text(
-        text = "Seasons",
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(horizontal = 16.dp),
-      )
-
-      Spacer(modifier = Modifier.height(8.dp))
-
-      SeasonsRow(
+      SeasonsSection(
         seasons = seasons,
         onSeasonClick = onSeasonClick,
       )
@@ -171,11 +157,141 @@ private fun ShowContent(
 }
 
 @Composable
-private fun BackdropSection(
+private fun ExpandedShowContent(
+  show: TvShowDetail,
+  seasons: List<TvShowSeasonSummary>,
+  onSeasonClick: (seasonId: String) -> Unit,
+) {
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .verticalScroll(rememberScrollState()),
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 24.dp, vertical = 16.dp),
+      horizontalArrangement = Arrangement.spacedBy(24.dp),
+    ) {
+      BackdropSection(
+        show = show,
+        modifier = Modifier
+          .weight(1f)
+          .widthIn(max = expandedBackdropMaxWidth),
+      )
+
+      Column(modifier = Modifier.weight(1f)) {
+        Text(
+          text = show.name,
+          style = MaterialTheme.typography.headlineMedium,
+          fontWeight = FontWeight.Bold,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        MetadataRow(show = show)
+
+        show.overview?.let { overview ->
+          Spacer(modifier = Modifier.height(16.dp))
+
+          Text(
+            text = "Overview",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+          )
+
+          Spacer(modifier = Modifier.height(8.dp))
+
+          Text(
+            text = overview,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        }
+      }
+    }
+
+    if(seasons.isNotEmpty()) {
+      SeasonsSection(
+        seasons = seasons,
+        onSeasonClick = onSeasonClick,
+      )
+    }
+
+    Spacer(modifier = Modifier.height(24.dp))
+  }
+}
+
+@Composable
+private fun ShowMetaSection(
   show: TvShowDetail,
 ) {
+  Column(
+    modifier = Modifier.padding(horizontal = 16.dp),
+  ) {
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Text(
+      text = show.name,
+      style = MaterialTheme.typography.headlineMedium,
+      fontWeight = FontWeight.Bold,
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    MetadataRow(show = show)
+
+    show.overview?.let { overview ->
+      Spacer(modifier = Modifier.height(16.dp))
+
+      Text(
+        text = "Overview",
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+      )
+
+      Spacer(modifier = Modifier.height(8.dp))
+
+      Text(
+        text = overview,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
+  }
+}
+
+@Composable
+private fun SeasonsSection(
+  seasons: List<TvShowSeasonSummary>,
+  onSeasonClick: (seasonId: String) -> Unit,
+) {
+  Column {
+    Spacer(modifier = Modifier.height(24.dp))
+
+    Text(
+      text = "Seasons",
+      style = MaterialTheme.typography.titleMedium,
+      fontWeight = FontWeight.SemiBold,
+      modifier = Modifier.padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    SeasonsRow(
+      seasons = seasons,
+      onSeasonClick = onSeasonClick,
+    )
+  }
+}
+
+@Composable
+private fun BackdropSection(
+  show: TvShowDetail,
+  modifier: Modifier = Modifier,
+) {
   Box(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxWidth()
       .aspectRatio(BACKDROP_ASPECT_RATIO),
   ) {
