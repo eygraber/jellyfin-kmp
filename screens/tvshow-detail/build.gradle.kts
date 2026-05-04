@@ -38,6 +38,7 @@ kotlin {
       implementation(libs.compose.foundation)
       implementation(libs.compose.foundationLayout)
       implementation(libs.compose.material3)
+      implementation(libs.compose.material3.adaptiveNavigationSuite)
       implementation(libs.compose.nav3.runtime)
       implementation(libs.compose.runtime)
       implementation(libs.compose.runtimeAnnotation)
