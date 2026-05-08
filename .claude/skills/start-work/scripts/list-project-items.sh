@@ -4,7 +4,7 @@
 #
 # Options:
 #   --status STATUS   Filter by status (Backlog, Ready, "In Progress", Done)
-#   --limit N         Limit number of results (default: 100)
+#   --limit N         Limit number of results (default: 500)
 #
 # Output: JSON array of project items
 
@@ -12,7 +12,7 @@ set -e
 
 OWNER="eygraber"
 PROJECT_NUMBER=6
-LIMIT=100
+LIMIT=500
 STATUS=""
 
 while [[ $# -gt 0 ]]; do
