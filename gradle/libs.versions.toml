@@ -21,7 +21,7 @@ compose-bom = "2026.05.00"
 composeJetbrains = "1.11.0-rc01"
 composeJetpack = "1.11.1"
 composeMaterial3Jetbrains = "1.11.0-alpha07"
-composeNav3 = "1.1.0"
+composeNav3 = "1.1.1"
 
 conventions = "0.0.100"
 
