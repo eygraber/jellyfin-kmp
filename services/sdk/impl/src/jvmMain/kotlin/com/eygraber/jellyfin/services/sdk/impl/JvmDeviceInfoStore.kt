@@ -2,13 +2,11 @@ package com.eygraber.jellyfin.services.sdk.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import java.io.File
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 internal class JvmDeviceInfoStore : DeviceInfoStore {
   private val deviceIdFile: File by lazy {
     val dir = File(System.getProperty("user.home"), APP_DIR).apply { mkdirs() }

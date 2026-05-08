@@ -5,12 +5,10 @@ import android.os.Build
 import com.eygraber.jellyfin.di.qualifiers.AppContext
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 internal class AndroidDeviceInfoStore(
   @param:AppContext private val context: Context,
 ) : DeviceInfoStore {
