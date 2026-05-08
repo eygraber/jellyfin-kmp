@@ -8,6 +8,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Metro DI module that provides the [JellyfinSdk] instance.
@@ -24,12 +26,20 @@ interface JellyfinSdkProvider {
     version = "0.1.0",
   )
 
+  @OptIn(ExperimentalUuidApi::class)
   @Provides
   @SingleIn(AppScope::class)
-  fun provideDeviceInfo(): DeviceInfo = DeviceInfo(
-    name = "KMP Device",
-    id = "jellyfin-kmp-device",
-  )
+  fun provideDeviceInfo(
+    deviceInfoStore: DeviceInfoStore,
+  ): DeviceInfo {
+    val id = deviceInfoStore.readDeviceId() ?: Uuid.random().toString().also {
+      deviceInfoStore.writeDeviceId(it)
+    }
+    return DeviceInfo(
+      name = deviceInfoStore.deviceName,
+      id = id,
+    )
+  }
 
   @Provides
   @SingleIn(AppScope::class)
