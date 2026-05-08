@@ -35,9 +35,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Get all open issues that have at least one OPEN blocker. Closed blockers are pre-filtered out
-# here — once a blocker closes, the issue is no longer blocked by it (whether it closed via PR
-# merge, manual close, or anything else).
+# Get all open issues that have at least one blocker (open OR closed). We keep closed blockers in
+# the result so we can detect issues whose blockers all merged — pre-filtering closed blockers
+# would silently drop those, since the remaining-open list would be empty.
 BLOCKED_ISSUES=$(gh api graphql -f query='
 {
   repository(owner: "'"$OWNER"'", name: "'"$REPO"'") {
@@ -55,21 +55,21 @@ BLOCKED_ISSUES=$(gh api graphql -f query='
       }
     }
   }
-}' | jq '[.data.repository.issues.nodes[]
-  | .blockedBy.nodes |= map(select(.state == "OPEN"))
-  | select(.blockedBy.nodes | length > 0)]')
+}' | jq '[.data.repository.issues.nodes[] | select(.blockedBy.nodes | length > 0)]')
 
-# An open blocker counts as "resolved enough to unblock" if its PR is up — which on this project
-# is reflected by the board status sitting in In Review. (Done issues are CLOSED and were already
-# filtered out above.)
+# An OPEN blocker counts as "resolved enough to unblock" if its PR is up — reflected by the board
+# status sitting in In Review. CLOSED blockers (PR merged or manually closed) are resolved by
+# definition.
 IN_REVIEW_ITEMS=$("$START_WORK_SCRIPTS/list-project-items.sh" --status in-review 2>/dev/null | jq '[.[].number]' || echo "[]")
 
 RESOLVED_ISSUES="$IN_REVIEW_ITEMS"
 
-# An issue can be unblocked if every remaining (OPEN) blocker has its PR up (In Review).
+# An issue can be unblocked if every blocker is either CLOSED or has its PR up (In Review).
 UNBLOCKABLE=$(echo "$BLOCKED_ISSUES" | jq --argjson resolved "$RESOLVED_ISSUES" '
   [.[] | select(
-    .blockedBy.nodes | all(.number as $n | $resolved | index($n))
+    .blockedBy.nodes | all(
+      .state == "CLOSED" or (.number as $n | ($resolved | index($n)) != null)
+    )
   ) | {number, title, blockedBy: [.blockedBy.nodes[].number]}]
 ')
 
