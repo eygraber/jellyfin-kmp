@@ -36,7 +36,7 @@ junit5 = "6.0.3"
 
 jvmTarget = "17"
 
-khronicle = "0.5.2"
+khronicle = "1.1.0"
 
 vlcj = "4.12.1"
 
