@@ -32,7 +32,7 @@ ejson = "1.0.9"
 
 googleServices = "4.4.4"
 
-junit5 = "6.0.3"
+junit5 = "6.1.0"
 
 jvmTarget = "17"
 
