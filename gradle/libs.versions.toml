@@ -18,7 +18,7 @@ atomicfu = "0.33.0"
 coil = "3.4.0"
 
 compose-bom = "2026.05.01"
-composeJetbrains = "1.11.0"
+composeJetbrains = "1.11.1"
 composeJetpack = "1.11.2"
 composeMaterial3Jetbrains = "1.11.0-alpha07"
 composeNav3 = "1.1.1"
