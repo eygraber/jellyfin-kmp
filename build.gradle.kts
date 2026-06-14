@@ -67,7 +67,11 @@ gradleConventionsDefaults {
       }
 
       when {
-        name.startsWith("kotlinx-coroutines") -> selector.useVersion(libs.versions.kotlinx.coroutines.get())
+        // detekt pulls in org.jetbrains.intellij.deps.kotlinx:kotlinx-coroutines-core, which is
+        // versioned independently of the regular coroutines artifacts, so leave it alone
+        // https://github.com/detekt/detekt/issues/5021#issuecomment-1178517184
+        name.startsWith("kotlinx-coroutines") && !selector.configurationName.startsWith("detekt") ->
+          selector.useVersion(libs.versions.kotlinx.coroutines.get())
       }
     }
 
