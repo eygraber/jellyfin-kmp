@@ -3,7 +3,7 @@ android-lint = "32.2.1"
 
 android-plugin = "9.2.1"
 
-android-sdk-compile = "36"
+android-sdk-compile = "37"
 android-sdk-target = "36"
 android-sdk-min = "28"
 
