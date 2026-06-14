@@ -26,7 +26,7 @@ composeNav3 = "1.1.1"
 conventions = "0.0.100"
 
 detekt = "2.0.0-alpha.4"
-detektCompose = "0.5.9"
+detektCompose = "0.6.1"
 
 ejson = "1.0.9"
 
