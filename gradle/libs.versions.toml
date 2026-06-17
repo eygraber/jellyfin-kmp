@@ -19,7 +19,7 @@ coil = "3.5.0"
 
 compose-bom = "2026.05.01"
 composeJetbrains = "1.11.1"
-composeJetpack = "1.11.2"
+composeJetpack = "1.11.3"
 composeMaterial3Jetbrains = "1.11.0-alpha07"
 composeNav3 = "1.1.1"
 
