@@ -30,7 +30,7 @@ detektCompose = "0.6.1"
 
 ejson = "1.0.9"
 
-googleServices = "4.4.4"
+googleServices = "4.5.0"
 
 junit5 = "6.1.0"
 
