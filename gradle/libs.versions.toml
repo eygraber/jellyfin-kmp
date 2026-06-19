@@ -92,7 +92,7 @@ conventionsProjectCommon = { id = "com.eygraber.conventions-project-common" }
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis" }
 dependencyAnalysisRoot = { id = "com.autonomousapps.dependency-analysis", version = "3.15.0" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
-firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.2.1" }
+firebase-appDistribution = { id = "com.google.firebase.appdistribution", version = "5.3.0" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
 googleServices = { id = "com.google.gms.google-services" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
