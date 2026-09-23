@@ -63,6 +63,7 @@ kotlin {
 
       implementation(libs.compose.animation)
       implementation(libs.compose.material3)
+      implementation(libs.compose.material3.adaptive)
       implementation(libs.compose.material3.adaptiveNavigationSuite)
       implementation(libs.compose.resources)
       implementation(libs.compose.runtime)

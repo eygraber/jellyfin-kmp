@@ -3,6 +3,7 @@ package com.eygraber.jellyfin.screens.video.player
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.eygraber.jellyfin.screens.video.player.model.VideoPlayerModel
@@ -30,7 +31,7 @@ class VideoPlayerCompositor(
       )
     }
 
-    LaunchedEffect(playerState) {
+    SideEffect(playerState) {
       playerModel.updateFromPlayerState(playerState)
     }
 

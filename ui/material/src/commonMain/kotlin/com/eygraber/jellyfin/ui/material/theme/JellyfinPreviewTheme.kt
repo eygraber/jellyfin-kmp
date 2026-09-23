@@ -100,11 +100,14 @@ private fun ModalBottomSheetPreview(
 ) {
   val sheetState = remember {
     SheetState(
-      skipPartiallyExpanded = skipPartiallyExpanded,
+      enabledValues = buildSet {
+        add(SheetValue.Expanded)
+        if(!skipPartiallyExpanded) add(SheetValue.PartiallyExpanded)
+        add(SheetValue.Hidden)
+      },
       positionalThreshold = { 1F },
       velocityThreshold = { 1F },
       initialValue = initialValue,
-      skipHiddenState = false,
       confirmValueChange = { true },
     )
   }
