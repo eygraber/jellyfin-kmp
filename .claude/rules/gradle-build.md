@@ -10,7 +10,7 @@ Dependencies are defined in gradle/libs.versions.toml
 Clean project: ./gradlew clean
 Build debug APK: ./gradlew :app:assembleDebug
 Run unit tests: ./gradlew testDebugUnitTest
-Run snapshot tests: ./gradlew verifyPaparazziDebug
+Run snapshot tests: ./gradlew verifyPaparazzi
 Format code: ./format
 Run detekt: ./detekt
 Run Android lint: ./gradlew :app:lintRelease

@@ -38,7 +38,7 @@ For running `./gradlew` with specific tasks — wrap tasks in quotes:
 ```bash
 .scripts/run-gradle --tasks "testDebugUnitTest"
 .scripts/run-gradle --tasks ":app:lintDevRelease"
-.scripts/run-gradle --tasks "verifyPaparazziDebug"
+.scripts/run-gradle --tasks "verifyPaparazzi"
 ```
 
 ### Custom Pattern Mode

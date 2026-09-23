@@ -28,7 +28,7 @@ Runs: formatting, detekt, lint, unit tests, screenshot tests, konsist.
 | Lint              | `./gradlew :app:lintDebug`            | Android-specific issues            |
 | Unit Tests        | `./gradlew testDebugUnitTest`         | All unit tests                     |
 | Module Tests      | `./gradlew :module:testDebugUnitTest` | Single module                      |
-| Screenshots       | `./gradlew verifyPaparazziDebug`      | Screenshot tests                   |
+| Screenshots       | `./gradlew verifyPaparazzi`           | Screenshot tests                   |
 | Konsist           | `./gradlew :konsist:test`             | Structural and architectural tests |
 
 #### Formatting
@@ -61,7 +61,7 @@ get reported by `./format` unless you specify the `--no-format` flag.
 | Hardcoded strings        | Extract to resources                                      |
 | Konsist annotation order | Reorder: `@Inject` → `@SingleIn` → `@ContributesBinding`  |
 | api vs implementation    | Change to correct configuration                           |
-| Screenshot diff          | `./gradlew recordPaparazziDebug` if change is intentional |
+| Screenshot diff          | `./gradlew recordPaparazzi` if change is intentional      |
 
 ## Priority
 

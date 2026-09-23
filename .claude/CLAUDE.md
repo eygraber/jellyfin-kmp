@@ -12,8 +12,8 @@ Kotlin Multiplatform (KMP) / Compose Multiplatform (CMP) app com.eygraber.jellyf
 | `./format`                                  | Auto-fix formatting with ktlint         |
 | `./detekt`                                  | Run static analysis                     |
 | `./gradlew testDebugUnitTest`               | Run unit tests                          |
-| `./gradlew verifyPaparazziDebug`            | Run screenshot tests                    |
-| `./gradlew recordPaparazziDebug`            | Record new screenshot baselines         |
+| `./gradlew verifyPaparazzi`                 | Run screenshot tests                    |
+| `./gradlew recordPaparazzi`                 | Record new screenshot baselines         |
 | `./gradlew :apps:android:assembleDevDebug`  | Build debug APK                         |
 | `.scripts/generate_module --feature=<Name>` | Generate new screen module              |
 
