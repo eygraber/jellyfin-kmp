@@ -25,7 +25,7 @@ data class VideoPlayerKey(
 @SingleIn(ScreenScope::class)
 class VideoPlayerNavEntryProvider(
   override val compositor: VideoPlayerCompositor,
-  private val playerService: VideoPlayerService,
+  playerService: VideoPlayerService,
 ) : ViceNavEntryProvider<Key, Intent, Compositor, Effects, ViewState>() {
   override val view: ViceView<Intent, ViewState> = { state, onIntent ->
     VideoPlayerView(state, playerService, onIntent)
