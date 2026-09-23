@@ -94,6 +94,7 @@ class TopLevelDestinationSceneStrategyTest {
 
   private fun navEntry(key: NavKey): NavEntry<NavKey> = NavEntry(
     key = key,
+    contentKey = key.toString(),
     content = {},
   )
 }

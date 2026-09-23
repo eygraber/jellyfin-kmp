@@ -36,10 +36,10 @@ internal enum class JellyfinTopLevelDestination(
   ;
 
   /**
-   * The default `contentKey` for a [androidx.navigation3.runtime.NavEntry] built from this
-   * destination's [key]. Vice's `viceEntry` derives the content key by calling `key.toString()`,
-   * which matches `NavEntry`'s default; this property mirrors that derivation so callers that only
-   * have access to a `NavEntry.contentKey` can still resolve the destination.
+   * The `contentKey` for a [androidx.navigation3.runtime.NavEntry] built from this
+   * destination's [key]. Vice's `viceEntry` derives the content key by calling `key.toString()`;
+   * this property mirrors that derivation so callers that only have access to a
+   * `NavEntry.contentKey` can still resolve the destination.
    */
   val contentKey: Any = key.toString()
 
