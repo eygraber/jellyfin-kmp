@@ -3,7 +3,7 @@ package com.eygraber.jellyfin.nav
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
@@ -36,7 +36,7 @@ internal fun JellyfinNavigationSuiteScaffold(
   currentTopLevelDestination: JellyfinTopLevelDestination?,
   onSelectTopLevelDestination: (JellyfinTopLevelDestination) -> Unit,
   modifier: Modifier = Modifier,
-  windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+  windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
   content: @Composable () -> Unit,
 ) {
   // Labels must be resolved in a composable scope; navigationSuiteItems is a non-composable

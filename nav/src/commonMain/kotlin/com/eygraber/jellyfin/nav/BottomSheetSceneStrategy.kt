@@ -9,7 +9,7 @@ import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -62,8 +62,12 @@ internal class BottomSheetScene<T : Any>(
   override val entries: List<NavEntry<T>> = listOf(entry)
 
   override val content: @Composable (() -> Unit) = {
-    val sheetState = rememberModalBottomSheetState(
-      skipPartiallyExpanded = properties.skipPartiallyExpanded,
+    val sheetState = rememberBottomSheetState(
+      initialValue = SheetValue.Hidden,
+      enabledValues = when {
+        properties.skipPartiallyExpanded -> setOf(SheetValue.Hidden, SheetValue.Expanded)
+        else -> setOf(SheetValue.Hidden, SheetValue.PartiallyExpanded, SheetValue.Expanded)
+      },
       confirmValueChange = properties.confirmValueChange,
     )
 
