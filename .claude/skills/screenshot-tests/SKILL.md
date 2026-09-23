@@ -85,8 +85,8 @@ class MyComponentScreenshotTest {
 ## Commands
 
 ```bash
-./gradlew verifyPaparazziDebug    # Verify against golden images
-./gradlew recordPaparazziDebug    # Record new golden images
+./gradlew verifyPaparazzi    # Verify against golden images
+./gradlew recordPaparazzi    # Record new golden images
 ```
 
 ## Process
@@ -94,5 +94,5 @@ class MyComponentScreenshotTest {
 1. **Read** the source file to understand component/screen structure
 2. **Check** for existing PreviewProvider or preview functions
 3. **Generate** test class following appropriate pattern
-4. **Run** `./gradlew :module:verifyPaparazziDebug` to verify
-5. **Record** if new: `./gradlew :module:recordPaparazziDebug`
+4. **Run** `./gradlew :module:verifyPaparazzi` to verify
+5. **Record** if new: `./gradlew :module:recordPaparazzi`

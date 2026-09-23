@@ -40,8 +40,8 @@ Testing strategies for Jellyfin.
 ./gradlew :screens:my-screen:testDebugUnitTest
 
 # Screenshot tests
-./gradlew verifyPaparazziDebug
-./gradlew recordPaparazziDebug
+./gradlew verifyPaparazzi
+./gradlew recordPaparazzi
 
 # Run konsist tests
 ./gradlew :konsist:test

@@ -7,6 +7,7 @@ plugins {
   alias(libs.plugins.dependencyAnalysis)
   alias(libs.plugins.kotlinxSerialization)
   alias(libs.plugins.metro)
+  alias(libs.plugins.paparazzi)
 }
 
 val pkg = "com.eygraber.jellyfin.screens.settings"
@@ -25,9 +26,19 @@ kotlin {
 
   android {
     androidResources.enable = true
+
+    withHostTest {
+      isIncludeAndroidResources = true
+    }
   }
 
   sourceSets {
+    // https://youtrack.jetbrains.com/issue/KT-83321/
+    named("androidHostTest").dependencies {
+      implementation(projects.testUtils)
+      implementation(libs.bundles.test.paparazzi)
+    }
+
     commonTest.dependencies {
       implementation(kotlin("test"))
 

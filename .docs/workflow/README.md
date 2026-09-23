@@ -18,7 +18,7 @@ Workflow documentation for Jellyfin development.
 | Run all checks     | `./check`                                         |
 | Format code        | `./format`                                        |
 | Run detekt         | `./detekt`                                        |
-| Screenshot tests   | `./gradlew recordPaparazziDebug` / `verifyPaparazziDebug` |
+| Screenshot tests   | `./gradlew recordPaparazzi` / `verifyPaparazzi`   |
 
 ## Entry Points
 

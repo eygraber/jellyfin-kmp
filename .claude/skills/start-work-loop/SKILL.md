@@ -227,7 +227,7 @@ After the merge succeeds:
 2. **Diagnose** based on the failure category:
    - `ktlint` / `detekt` / `lint` → run `./format` and/or fix style violations locally; re-run `./check`
    - `assemble` / build → reproduce locally with the gradle task in the log
-   - `unit_and_screenshot_tests` → run the failing test locally; for screenshot diffs use `./gradlew recordPaparazziDebug` only if the new rendering is actually correct
+   - `unit_and_screenshot_tests` → run the failing test locally; for screenshot diffs use `./gradlew recordPaparazzi` only if the new rendering is actually correct
    - `dependency_analysis` → adjust module dependencies per the script's recommendation
    - `danger` → read the Danger comment on the PR for the rule violation
    - `license_check` → ensure new dependencies have approved licenses

@@ -24,6 +24,8 @@ kotlin {
 
       implementation(libs.test.kotlinx.coroutines)
 
+      api(libs.test.paparazzi)
+
       implementation(libs.test.robolectric)
       api(libs.test.robolectric.annotations)
     }

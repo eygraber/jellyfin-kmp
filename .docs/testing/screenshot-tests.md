@@ -4,7 +4,8 @@ Prevent UI regressions with visual comparison.
 
 ## Framework
 
-[Paparazzi](https://github.com/cashapp/paparazzi) for screenshot testing.
+[Paparazzi](https://github.com/eygraber/paparazzi) for screenshot testing
+(a fork of [cashapp/paparazzi](https://github.com/cashapp/paparazzi) with KMP and AGP 9.1+ support).
 
 ## Test Modes
 
@@ -120,16 +121,16 @@ class MyComponentScreenshotTest {
 
 ```bash
 # Generate golden images
-./gradlew :module:recordPaparazziDebug
+./gradlew :module:recordPaparazzi
 
 # Verify against golden images
-./gradlew :module:verifyPaparazziDebug
+./gradlew :module:verifyPaparazzi
 
 # Clean golden images
-./gradlew :module:cleanPaparazziDebug
+./gradlew :module:deletePaparazziSnapshots
 
 # Clean and regenerate
-./gradlew :module:cleanRecordPaparazziDebug
+./gradlew :module:cleanRecordPaparazzi
 ```
 
 ## Robolectric Tests

@@ -56,7 +56,7 @@ ktorfit = "2.7.5"
 ktlint = "1.8.0"
 ktlintCustomRules = "0.1.1"
 
-paparazzi = "2.0.0-alpha05"
+paparazzi = "2.0.0-alpha05.3"
 
 publish = "0.37.0"
 
@@ -102,7 +102,7 @@ ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
 metro = { id = "dev.zacsweers.metro", version = "1.4.2" }
 mavenPublish = { id = "com.vanniktech.maven.publish" }
-paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
+paparazzi = { id = "com.eygraber.paparazzi", version.ref = "paparazzi" }
 playStoreApi = { id = "com.github.triplet.play", version = "4.1.1" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "square-sqldelight" }
 jellyfinGradle = { id = "jellyfin-gradle", version = "0.0.1" }
@@ -240,7 +240,7 @@ test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", ver
 test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared", version.ref = "kotest" }
 test-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-test-paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
+test-paparazzi = { module = "com.eygraber:paparazzi", version.ref = "paparazzi" }
 test-parameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.22"
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 test-robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }

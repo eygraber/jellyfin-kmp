@@ -3,6 +3,7 @@
 additional_gradle_tasks="
 :apps:shared:licensee
 testDebugUnitTest
+verifyPaparazzi
 :konsist:test
 "
 

@@ -41,10 +41,10 @@ Gradle commands for Jellyfin.
 ./gradlew :screens:welcome:testDebugUnitTest
 
 # Screenshot tests - verify
-./gradlew verifyPaparazziDebug
+./gradlew verifyPaparazzi
 
 # Screenshot tests - record new
-./gradlew recordPaparazziDebug
+./gradlew recordPaparazzi
 ```
 
 ### Quality
