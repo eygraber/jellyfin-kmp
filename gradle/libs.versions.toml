@@ -17,7 +17,6 @@ atomicfu = "0.33.0"
 
 coil = "3.5.0"
 
-compose-bom = "2026.09.00"
 composeJetbrains = "1.12.1"
 composeJetpack = "1.12.1"
 composeMaterial3Jetbrains = "1.12.0-alpha03"
@@ -150,7 +149,6 @@ buildscript-kotlinxSerialization = { module = "org.jetbrains.kotlin.plugin.seria
 buildscript-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 buildscript-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "publish" }
 
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref="composeJetbrains" }
 compose-edgeToEdgePreview = "de.drick.compose:edge-to-edge-preview:0.10.1"
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeJetbrains" }
@@ -228,8 +226,8 @@ jellyfinLint = "com.eygraber.jellyfin.lint:library:0.0.1"
 
 test-androidx-junit = "androidx.test.ext:junit:1.3.0"
 test-compose-ui = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeJetbrains" }
-test-compose-uiJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-test-compose-uiManifest = { module = "androidx.compose.ui:ui-test-manifest" }
+test-compose-uiJunit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeJetpack" }
+test-compose-uiManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeJetpack" }
 test-junit = "junit:junit:4.13.2"
 test-junit5-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 test-junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
