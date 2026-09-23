@@ -75,7 +75,7 @@ rootProject.name = "jellyfin-kmp"
 plugins {
   id("com.eygraber.conventions.settings") version "0.0.101"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("com.gradle.develocity") version "4.5.0"
+  id("com.gradle.develocity") version "4.5.1"
 }
 
 include(":android")
