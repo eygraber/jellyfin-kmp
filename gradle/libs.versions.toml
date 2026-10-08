@@ -159,7 +159,7 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-material3-adaptive = "org.jetbrains.compose.material3.adaptive:adaptive:1.3.0-rc01"
 compose-material3-adaptiveNavigationSuite = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version.ref = "composeMaterial3Jetbrains" }
 compose-materialIcons = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.3" }
-compose-nav3-adaptive = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3:1.3.0-rc01"
+compose-nav3-adaptive = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3:1.3.0"
 compose-nav3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-nav3" }
 compose-nav3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "composeNav3" }
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeJetbrains" }
