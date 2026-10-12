@@ -79,7 +79,6 @@ gradleConventionsDefaults {
       sourceSetPredicate = { it.name == "androidMain" },
     ) {
       implementation(platform(libs.firebase.bom))
-      implementation(platform(libs.compose.bom))
 
       runtimeOnly(libs.jellyfinLint)
     }
