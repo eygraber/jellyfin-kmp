@@ -66,7 +66,7 @@ androidx-sqlite = "2.7.1"
 
 sqldelight-androidx-driver = "0.5.0-alpha.11"
 
-square-sqldelight = "2.3.2"
+square-sqldelight = "2.4.1"
 
 vice = "1.0.8"
 viceModuleGenerator = "0.1.7"
