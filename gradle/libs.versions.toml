@@ -50,7 +50,7 @@ kotlinx-serialization = "1.11.0"
 
 ksp = "2.3.12"
 
-ktor = "3.5.2"
+ktor = "3.6.0"
 ktorfit = "2.7.5"
 
 ktlint = "1.8.0"
