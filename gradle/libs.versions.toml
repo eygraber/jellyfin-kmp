@@ -236,7 +236,7 @@ test-junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
 test-junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 test-junit5-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params" }
-test-konsist = "com.lemonappdev:konsist:0.17.3"
+test-konsist = "com.lemonappdev:konsist:0.18.1"
 test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 test-kotest-assertions-shared = { module = "io.kotest:kotest-assertions-shared", version.ref = "kotest" }
 test-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
